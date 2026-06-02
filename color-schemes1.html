@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dark Theme Palette Prototypes</title>
+<style>
+:root {
+  color-scheme: dark;
+  --page-bg: #0d1117;
+  --page-text: #dbe2ea;
+  --page-muted: #9aa7b2;
+  --page-border: #2a3441;
+}
+
+.theme-ukiyo-night {
+  --bg0: #111827;
+  --bg1: #172033;
+  --bg2: #1F2A44;
+  --surface: #24324F;
+  --surface2: #2C3A5B;
+  --border: #52627A;
+  --text: #D8D3C4;
+  --muted: #A6A99F;
+  --title: #E6C384;
+  --emphasis: #F4A261;
+  --accent: #7FB4CA;
+  --accent2: #A3D4D8;
+  --highlight: #3D4D63;
+  --selection: #33415C;
+  --danger: #C65D57;
+  --success: #8A9A5B;
+  --comment: #7E8794;
+}
+
+.theme-argon-executive {
+  --bg0: #0F1618;
+  --bg1: #142022;
+  --bg2: #1B2B2D;
+  --surface: #223436;
+  --surface2: #2B4142;
+  --border: #426164;
+  --text: #DCE7E3;
+  --muted: #9BB0AA;
+  --title: #BFE7E0;
+  --emphasis: #B7D989;
+  --accent: #77C7C2;
+  --accent2: #9DE2D4;
+  --highlight: #274447;
+  --selection: #31575B;
+  --danger: #D9796D;
+  --success: #8FCB81;
+  --comment: #7D918D;
+}
+
+.theme-black-lotus-shock {
+  --bg0: #0B0D12;
+  --bg1: #11131C;
+  --bg2: #181B29;
+  --surface: #202438;
+  --surface2: #292E46;
+  --border: #4A5173;
+  --text: #D7DAE8;
+  --muted: #9AA1B8;
+  --title: #E6E1FF;
+  --emphasis: #FFB86B;
+  --accent: #00D1FF;
+  --accent2: #B877FF;
+  --highlight: #302B4F;
+  --selection: #253C55;
+  --danger: #FF5C8A;
+  --success: #69F0AE;
+  --comment: #7C849F;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top left, #172033 0, var(--page-bg) 34rem);
+  color: var(--page-text);
+  line-height: 1.55;
+}
+
+header {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 54px 24px 26px;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 4rem);
+  margin: 0 0 12px;
+  letter-spacing: -0.05em;
+}
+
+header p {
+  max-width: 760px;
+  color: var(--page-muted);
+  font-size: 1.05rem;
+}
+
+.theme-card {
+  max-width: 1180px;
+  margin: 28px auto;
+  padding: 26px;
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--bg2), transparent 8%), var(--bg0));
+  color: var(--text);
+  box-shadow: 0 24px 70px rgba(0,0,0,.38);
+}
+
+.theme-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+
+.eyebrow {
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-size: .75rem;
+  font-weight: 750;
+  margin: 0 0 6px;
+}
+
+h2 {
+  color: var(--title);
+  font-size: clamp(1.7rem, 4vw, 3rem);
+  line-height: 1;
+  margin: 0 0 10px;
+  letter-spacing: -0.04em;
+}
+
+.mood, .design-note {
+  color: var(--muted);
+  margin: 0;
+}
+
+.design-note {
+  margin: 18px 0 16px;
+  border-left: 3px solid var(--accent);
+  padding-left: 14px;
+}
+
+.mini-terminal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 10px 12px;
+  display: flex;
+  gap: 7px;
+  min-width: 76px;
+}
+
+.mini-terminal span {
+  width: 10px;
+  height: 10px;
+  border-radius: 99px;
+  background: var(--accent);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--accent), transparent 35%);
+}
+
+.mini-terminal span:nth-child(2) { background: var(--emphasis); }
+.mini-terminal span:nth-child(3) { background: var(--success); }
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 18px;
+}
+
+.demo-grid article {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--bg1);
+  overflow: hidden;
+}
+
+.note-panel {
+  padding: 22px;
+  grid-row: span 2;
+}
+
+.note-panel h3 {
+  color: var(--title);
+  font-size: 1.35rem;
+  margin: 0 0 12px;
+}
+
+.note-panel p {
+  color: var(--text);
+  margin: 0 0 14px;
+}
+
+strong {
+  color: var(--emphasis);
+  font-weight: 750;
+}
+
+mark {
+  color: var(--text);
+  background: var(--highlight);
+  border: 1px solid color-mix(in srgb, var(--accent), transparent 55%);
+  padding: .05rem .28rem;
+  border-radius: .35rem;
+}
+
+blockquote {
+  margin: 16px 0;
+  padding: 14px 16px;
+  background: var(--surface);
+  border-left: 4px solid var(--accent2);
+  border-radius: 14px;
+  color: var(--muted);
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-row span {
+  color: var(--accent2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: .85rem;
+}
+
+.code-panel, .term-panel {
+  background: var(--bg0);
+}
+
+.panel-title {
+  background: var(--surface);
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  padding: 9px 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: .86rem;
+}
+
+pre {
+  margin: 0;
+  padding: 18px;
+  overflow-x: auto;
+}
+
+code {
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: .9rem;
+}
+
+.term-panel code {
+  color: var(--accent2);
+}
+
+.swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(205px, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.swatch {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 9px 10px;
+}
+
+.chip {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  border: 1px solid rgba(255,255,255,.16);
+}
+
+.swatch-name {
+  color: var(--muted);
+  font-size: .88rem;
+}
+
+.swatch code {
+  color: var(--text);
+  font-size: .82rem;
+}
+
+footer {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 20px 24px 54px;
+  color: var(--page-muted);
+}
+
+@media (max-width: 840px) {
+  .demo-grid {
+    grid-template-columns: 1fr;
+  }
+  .note-panel {
+    grid-row: auto;
+  }
+  .theme-header {
+    flex-direction: column;
+  }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Dark theme palette prototypes</h1>
+  <p>
+    Three dark UI themes designed for long-form notes, code editors, and terminals.
+    Each avoids pure black and pure white, keeps large surfaces low-contrast, and reserves saturated colors for orientation, emphasis, and active states.
+  </p>
+</header>
+
+
+<section class="theme-card theme-ukiyo-night">
+  <div class="theme-header">
+    <div>
+      <p class="eyebrow">Kanagawa • Hokusai • Shogun</p>
+      <h2>Ukiyo Night</h2>
+      <p class="mood">indigo ink, weathered paper, wave foam, muted vermilion, antique gold</p>
+    </div>
+    <div class="mini-terminal">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <div class="demo-grid">
+    <article class="note-panel">
+      <h3>Research note title</h3>
+      <p>
+        Plain text should feel soft, stable, and readable. Use
+        <strong>bold emphasis</strong> for important claims, and use
+        <mark>highlighting</mark> sparingly for things you need to find again.
+      </p>
+      <blockquote>
+        The best dark themes avoid pure black, pure white, and over-saturated accents in long text.
+      </blockquote>
+      <div class="tag-row">
+        <span>#modeling</span><span>#ideas</span><span>#review</span>
+      </div>
+    </article>
+
+    <article class="code-panel">
+      <div class="panel-title">editor.js</div>
+      <pre><code>function wave(x) {
+  const crest = Math.sin(x) * 0.8
+  return crest &gt; 0.5 ? &quot;foam&quot; : &quot;ink&quot;;
+}</code></pre>
+    </article>
+
+    <article class="term-panel">
+      <div class="panel-title">terminal</div>
+      <pre><code>$ julia kanagawa_sim.jl --palette ukiyo
+✓ loaded wave geometry
+→ rendering midnight study mode</code></pre>
+    </article>
+  </div>
+
+  <p class="design-note">Best for long writing sessions. The background is cool and quiet; gold and blue accents preserve the Hokusai feel without becoming loud.</p>
+
+  <div class="swatch-grid">
+    
+        <div class="swatch">
+          <span class="chip" style="background:#111827"></span>
+          <span class="swatch-name">bg0</span>
+          <code>#111827</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#172033"></span>
+          <span class="swatch-name">bg1</span>
+          <code>#172033</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#1F2A44"></span>
+          <span class="swatch-name">bg2</span>
+          <code>#1F2A44</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#24324F"></span>
+          <span class="swatch-name">surface</span>
+          <code>#24324F</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#2C3A5B"></span>
+          <span class="swatch-name">surface2</span>
+          <code>#2C3A5B</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#52627A"></span>
+          <span class="swatch-name">border</span>
+          <code>#52627A</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#D8D3C4"></span>
+          <span class="swatch-name">text</span>
+          <code>#D8D3C4</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#A6A99F"></span>
+          <span class="swatch-name">muted</span>
+          <code>#A6A99F</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#E6C384"></span>
+          <span class="swatch-name">title</span>
+          <code>#E6C384</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#F4A261"></span>
+          <span class="swatch-name">emphasis</span>
+          <code>#F4A261</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#7FB4CA"></span>
+          <span class="swatch-name">accent</span>
+          <code>#7FB4CA</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#A3D4D8"></span>
+          <span class="swatch-name">accent2</span>
+          <code>#A3D4D8</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#3D4D63"></span>
+          <span class="swatch-name">highlight</span>
+          <code>#3D4D63</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#33415C"></span>
+          <span class="swatch-name">selection</span>
+          <code>#33415C</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#C65D57"></span>
+          <span class="swatch-name">danger</span>
+          <code>#C65D57</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#8A9A5B"></span>
+          <span class="swatch-name">success</span>
+          <code>#8A9A5B</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#7E8794"></span>
+          <span class="swatch-name">comment</span>
+          <code>#7E8794</code>
+        </div>
+  </div>
+</section>
+
+<section class="theme-card theme-argon-executive">
+  <div class="theme-header">
+    <div>
+      <p class="eyebrow">Argon gas • Cell • Nature • Science • BCG</p>
+      <h2>Argon Executive</h2>
+      <p class="mood">charcoal lab bench, argon glow, chlorophyll, clean executive slate, glass-panel dashboards</p>
+    </div>
+    <div class="mini-terminal">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <div class="demo-grid">
+    <article class="note-panel">
+      <h3>Research note title</h3>
+      <p>
+        Plain text should feel soft, stable, and readable. Use
+        <strong>bold emphasis</strong> for important claims, and use
+        <mark>highlighting</mark> sparingly for things you need to find again.
+      </p>
+      <blockquote>
+        The best dark themes avoid pure black, pure white, and over-saturated accents in long text.
+      </blockquote>
+      <div class="tag-row">
+        <span>#modeling</span><span>#ideas</span><span>#review</span>
+      </div>
+    </article>
+
+    <article class="code-panel">
+      <div class="panel-title">editor.js</div>
+      <pre><code>struct CellSignal
+    ligand::Float64
+    response::Float64
+end
+
+growth(x) = 1 / (1 + exp(-x))</code></pre>
+    </article>
+
+    <article class="term-panel">
+      <div class="panel-title">terminal</div>
+      <pre><code>$ python argon_cells.py --quiet
+argon-core: stable
+cell cycle: synchronized
+report exported: q3_strategy.md</code></pre>
+    </article>
+  </div>
+
+  <p class="design-note">Most professional and least theatrical. Strong choice for terminal/editor defaults, dashboards, papers, and business/science note-taking.</p>
+
+  <div class="swatch-grid">
+    
+        <div class="swatch">
+          <span class="chip" style="background:#0F1618"></span>
+          <span class="swatch-name">bg0</span>
+          <code>#0F1618</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#142022"></span>
+          <span class="swatch-name">bg1</span>
+          <code>#142022</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#1B2B2D"></span>
+          <span class="swatch-name">bg2</span>
+          <code>#1B2B2D</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#223436"></span>
+          <span class="swatch-name">surface</span>
+          <code>#223436</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#2B4142"></span>
+          <span class="swatch-name">surface2</span>
+          <code>#2B4142</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#426164"></span>
+          <span class="swatch-name">border</span>
+          <code>#426164</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#DCE7E3"></span>
+          <span class="swatch-name">text</span>
+          <code>#DCE7E3</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#9BB0AA"></span>
+          <span class="swatch-name">muted</span>
+          <code>#9BB0AA</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#BFE7E0"></span>
+          <span class="swatch-name">title</span>
+          <code>#BFE7E0</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#B7D989"></span>
+          <span class="swatch-name">emphasis</span>
+          <code>#B7D989</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#77C7C2"></span>
+          <span class="swatch-name">accent</span>
+          <code>#77C7C2</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#9DE2D4"></span>
+          <span class="swatch-name">accent2</span>
+          <code>#9DE2D4</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#274447"></span>
+          <span class="swatch-name">highlight</span>
+          <code>#274447</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#31575B"></span>
+          <span class="swatch-name">selection</span>
+          <code>#31575B</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#D9796D"></span>
+          <span class="swatch-name">danger</span>
+          <code>#D9796D</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#8FCB81"></span>
+          <span class="swatch-name">success</span>
+          <code>#8FCB81</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#7D918D"></span>
+          <span class="swatch-name">comment</span>
+          <code>#7D918D</code>
+        </div>
+  </div>
+</section>
+
+<section class="theme-card theme-black-lotus-shock">
+  <div class="theme-header">
+    <div>
+      <p class="eyebrow">Cyberpunk • Casio G-Shock • Blade Runner: Black Lotus</p>
+      <h2>Black Lotus Shock</h2>
+      <p class="mood">black resin, violet neon, cyan HUD, amber warning LEDs, rain-slick asphalt</p>
+    </div>
+    <div class="mini-terminal">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <div class="demo-grid">
+    <article class="note-panel">
+      <h3>Research note title</h3>
+      <p>
+        Plain text should feel soft, stable, and readable. Use
+        <strong>bold emphasis</strong> for important claims, and use
+        <mark>highlighting</mark> sparingly for things you need to find again.
+      </p>
+      <blockquote>
+        The best dark themes avoid pure black, pure white, and over-saturated accents in long text.
+      </blockquote>
+      <div class="tag-row">
+        <span>#modeling</span><span>#ideas</span><span>#review</span>
+      </div>
+    </article>
+
+    <article class="code-panel">
+      <div class="panel-title">editor.js</div>
+      <pre><code>const status = {
+  sector: &quot;Lotus-09&quot;,
+  signal: &quot;cyan&quot;,
+  latency_ms: 12
+};
+
+scan(status);</code></pre>
+    </article>
+
+    <article class="term-panel">
+      <div class="panel-title">terminal</div>
+      <pre><code>$ ./black_lotus_scan --city rainy
+[00:12] neon grid online
+[00:13] shock-resistant shell: armed</code></pre>
+    </article>
+  </div>
+
+  <p class="design-note">Most energetic. Keep neon accents sparse: great for headers, cursor, search matches, and active tabs, but not for large text blocks.</p>
+
+  <div class="swatch-grid">
+    
+        <div class="swatch">
+          <span class="chip" style="background:#0B0D12"></span>
+          <span class="swatch-name">bg0</span>
+          <code>#0B0D12</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#11131C"></span>
+          <span class="swatch-name">bg1</span>
+          <code>#11131C</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#181B29"></span>
+          <span class="swatch-name">bg2</span>
+          <code>#181B29</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#202438"></span>
+          <span class="swatch-name">surface</span>
+          <code>#202438</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#292E46"></span>
+          <span class="swatch-name">surface2</span>
+          <code>#292E46</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#4A5173"></span>
+          <span class="swatch-name">border</span>
+          <code>#4A5173</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#D7DAE8"></span>
+          <span class="swatch-name">text</span>
+          <code>#D7DAE8</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#9AA1B8"></span>
+          <span class="swatch-name">muted</span>
+          <code>#9AA1B8</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#E6E1FF"></span>
+          <span class="swatch-name">title</span>
+          <code>#E6E1FF</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#FFB86B"></span>
+          <span class="swatch-name">emphasis</span>
+          <code>#FFB86B</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#00D1FF"></span>
+          <span class="swatch-name">accent</span>
+          <code>#00D1FF</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#B877FF"></span>
+          <span class="swatch-name">accent2</span>
+          <code>#B877FF</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#302B4F"></span>
+          <span class="swatch-name">highlight</span>
+          <code>#302B4F</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#253C55"></span>
+          <span class="swatch-name">selection</span>
+          <code>#253C55</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#FF5C8A"></span>
+          <span class="swatch-name">danger</span>
+          <code>#FF5C8A</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#69F0AE"></span>
+          <span class="swatch-name">success</span>
+          <code>#69F0AE</code>
+        </div>
+
+        <div class="swatch">
+          <span class="chip" style="background:#7C849F"></span>
+          <span class="swatch-name">comment</span>
+          <code>#7C849F</code>
+        </div>
+  </div>
+</section>
+
+<footer>
+  Implementation tip: use <code>bg0</code> for the app background, <code>bg1</code> and <code>surface</code> for cards/panes,
+  <code>text</code> for body copy, <code>muted</code> for secondary UI, <code>accent</code> for links/cursor/active tab,
+  <code>highlight</code> for selections/search, and <code>emphasis</code> for bold or warning-like semantic emphasis.
+</footer>
+</body>
+</html>
