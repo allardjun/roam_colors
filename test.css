@@ -1,0 +1,11 @@
+:root {
+  --selection-bg: #b9d7ff;
+  --selection-text: #6B9CCD;
+
+  --code-selection-bg: #ffcf70;
+  --code-selection-text: #AEAEAE;
+
+  --done-checkbox-bg: #6f8f72;
+  --done-checkbox-border: #4f6f52;
+  --done-checkbox-check: #ffffff;
+}
