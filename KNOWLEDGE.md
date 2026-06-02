@@ -33,6 +33,32 @@ Many Roam/Blueprint defaults are themselves high-specificity (deep descendant se
 
 The cost: if you set the same property with `!important` in two places, the earlier one is silently dead. Watch out — `dracula-jun.css` had ~6 dead rules from this. When you override an earlier rule with an `!important` version, delete (or comment-pointer to) the original.
 
+## Bold text needs `strong, .rm-bold` and `!important`
+
+Styling `<strong>` alone doesn't work — Roam applies an inline `color: rgb(...)` to bold elements, which beats any non-`!important` rule. Roam also sometimes wraps bold with a `.rm-bold` class instead of (or in addition to) `<strong>`. The robust pattern, lifted from RailsRoam.css:
+
+```css
+strong,
+.rm-bold {
+  color: var(--your-bold-color) !important;
+}
+```
+
+Same pattern applies to other inline styles Roam sets — when CSS "doesn't work" on text formatting, the first thing to check in DevTools is whether Roam is applying an inline `style="color: ..."` that beats your rule.
+
+## Page titles, including daily-note dates
+
+`.rm-title-display` (display mode) and `.rm-title-textarea` (edit mode) target every page title — both regular pages and daily-note date pages. Roam doesn't expose a date-only class, so theming dates differently from other titles requires `:has()` content-matching, which is brittle. In practice, color all titles together.
+
+## Caching gotcha when iterating via `@import`
+
+When using `@import url('...')` from `roam/css`, browser cache holds the imported sheet across normal reloads. Cmd-R won't always re-fetch. Two fixes:
+
+- **Cmd-Shift-R** for a true hard reload that bypasses the cache.
+- **Cache-bust the URL** — add `?v=2` (increment on each edit). This works even without a hard reload.
+
+If you're running a local HTTPS server, the server's request log is the definitive test: a GET that hits it means the file is being re-fetched; silence means cache is winning.
+
 ## CodeMirror selection is two systems
 
 Inside a code block, "selection" is rendered two different ways depending on whether CodeMirror or the browser owns focus:

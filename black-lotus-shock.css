@@ -368,16 +368,18 @@ Dracula slot names but hold Black Lotus Shock colors.
   --red:    #FF5C8A;  /* danger */
   --yellow: #E6E1FF;  /* title (pale lavender — substituted for warm yellow) */
 
-  /* Black & white surfaces */
-  --background:   #0B0D12;  /* bg0 */
-  --current-line: #202438;  /* surface */
+  /* Black & white surfaces — lifted up the palette so Roam reads like the
+     card preview instead of near-black. Main editor uses bg2 (the most
+     visible/themed surface), sidebar uses surface, hovers use surface2. */
+  --background:   #181B29;  /* bg2 (was bg0) */
+  --current-line: #292E46;  /* surface2 (was surface) */
   --foreground:   #D7DAE8;  /* text */
   --comment:      #7C849F;  /* comment */
 
   /* Other UI colors */
   --dark-blue:    #302B4F;  /* highlight */
   --dark-yellow:  #5A3F1A;  /* dim amber for highlighter */
-  --background2:  #181B29;  /* bg2 */
+  --background2:  #202438;  /* surface (was bg2) */
   --foreground2:  #9AA1B8;  /* muted */
   --search-input: #D7DAE8;  /* text (light surface for search popover) */
   --search-hover: #9AA1B8;  /* muted */
@@ -670,7 +672,14 @@ textarea {
 .rm-title-display,
 .rm-title-textarea {
   font-family: var(--font-mono) !important;
-  color: var(--my-text) !important;
+  color: var(--yellow) !important;  /* Black Lotus "title" — pale lavender */
+}
+
+/* Bold text — Black Lotus emphasis (amber). Needs !important because Roam
+   applies inline color via `color: rgb(...)` on the <strong> element. */
+strong,
+.rm-bold {
+  color: var(--orange) !important;
 }
 
 

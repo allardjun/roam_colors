@@ -368,16 +368,18 @@ Ukiyo Night colors.
   --red:    #C65D57;  /* danger */
   --yellow: #E6C384;  /* title (warm gold) */
 
-  /* Black & white surfaces */
-  --background:   #111827;  /* bg0 */
-  --current-line: #24324F;  /* surface */
+  /* Black & white surfaces — lifted up the palette so Roam reads like the
+     card preview instead of near-black. Main editor uses bg2 (the most
+     visible/themed surface), sidebar uses surface, hovers use surface2. */
+  --background:   #1F2A44;  /* bg2 (was bg0) */
+  --current-line: #2C3A5B;  /* surface2 (was surface) */
   --foreground:   #D8D3C4;  /* text */
   --comment:      #7E8794;  /* comment */
 
   /* Other UI colors */
   --dark-blue:    #3D4D63;  /* highlight */
   --dark-yellow:  #5A4A2A;  /* dim warm gold for highlighter */
-  --background2:  #1F2A44;  /* bg2 */
+  --background2:  #24324F;  /* surface (was bg2) */
   --foreground2:  #A6A99F;  /* muted */
   --search-input: #D8D3C4;  /* text (light surface for search popover) */
   --search-hover: #A6A99F;  /* muted */
@@ -670,7 +672,14 @@ textarea {
 .rm-title-display,
 .rm-title-textarea {
   font-family: var(--font-mono) !important;
-  color: var(--my-text) !important;
+  color: var(--orange) !important;
+}
+
+/* Bold text — Ukiyo Night gold. Needs !important because Roam applies
+   inline color via `color: rgb(...)` on the <strong> element. */
+strong,
+.rm-bold {
+  color: var(--yellow) !important;
 }
 
 

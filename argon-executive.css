@@ -368,16 +368,18 @@ Argon Executive colors.
   --red:    #D9796D;  /* danger */
   --yellow: #BFE7E0;  /* title (pale teal — no warm color in this palette) */
 
-  /* Black & white surfaces */
-  --background:   #0F1618;  /* bg0 */
-  --current-line: #223436;  /* surface */
+  /* Black & white surfaces — lifted up the palette so Roam reads like the
+     card preview instead of near-black. Main editor uses bg2 (the most
+     visible/themed surface), sidebar uses surface, hovers use surface2. */
+  --background:   #1B2B2D;  /* bg2 (was bg0) */
+  --current-line: #2B4142;  /* surface2 (was surface) */
   --foreground:   #DCE7E3;  /* text */
   --comment:      #7D918D;  /* comment */
 
   /* Other UI colors */
   --dark-blue:    #274447;  /* highlight */
   --dark-yellow:  #3D4F1F;  /* dim olive for highlighter */
-  --background2:  #1B2B2D;  /* bg2 */
+  --background2:  #223436;  /* surface (was bg2) */
   --foreground2:  #9BB0AA;  /* muted */
   --search-input: #DCE7E3;  /* text (light surface for search popover) */
   --search-hover: #9BB0AA;  /* muted */
@@ -670,7 +672,14 @@ textarea {
 .rm-title-display,
 .rm-title-textarea {
   font-family: var(--font-mono) !important;
-  color: var(--my-text) !important;
+  color: var(--yellow) !important;  /* Argon "title" — pale teal */
+}
+
+/* Bold text — Argon emphasis (chartreuse). Needs !important because Roam
+   applies inline color via `color: rgb(...)` on the <strong> element. */
+strong,
+.rm-bold {
+  color: var(--orange) !important;
 }
 
 
