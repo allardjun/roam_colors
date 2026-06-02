@@ -156,29 +156,8 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
  background: var(--orange);  /* best guess */
 }
 
-.CodeMirror-activeline-background {
- background: var(--current-line);
-}
-
-.CodeMirror-selected {
-  background: var(--current-line);
-}
-
-.CodeMirror-focused .CodeMirror-selected {
-  background: var(--current-line);
-}
-
-.CodeMirror-line::selection,
-.CodeMirror-line>span::selection,
-.CodeMirror-line>span>span::selection {
-  background: var(--current-line);
-}
-
-.CodeMirror-line::-moz-selection,
-.CodeMirror-line>span::-moz-selection,
-.CodeMirror-line>span>span::-moz-selection {
-  background: var(--current-line);
-}
+/* Note: .CodeMirror-selected / activeline / line::selection rules live in the
+   "Selection + DONE checkbox" section near the bottom with !important. */
 
 .cm-searching {
   background-color: var(--dark-yellow);  /* best guess */
@@ -299,11 +278,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
 
 /* Filter tooltip */
 
-.bp3-tooltip .bp3-popover-content {
-  background-color: var(--current-line);
-  color: var(--foreground);
-}
-
+.bp3-tooltip .bp3-popover-content,
 .bp3-popover .bp3-popover-content {
   background-color: var(--current-line);
   color: var(--foreground);
@@ -347,9 +322,8 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   background-color: var(--bullet-outer);
 }
 
-.check-container input:checked ~ .checkmark {
-  background-color: var(--dark-yellow);
-}
+/* Note: .check-container input:checked ~ .checkmark is set with !important
+   in the "Selection + DONE checkbox" section near the bottom. */
 
 
 /* Sliders */
@@ -385,7 +359,7 @@ Install with the Stylus extension for Chrome or Firefox.
 :root {
   /* Dracula color palette */
   --blue:   #8be9fd;
-  --green:  #50fa7b; 
+  --green:  #50fa7b;
   --orange: #ffb86c;
   --pink:   #ff79c6;
   --purple: #bd93f9;
@@ -396,7 +370,6 @@ Install with the Stylus extension for Chrome or Firefox.
   --background:   #282a36;
   --current-line: #44475a;
   --foreground:   #f8f8f2;
-  --foreground2:  #f8f8f2;
   --comment:      #6272a4;
 
   /* Other UI colors */
@@ -409,6 +382,21 @@ Install with the Stylus extension for Chrome or Firefox.
   --bullet-outer: #6c6f75;
   --bullet-inner: #D8DEE9;
   --column-title: #818D9B;
+
+  /* Typography */
+  --my-text: #E1E1E1;
+  --my-font: "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas,
+               "Liberation Mono", "Courier New", monospace;
+
+  /* Selection + DONE checkbox */
+  --selection-bg: #b9d7ff;
+  --selection-text: #6B9CCD;
+  --code-selection-bg: #ffcf70;
+  --code-selection-text: #AEAEAE;
+  --done-checkbox-bg: #6f8f72;
+  --done-checkbox-border: #4f6f52;
+  --done-checkbox-check: #ffffff;
 }
 
 
@@ -466,23 +454,14 @@ Install with the Stylus extension for Chrome or Firefox.
   color: var(--comment); 
 }
 
-.roam-block .bp3-button {
-  background-color: var(--background2);
-  color: var(--foreground2);
-  background-image: none;
-}
-
-.roam-block .bp3-button:hover {
-  background-color: var(--current-line);
-  color: var(--foreground);
-}
-
+.roam-block .bp3-button,
 .dont-focus-block.bp3-button {
   background-color: var(--background2);
   color: var(--foreground2);
   background-image: none;
 }
 
+.roam-block .bp3-button:hover,
 .dont-focus-block.bp3-button:hover {
   background-color: var(--current-line);
   color: var(--foreground);
@@ -521,10 +500,8 @@ Install with the Stylus extension for Chrome or Firefox.
   background-color: var(--dark-yellow);
 }
 
-.block-highlight-blue {
-  background-color: var(--dark-blue);
-}
-
+/* Note: -grey reuses --dark-blue — possibly intentional, possibly a bug. */
+.block-highlight-blue,
 .block-highlight-grey {
   background-color: var(--dark-blue);
 }
@@ -555,10 +532,7 @@ Install with the Stylus extension for Chrome or Firefox.
 
 /* External links */
 
-a {
-  color: var(--blue);
-}
-
+a,
 a:hover {
   color: var(--blue);
 }
@@ -613,11 +587,7 @@ a:hover {
 }
 
 .roam-bullet-closed {
-  background-color: var(--bullet-outer); 
-}
-
-#right-sidebar .roam-bullet-closed {
-  background-color: var(--bullet-outer); 
+  background-color: var(--bullet-outer);
 }
 
 .block-border-left {
@@ -639,18 +609,12 @@ a:hover {
   border-bottom: 1px solid var(--background2); 
 }
 
-.rm-pages-title-col span {
-  color: var(--column-title);
-}
-
+.rm-pages-title-col span,
 .rm-pages-col span {
   color: var(--column-title);
 }
 
-.rm-pages-title-col span.sorted-header-text {
-  color: var(--foreground2);
-}
-
+.rm-pages-title-col span.sorted-header-text,
 .rm-pages-col span.sorted-header-text {
   color: var(--foreground2);
 }
@@ -684,18 +648,11 @@ a:hover {
   background-color: var(--bullet-outer);
 }
 
-.bp3-control.bp3-checkbox input:checked ~ .bp3-control-indicator {
-  background-color: var(--dark-yellow);
-} 
+/* Note: .bp3-control...input:checked ~ .bp3-control-indicator is set with
+   !important in the "Selection + DONE checkbox" section near the bottom. */
 
-:root {
-  --my-text: #E1E1E1;
-  --my-font: "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas,
-               "Liberation Mono", "Courier New", monospace;
-    /* --my-font: var(--font-mono) */
 
-}
+/* Typography */
 
 body,
 .roam-body,
@@ -719,18 +676,6 @@ textarea {
 /* ============================================================
    Edge-case fixes: selection + DONE checkbox
    ============================================================ */
-
-:root {
-  --selection-bg: #b9d7ff;
-  --selection-text: #6B9CCD;
-
-  --code-selection-bg: #ffcf70;
-  --code-selection-text: #AEAEAE;
-
-  --done-checkbox-bg: #6f8f72;
-  --done-checkbox-border: #4f6f52;
-  --done-checkbox-check: #ffffff;
-}
 
 /* 1. Normal text selection throughout Roam */
 ::selection {
