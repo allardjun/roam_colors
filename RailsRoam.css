@@ -2444,3 +2444,8 @@ inspired by Matt Goldenberg
 #right-sidebar {
   border-left: var(--masonry-border);
 }
+
+/* DEBUG TEST */
+.rm-title-display {
+  outline: 6px solid hotpink !important;
+}
