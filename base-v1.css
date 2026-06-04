@@ -1,0 +1,108 @@
+/* ============================================================
+   base-v1.css  —  Dracula-based Roam Research theme (entry file)
+   ------------------------------------------------------------
+   Two tiers of variables live here:
+     1. PALETTE      — raw, color-describing hues (--col-*).
+     2. APPLICATIONS — semantic roles that map palette -> UI.
+   Component rules live in components.css and reference ONLY the
+   application vars. To make a new theme, copy this file and
+   change the PALETTE; the application map and components stay.
+
+   NOTE: the @import must come before :root. A CSS @import is
+   dropped by the browser if any style rule precedes it. var()
+   resolution is order-independent, so components.css (imported
+   first) still sees the vars defined just below.
+   ============================================================ */
+
+@import url('./components.css');
+
+:root {
+  /* ── PALETTE (color-describing) ───────────────────────── */
+
+  /* Dracula core hues */
+  --col-cyan:   #8be9fd;
+  --col-green:  #50fa7b;
+  --col-orange: #ffb86c;
+  --col-pink:   #ff79c6;
+  --col-purple: #bd93f9;
+  --col-red:    #ff5555;
+  --col-yellow: #f1fa8c;
+
+  /* Neutrals (dark -> light) */
+  --col-ink:         #282a36;  /* deepest background */
+  --col-charcoal:    #333545;  /* panel surface */
+  --col-slate:       #44475a;  /* raised surface */
+  --col-indigo-gray: #6272a4;  /* muted text */
+  --col-gray:        #6c6f75;
+  --col-slate-gray:  #818D9B;
+  --col-mid-gray:    #AEAEAE;
+  --col-steel:       #BDCAD4;
+  --col-pale-gray:   #D8DEE9;
+  --col-light-gray:  #E1E1E1;
+  --col-paper:       #f8f8f2;  /* primary text */
+  --col-white:       #ffffff;
+
+  /* Accent / state hues used outside the Dracula core */
+  --col-dark-teal:  #29454B;
+  --col-dark-olive: #606438;
+  --col-cloud:      #e4e9ed;
+  --col-fog:        #d5dadf;
+  --col-pale-blue:  #b9d7ff;
+  --col-steel-blue: #6B9CCD;
+  --col-amber:      #ffcf70;
+  --col-sage:       #6f8f72;
+  --col-forest:     #4f6f52;
+
+  /* ── APPLICATIONS (semantic; map palette -> UI roles) ─────
+     Each comment lists where the color is used, so this block
+     doubles as a map of which components share each color. */
+
+  /* Surfaces */
+  --bg-base:   var(--col-ink);      /* page/editor/topbar bg, kanban-card, mention-pill bg, pill text-on-light, input text, gutters */
+  --bg-panel:  var(--col-charcoal); /* sidebars, kanban-column, embed-outer, buttons, borders, table header row */
+  --bg-raised: var(--col-slate);    /* popovers/tooltips/datepicker, inline-code bg, buffer, hover, reference-item, embed-inner, 2ndary cursor, ruler */
+
+  /* Text */
+  --text-primary:   var(--col-paper);       /* body text, headings, editor text, cursor, cm-error, matching bracket */
+  --text-secondary: var(--col-steel);       /* sidebar items, datepicker text, level3 heading, icons, parent-path, sorted headers */
+  --text-muted:     var(--col-indigo-gray); /* line numbers, page-ref, ref brackets, search list, small buttons, indent guide, title-children */
+  --text-body:      var(--col-light-gray);  /* typography !important color (body + title) */
+
+  /* Accent / state colors */
+  --accent:   var(--col-cyan);   /* external links, mention pills, cm header/def/link */
+  --success:  var(--col-green);  /* success toast, sync-synced icon, green cm tokens (quote/positive/type/variable-3/qualifier/builtin/attribute) */
+  --emphasis: var(--col-orange); /* inline-code fg, warning toast, saving icon, cm-variable-2, matching tag */
+  --keyword:  var(--col-pink);   /* cm keyword/tag, find-or-create new-page label, linked-ref page title */
+  --error:    var(--col-red);    /* cm negative/invalidchar/non-matching bracket */
+  --special:  var(--col-purple); /* cm atom/number, page-ref link color, bold text */
+  --string:   var(--col-yellow); /* cm string/string-2, slider progress */
+
+  /* Bullets, table, highlights */
+  --bullet-outer:  var(--col-gray);       /* closed/collapsed bullet, slider handle, cm-meta, fat-cursor color, active checkbox */
+  --kanban-bg:     var(--col-gray);        /* kanban board backdrop (own var so it can diverge from bullets) */
+  --bullet-inner:  var(--col-pale-gray);   /* open bullet, slider-label bg, cm bracket/hr, fat-cursor bg */
+  --table-header:  var(--col-slate-gray);  /* All-Pages column header text */
+  --highlight-cool: var(--col-dark-teal);  /* block-highlight blue/grey */
+  --highlight-warm: var(--col-dark-olive); /* roam-highlight, block-highlight-yellow, cm-searching */
+
+  /* Find-or-create search */
+  --search-bg:       var(--col-cloud); /* search input + menu background */
+  --search-hover-bg: var(--col-fog);   /* search menu item hover */
+
+  /* Selection */
+  --selection-bg:        var(--col-pale-blue);  /* normal text selection bg */
+  --selection-text:      var(--col-steel-blue); /* normal text selection fg */
+  --code-selection-bg:   var(--col-amber);      /* code-block selection bg */
+  --code-selection-text: var(--col-mid-gray);   /* code-block selection fg */
+  --code-activeline-bg:  rgba(0, 0, 0, 0.04);   /* subtle active line inside code blocks */
+
+  /* DONE / checked checkbox */
+  --done-checkbox-bg:     var(--col-sage);   /* checked checkbox fill */
+  --done-checkbox-border: var(--col-forest); /* checked checkbox border + hover fill */
+  --done-checkbox-check:  var(--col-white);  /* the tick mark */
+
+  /* Typography */
+  --font-ui:   "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; /* body/textarea */
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas,
+               "Liberation Mono", "Courier New", monospace;                              /* page titles */
+}

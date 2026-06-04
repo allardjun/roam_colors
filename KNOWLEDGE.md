@@ -57,6 +57,8 @@ When using `@import url('...')` from `roam/css`, browser cache holds the importe
 - **Cmd-Shift-R** for a true hard reload that bypasses the cache.
 - **Cache-bust the URL** — add `?v=2` (increment on each edit). This works even without a hard reload.
 
+Note the split entry/`components.css` layout means **two** files are cached. Editing a component rule (in `components.css`) won't show up if you only cache-bust the entry file — the browser holds the nested `@import`'d sheet separately. Hard-reload, or cache-bust the `components.css` import too.
+
 If you're running a local HTTPS server, the server's request log is the definitive test: a GET that hits it means the file is being re-fetched; silence means cache is winning.
 
 ## CodeMirror selection is two systems
@@ -100,6 +102,19 @@ CodeMirror tokens you'll actually see in Roam code blocks: `cm-keyword`, `cm-ato
 ## Variables-first design
 
 Define everything in a single `:root` block. The cost of a duplicate variable name in the same `:root` is silent override — easy to ship a bug where the "wrong" definition wins. Resist the urge to add a second `:root` further down the file when you add a new feature; just append the variable to the top one.
+
+### Two tiers: palette vs application (`base-v1.css`)
+
+`base-v1.css` splits its `:root` into two tiers, and themes built on it should follow the same convention:
+
+1. **Palette** — raw, color-describing hues, prefixed `--col-*` (e.g. `--col-cyan: #8be9fd`). One entry per distinct hex; this is the *only* place literal colors appear.
+2. **Application** — semantic role vars that map palette → UI (e.g. `--accent: var(--col-cyan)`, `--bg-raised: var(--col-slate)`). Component rules reference *only* these. Each application var carries a comment listing where it's used, so the block doubles as a map of which components share a color.
+
+Components live in a separate `components.css` (see below) and never touch the palette directly. **To make a new theme, change only the palette tier** — the application map and components stay put. (Group application vars by shared color: roles that are meant to track the same hue in every theme share one application var.)
+
+### `@import` must precede `:root`
+
+`base-v1.css` pulls in components with `@import url('./components.css')` at the very top, *before* the `:root` block. A CSS `@import` is silently dropped by the browser if any style rule (including `:root`) precedes it. This is safe because custom-property resolution is order-independent: `var()` resolves at used-value time against the single `:root`, so `components.css` (imported first) still sees vars defined just below. The relative path resolves against the entry file's own URL, so it works on GitHub Pages and the localhost dev server alike — the install URL is unchanged.
 
 ## Local prototyping
 
