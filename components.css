@@ -381,8 +381,11 @@ code {
   color: var(--text-primary);
 }
 
+/* Page title (display mode) is an <h1>; this is the selector that actually
+   renders the title color. .rm-title-display below covers the edit-mode
+   textarea + sidebar surfaces. Both point at --title-fg. */
 .roam-body .roam-app h1 {
-  color: var(--text-primary);
+  color: var(--title-fg);
 }
 
 .roam-app {
@@ -634,7 +637,7 @@ textarea {
 .rm-title-display,
 .rm-title-textarea {
   font-family: var(--font-mono) !important;
-  color: var(--text-body) !important;
+  color: var(--title-fg) !important;
 }
 
 

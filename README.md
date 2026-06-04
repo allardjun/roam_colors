@@ -22,6 +22,12 @@ mkcert localhost                 # creates localhost.pem + localhost-key.pem
 npx http-server -S -C localhost.pem -K localhost-key.pem --cors -p 8080
 ```
 
+Remove caching:
+
+```bash
+npx http-server -S -C localhost.pem -K localhost-key.pem --cors -c-1 -p 8080
+```
+
 Then swap the `@import` in your `roam/css` block to:
 
 ```css

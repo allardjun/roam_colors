@@ -50,16 +50,25 @@ Same pattern applies to other inline styles Roam sets — when CSS "doesn't work
 
 `.rm-title-display` (display mode) and `.rm-title-textarea` (edit mode) target every page title — both regular pages and daily-note date pages. Roam doesn't expose a date-only class, so theming dates differently from other titles requires `:has()` content-matching, which is brittle. In practice, color all titles together.
 
+**Title `color` is not won by `.rm-title-display`.** The displayed title is an `<h1>`, and the rule that actually paints it is **`.roam-body .roam-app h1`** (this is what RailsRoam.css uses). Setting `color` on `.rm-title-display` alone — even with `!important` — does *not* change the displayed title color, because `.roam-body .roam-app h1` is the governing selector for that element. To recolor titles, set `.roam-body .roam-app h1` (display) and keep `.rm-title-display, .rm-title-textarea` (edit-mode textarea + sidebar surfaces) pointing at the same var. In `base-v1.css` both feed `--title-fg`. Confirm with DevTools: the winning `color:` in the Styles pane is the `h1` rule, not `.rm-title-display`.
+
 ## Caching gotcha when iterating via `@import`
 
 When using `@import url('...')` from `roam/css`, browser cache holds the imported sheet across normal reloads. Cmd-R won't always re-fetch. Two fixes:
 
 - **Cmd-Shift-R** for a true hard reload that bypasses the cache.
 - **Cache-bust the URL** — add `?v=2` (increment on each edit). This works even without a hard reload.
+- **Disable caching at the server** — run `http-server` with `-c-1` (sets `max-age=-1`, i.e. no caching) so a plain Cmd-R always re-fetches. Best default while iterating. Caveat: it only affects fetches made *after* you set it — an entry already cached under the old `max-age=3600` stays "fresh" until its hour expires, so add `-c-1` *before* the first load (or clear the cache once).
 
-Note the split entry/`components.css` layout means **two** files are cached. Editing a component rule (in `components.css`) won't show up if you only cache-bust the entry file — the browser holds the nested `@import`'d sheet separately. Hard-reload, or cache-bust the `components.css` import too.
+### The split-file layout multiplies this
 
-If you're running a local HTTPS server, the server's request log is the definitive test: a GET that hits it means the file is being re-fetched; silence means cache is winning.
+The entry file (`base-v1.css`) `@import`s `components.css`, so **two** files are cached independently. Editing a component rule won't show up if you only cache-bust the entry — the nested sheet is held separately. To force the nested sheet to re-fetch you must change *its* URL, e.g. `@import url('./components.css?v=100')`, **and** bump the entry's `?v` so the browser re-reads the entry and discovers the new nested URL. Bumping only one of the two does nothing.
+
+### The macOS desktop app caches separately from the browser
+
+This burned an afternoon: the Roam **desktop app is Electron and keeps its own HTTP cache, independent of any browser**. The same `roam/css` `@import` can render correctly in a browser tab pointed at `roamresearch.com` while the desktop app shows a stale result — because the app cached the nested `components.css` earlier (under `max-age=3600`, before `-c-1`) and a parent `?v` bump never touched that nested URL. Symptom: "it works in the browser but not the app" with identical `roam/css`. Fix: cache-bust the nested import URL (above) so the app fetches a URL it has never seen, or iterate in the browser and use the app only for final checks. To see a `components.css` edit in the app you must bump *both* version numbers (parent in `roam/css` **and** the nested `?v=` in the entry file).
+
+If you're running a local HTTPS server, the server's request log is the definitive test: a GET that hits it means the file is being re-fetched; silence means cache is winning. Note the log shows browser *and* app requests — match by timing to tell which client is (not) re-fetching.
 
 ## CodeMirror selection is two systems
 

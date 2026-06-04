@@ -63,10 +63,11 @@
   --bg-raised: var(--col-slate);    /* popovers/tooltips/datepicker, inline-code bg, buffer, hover, reference-item, embed-inner, 2ndary cursor, ruler */
 
   /* Text */
-  --text-primary:   var(--col-paper);       /* body text, headings, editor text, cursor, cm-error, matching bracket */
+  --text-primary:   var(--col-paper);       /* body text, editor text, cursor, cm-error, matching bracket, All-Pages title text */
   --text-secondary: var(--col-steel);       /* sidebar items, datepicker text, level3 heading, icons, parent-path, sorted headers */
   --text-muted:     var(--col-indigo-gray); /* line numbers, page-ref, ref brackets, search list, small buttons, indent guide, title-children */
-  --text-body:      var(--col-light-gray);  /* typography !important color (body + title) */
+  --text-body:      var(--col-light-gray);  /* body/block text !important color */
+  --title-fg:       var(--col-indigo-gray);         /* page title: .roam-app h1 (display) + .rm-title-display/-textarea (edit) */
 
   /* Accent / state colors */
   --accent:   var(--col-cyan);   /* external links, mention pills, cm header/def/link */
@@ -103,6 +104,6 @@
 
   /* Typography */
   --font-ui:   "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; /* body/textarea */
-  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas,
+  --font-mono:  ui-monospace, "SFMono-Regular", Menlo, Consolas,
                "Liberation Mono", "Courier New", monospace;                              /* page titles */
 }
