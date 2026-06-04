@@ -53,6 +53,23 @@
   --col-sage:       #6f8f72;
   --col-forest:     #4f6f52;
 
+  /* OneDark code-block hues (CodeMirror 6 / .rm-code-block) */
+  --col-od-bg:            #21252b;   /* editor + gutter background */
+  --col-od-active:        #2c313a;   /* active line */
+  --col-od-fg:            #abb2bf;   /* default text + gutter */
+  --col-od-selection:     #3E4451;   /* selection */
+  --col-od-cursor:        #528bff;   /* caret / cursor */
+  --col-od-gray:          #7d8799;   /* comment / placeholder / fold */
+  --col-od-purple:        #c678dd;   /* keyword */
+  --col-od-cyan:          #56b6c2;   /* operator / regexp / specialChar */
+  --col-od-green:         #98c379;   /* string */
+  --col-od-blue:          #61afef;   /* variable */
+  --col-od-orange:        #d19a66;   /* number / constant */
+  --col-od-red:           #e06c75;   /* property / name */
+  --col-od-yellow:        #e5c07b;   /* type / class */
+  --col-od-bracket-match: #bad0f847; /* matching-bracket fill (incl. alpha) */
+  --col-od-bracket-line:  #515a6b;   /* matching-bracket outline */
+
   /* ── APPLICATIONS (semantic; map palette -> UI roles) ─────
      Each comment lists where the color is used, so this block
      doubles as a map of which components share each color. */
@@ -96,6 +113,27 @@
   --code-selection-bg:   var(--col-amber);      /* code-block selection bg */
   --code-selection-text: var(--col-mid-gray);   /* code-block selection fg */
   --code-activeline-bg:  rgba(0, 0, 0, 0.04);   /* subtle active line inside code blocks */
+
+  /* Code blocks — CodeMirror 6 / .rm-code-block (OneDark).
+     Separate from the legacy CM5 (.cm-s-default) tokens above; modern Roam
+     renders ``` blocks with CodeMirror 6. */
+  --cm6-bg:                 var(--col-od-bg);            /* code block + gutter background */
+  --cm6-fg:                 var(--col-od-fg);            /* default code text, gutter text + border */
+  --cm6-active-line:        var(--col-od-active);        /* active line + active-line gutter */
+  --cm6-selection:          var(--col-od-selection);     /* selected text background */
+  --cm6-cursor:             var(--col-od-cursor);        /* caret + cursor */
+  --cm6-muted:              var(--col-od-gray);          /* comment, placeholder, fold placeholder */
+  --cm6-keyword:            var(--col-od-purple);        /* keywords */
+  --cm6-operator:           var(--col-od-cyan);          /* operators, regexp, special chars */
+  --cm6-string:             var(--col-od-green);         /* strings */
+  --cm6-variable:           var(--col-od-blue);          /* variables */
+  --cm6-number:             var(--col-od-orange);        /* numbers, colors, constants */
+  --cm6-name:               var(--col-od-red);           /* property names, names */
+  --cm6-type:               var(--col-od-yellow);        /* type / class names */
+  --cm6-bracket-match-bg:   var(--col-od-bracket-match); /* matching-bracket fill */
+  --cm6-bracket-match-line: var(--col-od-bracket-line);  /* matching-bracket outline */
+  --cm6-bracket-nomatch-bg: red;                         /* non-matching bracket (OneDark uses literal red) */
+  --cm6-field-border:       silver;                      /* CM search textfield border */
 
   /* DONE / checked checkbox */
   --done-checkbox-bg:     var(--col-sage);   /* checked checkbox fill */

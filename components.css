@@ -7,7 +7,8 @@
    raw palette and never literal colors.
 
    Sections, in order:
-     CodeMirror (code blocks + syntax) · Intercom (hidden)
+     CodeMirror 5 (legacy code blocks + syntax)
+     CodeMirror 6 / .rm-code-block (OneDark) · Intercom (hidden)
      Mentions in All Pages · Find-or-create search · Hover popover
      Date picker · Kanban · Filter tooltip · Embeds · Checkmarks
      Sliders · Inline code · Body/topbar/sidebar · Buttons
@@ -179,7 +180,96 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
 .cm-searching {
   background-color: var(--highlight-warm);  /* best guess */
 }
- 
+
+
+/* Code blocks — CodeMirror 6 / .rm-code-block (OneDark)
+   ----------------------------------------------------------------
+   Modern Roam renders ``` fenced code blocks with CodeMirror 6, whose
+   tokens are emitted as generated `.ͼ*` classes plus `.cm-*` chrome
+   (distinct from the legacy CM5 `.cm-s-default` rules above). Ported
+   from theme-one-dark; colors routed through --cm6-* application vars.
+   Applies unconditionally (the source's prefers-color-scheme: dark
+   wrapper was dropped, since this is an always-dark theme). */
+
+.cm-activeLine, .cm-focused .cm-activeLine,
+.cm-activeLineGutter, .cm-focused .cm-activeLineGutter,
+.ͼ2 .cm-activeLine, .ͼ3 .cm-activeLine,
+.ͼ2 .cm-activeLineGutter, .ͼ3 .cm-activeLineGutter {
+  background-color: var(--cm6-active-line) !important;
+}
+
+.rm-code-block {
+  background-color: var(--cm6-bg);
+  color: var(--cm6-fg);
+  border-radius: 5px;
+}
+
+.ͼ2 .cm-content, .ͼ3 .cm-content {
+  caret-color: var(--cm6-cursor);
+}
+
+.ͼ2 .cm-selectionBackground, .ͼ3 .cm-selectionBackground,
+.ͼ2.cm-focused .cm-selectionBackground, .ͼ3.cm-focused .cm-selectionBackground,
+.cm-content::selection {
+  background-color: var(--cm6-selection);
+}
+
+.ͼ1 .cm-cursor, .ͼ3 .cm-cursor {
+  border-left-color: var(--cm6-cursor);
+}
+
+.ͼ2 .cm-specialChar, .ͼ3 .cm-specialChar {
+  color: var(--cm6-operator);
+}
+
+.ͼ1 .cm-placeholder {
+  color: var(--cm6-muted);
+}
+
+.ͼ1 .cm-textfield {
+  vertical-align: middle;
+  color: inherit;
+  font-size: 70%;
+  border: 1px solid var(--cm6-field-border);
+  padding: .2em .5em;
+}
+
+.ͼ1 .cm-foldPlaceholder {
+  background-color: transparent;
+  border-color: var(--cm6-muted);
+  color: var(--cm6-muted);
+}
+
+.ͼ1 .cm-gutters, .ͼ2 .cm-gutters, .ͼ3 .cm-gutters {
+  background-color: var(--cm6-bg);
+  color: var(--cm6-fg);
+  border-right: 1px solid var(--cm6-fg);
+}
+
+.ͼ1 .cm-matchingBracket {
+  background-color: var(--cm6-bracket-match-bg);
+  outline: 1px solid var(--cm6-bracket-match-line);
+}
+
+.ͼ1 .cm-nonmatchingBracket {
+  background-color: var(--cm6-bracket-nomatch-bg);
+}
+
+.ͼa { color: var(--cm6-keyword); }   /* keyword */
+.ͼb { color: var(--cm6-operator); }  /* operator */
+.ͼc { color: var(--cm6-number); }    /* color */
+.ͼd { color: var(--cm6-string); }    /* string */
+.ͼe { color: var(--cm6-operator); }  /* regexp */
+.ͼf { color: var(--cm6-variable); }  /* variable */
+.ͼg { color: var(--cm6-operator); }  /* (cyan) */
+.ͼh { color: var(--cm6-name); }      /* propertyname */
+.ͼi { color: var(--cm6-type); }      /* typename, classname */
+.ͼj { color: var(--cm6-number); }    /* (orange) */
+.ͼk { color: var(--cm6-name); }      /* name */
+.ͼl { color: var(--cm6-muted); }     /* comment */
+.ͼm { color: var(--cm6-string); }    /* (green) */
+.ͼn { color: var(--cm6-number); }    /* (orange) */
+
 
 /* Intercom app */
 
