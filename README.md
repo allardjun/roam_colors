@@ -61,9 +61,7 @@ Commit such changes separately from whatever prompted them, so they can be rever
 - `base-v1.css` + `components.css` — the first split-layout version, kept frozen as a reference.
   Superseded by v2.
   They are a matched pair: nothing else imports `components.css`, so they move or go together.
-- `dracula-jun.css` — the last of the monolithic themes, a single self-contained file with no shared components.
-  Still installable, but it predates the refactor and doesn't benefit from fixes made to `components-v2.css`.
-  Its palette is Dracula, so `base-v2.css` supersedes it in everything but form.
+  Frozen means frozen: fixes go into `components-v2.css`, never here.
 - `RailsRoam.css` — a third-party theme kept purely as a reference for Roam's current class names.
   Not meant to be installed from here.
 
