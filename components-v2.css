@@ -347,32 +347,52 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
 
 
 /* Keyboard-selected row (up/down arrows) in the find-or-create menu,
-   the slash / inline-search popover, and the command palette.
+   the full-text search panel, the slash / inline-search popover, and
+   the command palette.
    ----------------------------------------------------------------
-   Roam does NOT put a class on the selected row — it writes the
-   highlight as an INLINE style, `background-color: rgb(213, 218, 223)`
-   (= #d5dadf). So it can only be overridden by matching the style
-   attribute, and only !important beats an inline declaration.
+   Current Roam marks the selected row with the CLASS `bp3-active` on
+   `.bp3-menu-item` (verified in the DOM). Older builds — and the
+   RailsRoam theme that documents them — instead wrote an inline
+   `background-color: rgb(213, 218, 223)`, which is why the block
+   autocomplete rule below still matches on the style attribute
+   rather than a class. Both forms are covered.
 
-   base-v1 set --search-hover-bg to that exact same #d5dadf, which is
-   why arrowing through results was ~invisible: 1.16:1 against the
-   #e4e9ed menu background. The selected row now gets a filled accent,
-   and plain mouse hover stays a quieter grey (see .bp3-menu div:hover
-   above), so the two states are no longer competing. */
-.bp3-popover-content .rm-menu-item[style*="rgb(213, 218, 223)"],
-.bp3-elevation-3 .dont-unfocus-block[style*="rgb(213, 218, 223)"],
+   base-v1 set --search-hover-bg to that same #d5dadf, so arrowing
+   through results gave 1.16:1 against the #e4e9ed menu — effectively
+   invisible. The selected row now gets a filled accent and plain
+   mouse hover stays a quieter grey (see .bp3-menu div:hover above),
+   so the two states no longer compete. */
+
+/* Specificity matters here. Roam puts its own class (rm-find-or-create__menu)
+   on the UL and styles the active row through it, so a bare
+   `.bp3-menu-item.bp3-active` — even with !important — loses. These
+   selectors are deliberately over-qualified to outrank it. */
+.bp3-popover-content .bp3-menu.rm-find-or-create__menu li.bp3-menu-item.bp3-active,
+.bp3-popover-content .bp3-menu li.bp3-menu-item.bp3-active,
+.bp3-menu li.bp3-menu-item.bp3-active,
+.bp3-menu li.bp3-menu-item.bp3-active:hover,
 .rm-command-palette__scroll-container .bp3-menu .rm-menu-item--active,
 .rm-command-palette__scroll-container .bp3-menu .rm-menu-item--active:hover {
   background-color: var(--search-selected-bg) !important;
   color: var(--search-selected-text) !important;
 }
 
-/* Force descendants too — .rm-search-title, .rm-search-list-item and
-   .rm-new-page each set their own color and would otherwise clash
-   with the filled row. */
-.bp3-popover-content .rm-menu-item[style*="rgb(213, 218, 223)"] *,
-.bp3-elevation-3 .dont-unfocus-block[style*="rgb(213, 218, 223)"] *,
-.rm-command-palette__scroll-container .bp3-menu .rm-menu-item--active * {
+/* Block autocomplete / slash menu, which still uses an inline style.
+   The match is deliberately loose (any inline background-color) —
+   matching a specific rgb() would break again the next time Roam
+   changes the value. */
+.bp3-elevation-3 .dont-unfocus-block[style~="background-color:"] {
+  background-color: var(--search-selected-bg) !important;
+  color: var(--search-selected-text) !important;
+}
+
+/* Force descendants too — .rm-search-title, .rm-search-list-item,
+   .rm-new-page and the bolded query match each set their own color
+   and would otherwise clash with the filled row. */
+.bp3-popover-content .bp3-menu li.bp3-menu-item.bp3-active *,
+.bp3-menu li.bp3-menu-item.bp3-active *,
+.rm-command-palette__scroll-container .bp3-menu .rm-menu-item--active *,
+.bp3-elevation-3 .dont-unfocus-block[style~="background-color:"] * {
   color: var(--search-selected-text) !important;
 }
 
@@ -384,16 +404,15 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
 }
 
 /* The selected-row rule for .bp3-elevation-3 lives in the search
-   section above, so this popover and the find-or-create menu now
-   share one highlight. base-v1 handled only this surface, and with
-   a different color (--text-muted), which is why the two menus
-   disagreed about what "selected" looks like. */
+   section above, so this popover and the search menus now share one
+   highlight. base-v1 handled only this surface, and with a different
+   color (--text-muted), which is why the two menus disagreed about
+   what "selected" looks like. */
 
 
 /* Date picker */
 
-.bp3-datepicker,
-.bp3-popover .bp3-popover-content .bp3-datepicker {
+.bp3-datepicker{
   background-color: var(--bg-raised);
   color: var(--text-secondary);
 }
@@ -403,31 +422,10 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   color: var(--text-secondary);
 }
 
-/* Day-cell states.
-   base-v1 styled only the panel and the two selects, so today,
-   the selected day, hover and spill-over days all fell through to
-   Blueprint's light-mode defaults — a white chip and a solid white
-   circle, the highest-contrast things on the screen. */
-
-.bp3-datepicker .DayPicker-Day.DayPicker-Day--isToday .bp3-datepicker-day-wrapper {
-  border: 1px solid var(--datepicker-today-border);
-}
-
-.bp3-datepicker .DayPicker-Day--selected,
-.bp3-datepicker .DayPicker-Day--selected:focus {
-  background-color: var(--datepicker-selected-bg) !important;
-  color: var(--datepicker-selected-text) !important;
-}
-
-.bp3-datepicker .DayPicker-Day:hover,
-.bp3-datepicker .DayPicker-Day:focus {
-  background-color: var(--datepicker-hover-bg);
-  color: var(--datepicker-hover-text);
-}
-
-.bp3-datepicker .DayPicker-Day--outside {
-  color: var(--datepicker-outside-text);
-}
+/* Day cells (today / selected / hover / outside-month) are deliberately
+   left to Blueprint. Theming them was tried and reverted — see
+   KNOWLEDGE.md "Blueprint date picker: don't bother". The panel and the
+   two selects above are the whole treatment. */
 
 
 /* Kanban board */

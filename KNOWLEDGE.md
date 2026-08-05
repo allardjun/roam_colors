@@ -79,6 +79,54 @@ Inside a code block, "selection" is rendered two different ways depending on whe
 
 You need to style both, with both `-webkit-`/standard and `-moz-` variants. Skipping one leaves a visible "wrong color" flash during selection.
 
+## The search menu's selected row is a class, not an inline style
+
+Arrowing up/down through search results highlights a row. In current Roam
+that row is `LI.bp3-menu-item.bp3-active`, inside
+`UL.bp3-menu.rm-find-or-create__menu`. Two traps:
+
+- **RailsRoam's approach is out of date.** It matches an inline
+  `background-color: rgb(213, 218, 223)` on the row. Current Roam sets no
+  inline background there at all — verified in the DOM — so any selector
+  built on that never matches. (The block-autocomplete popover,
+  `.bp3-elevation-3 .dont-unfocus-block`, *does* still use an inline
+  style, so both forms are in play on different surfaces. Match it
+  loosely, `[style~="background-color:"]`, so it survives Roam changing
+  the value.)
+- **`!important` alone is not enough.** Roam styles the active row
+  through its own `rm-find-or-create__menu` class, so a bare
+  `.bp3-menu-item.bp3-active { ... !important }` still loses. Qualify the
+  selector (e.g. `.bp3-menu li.bp3-menu-item.bp3-active`).
+
+Also: `#d5dadf` is Roam's own highlight grey. Don't reuse it as your
+hover color — base-v1 did, which made keyboard selection 1.16:1 against
+the menu background and effectively invisible.
+
+## Popover arrows need `fill`, not `color`
+
+`.bp3-popover-arrow { color: ... }` is a **no-op**. Blueprint paints the
+arrow as an SVG `<path class="bp3-popover-arrow-fill">`, so it needs
+`.bp3-popover .bp3-popover-arrow-fill { fill: ... }`. base-v1 had the
+`color` form, which is why every popover in Roam — date picker, tooltips,
+block menus — rendered a white triangle against the dark theme.
+
+## Blueprint date picker: don't bother with day cells
+
+Theming the day cells (today / selected / hover / outside-month) was
+tried in v2 and reverted. Each fix uncovered another Blueprint layer:
+
+- Fill and text render on the inner `.bp3-datepicker-day-wrapper`. A
+  background on `.DayPicker-Day` is hidden behind it.
+- Setting it on both leaks a square behind the wrapper's round chip —
+  the cell is rectangular, the wrapper isn't.
+- Blueprint also draws a light focus indicator on the cell above the
+  wrapper, which the cell background had been masking. Remove the
+  background and a bright white square appears on the focused day.
+
+Net result looked worse than the untouched Blueprint defaults. The panel
+(`.bp3-datepicker`) and the month/year selects are worth theming; the day
+grid is not, unless you're willing to design the whole thing.
+
 ## Useful class map (the ones that aren't obvious)
 
 | What you want to style | Selector |

@@ -16,7 +16,12 @@
    Changes from base-v1.css are listed at the bottom of this file.
    ============================================================ */
 
-@import url('./components-v2.css');
+/* The ?v= is a cache-buster, not decoration. The nested sheet is cached
+   independently of this file, so editing components-v2.css is invisible
+   until THIS url changes too — bump it on every component edit, and bump
+   the roam/css import as well so the browser re-reads this file and
+   discovers the new nested url. See KNOWLEDGE.md "Caching gotcha". */
+@import url('./components-v2.css?v=7');
 
 :root {
   /* ── PALETTE (color-describing) ───────────────────────────
@@ -108,10 +113,10 @@
   /* Accent / state colors */
   --accent:   var(--col-cyan);   /* external links, mention pills, cm5 header/def/link */
   --success:  var(--col-green);  /* success toast, sync-synced icon, green cm5 tokens (quote/positive/type/variable-3/qualifier/builtin/attribute) */
-  --emphasis: var(--col-orange); /* inline-code fg, warning toast, saving icon, cm5 variable-2, matching tag, datepicker today ring */
+  --emphasis: var(--col-orange); /* inline-code fg, warning toast, saving icon, cm5 variable-2, matching tag */
   --keyword:  var(--col-pink);   /* cm5 keyword/tag, find-or-create new-page label, linked-ref page title */
   --error:    var(--col-red);    /* cm5 negative/invalidchar/non-matching bracket */
-  --special:  var(--col-purple); /* cm5 atom/number, page-ref link color, bold text, search-selected row, datepicker selected day */
+  --special:  var(--col-purple); /* cm5 atom/number, page-ref link color, bold text, search-selected row */
   --string:   var(--col-yellow); /* cm5 string/string-2, slider progress */
 
   /* Bullets, table, highlights */
@@ -130,15 +135,8 @@
   --search-selected-bg:   var(--col-purple); /* KEYBOARD-selected row (up/down arrows) */
   --search-selected-text: var(--col-n900);   /* text on the selected row */
 
-  /* Date picker day states.
-     v1 styled only the panel and the month/year selects, so today /
-     selected / hover fell through to Blueprint's light-mode defaults. */
-  --datepicker-today-border:   var(--emphasis);     /* ring around today */
-  --datepicker-selected-bg:    var(--special);      /* selected day fill */
-  --datepicker-selected-text:  var(--col-n900);     /* selected day numeral */
-  --datepicker-hover-bg:       var(--col-n600);     /* day hover fill */
-  --datepicker-hover-text:     var(--col-n50);      /* day hover numeral */
-  --datepicker-outside-text:   var(--col-comment);  /* spill-over days from adjacent months */
+  /* No --datepicker-* day-state vars: day cells are left to Blueprint.
+     See KNOWLEDGE.md "Blueprint date picker: don't bother". */
 
   /* Popover */
   --popover-arrow: var(--bg-raised); /* the little triangle; needs `fill`, not `color` — see components-v2.css */
@@ -197,8 +195,13 @@
        (= #d5dadf), and v1's --search-hover-bg was that same value,
        1.16:1 against --search-bg. Now purple, via an attribute
        selector + !important (the only way to beat an inline style).
-     · Date picker today / selected / hover / outside-month days
-       were unstyled Blueprint light-mode defaults.
+   Tried and reverted:
+     · Theming the date picker's day cells (today / selected / hover /
+       outside-month). They are unstyled Blueprint light-mode defaults,
+       but every fix uncovered another Blueprint layer — fill lives on
+       .bp3-datepicker-day-wrapper, the focus indicator on the cell
+       above it — and the result was worse-looking than leaving it
+       alone. v2 matches v1 here on purpose. See KNOWLEDGE.md.
 
    Comment corrections:
      · --text-primary no longer claims "body text" (--text-body wins
