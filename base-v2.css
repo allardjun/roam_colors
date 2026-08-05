@@ -1,0 +1,227 @@
+/* ============================================================
+   base-v2.css  —  Dracula-based Roam Research theme (entry file)
+   ------------------------------------------------------------
+   Two tiers of variables live here:
+     1. PALETTE      — raw, color-describing values (--col-*).
+     2. APPLICATIONS — semantic roles that map palette -> UI.
+   Component rules live in components-v2.css and reference ONLY
+   the application vars. To make a new theme, copy this file and
+   change the PALETTE; the application map and components stay.
+
+   NOTE: the @import must come before :root. A CSS @import is
+   dropped by the browser if any style rule precedes it. var()
+   resolution is order-independent, so components-v2.css
+   (imported first) still sees the vars defined just below.
+
+   Changes from base-v1.css are listed at the bottom of this file.
+   ============================================================ */
+
+@import url('./components-v2.css');
+
+:root {
+  /* ── PALETTE (color-describing) ───────────────────────────
+
+     Neutrals use a numeric ramp: n900 is the darkest, n0 is white.
+     The numbers are the only ordering signal — v1's gray /
+     mid-gray / pale-gray / slate / steel names carried none, and
+     one pair was actually out of order. Verified monotonic by
+     WCAG relative luminance (shown in comments). */
+
+  /* Neutral ramp (dark -> light) */
+  --col-n900: #282a36;  /* L .026  Dracula "Background" */
+  --col-n850: #333545;  /* L .038 */
+  --col-n800: #44475a;  /* L .064  Dracula "Current Line" */
+  --col-n600: #6c6f75;  /* L .155 */
+  --col-n500: #818d9b;  /* L .260 */
+  --col-n400: #aeaeae;  /* L .418 */
+  --col-n300: #bdcad4;  /* L .578 */
+  --col-n200: #d8dee9;  /* L .727 */
+  --col-n150: #e1e1e1;  /* L .753 */
+  --col-n100: #e4e9ed;  /* L .809 */
+  --col-n50:  #f8f8f2;  /* L .908  Dracula "Foreground" */
+  --col-n0:   #ffffff;  /* L 1.00 */
+
+  /* Dracula core hues.
+     --col-comment is Dracula's own name for #6272a4. v1 filed it in
+     the neutral ramp as --col-indigo-gray, where it broke the
+     dark->light ordering; it is chromatic, so it belongs here. */
+  --col-comment: #6272a4;
+  --col-cyan:    #8be9fd;
+  --col-green:   #50fa7b;
+  --col-orange:  #ffb86c;
+  --col-pink:    #ff79c6;
+  --col-purple:  #bd93f9;
+  --col-red:     #ff5555;
+  --col-yellow:  #f1fa8c;
+
+  /* Accent / state hues used outside the Dracula core */
+  --col-dark-teal:  #29454b;
+  --col-dark-olive: #606438;
+  --col-pale-blue:  #b9d7ff;
+  --col-steel-blue: #6b9ccd;
+  --col-amber:      #ffcf70;
+  --col-sage:       #6f8f72;
+  --col-forest:     #4f6f52;
+
+  /* OneDark code-block hues (CodeMirror 6 / .rm-code-block) */
+  --col-od-bg:            #21252b;   /* editor + gutter background */
+  --col-od-active:        #2c313a;   /* active line */
+  --col-od-fg:            #abb2bf;   /* default text + gutter */
+  --col-od-selection:     #3e4451;   /* selection */
+  --col-od-cursor:        #528bff;   /* caret / cursor */
+  --col-od-gray:          #7d8799;   /* comment / placeholder / fold */
+  --col-od-purple:        #c678dd;   /* keyword */
+  --col-od-cyan:          #56b6c2;   /* operator / regexp / specialChar */
+  --col-od-green:         #98c379;   /* string */
+  --col-od-blue:          #61afef;   /* variable */
+  --col-od-orange:        #d19a66;   /* number / constant */
+  --col-od-red:           #e06c75;   /* property / name */
+  --col-od-yellow:        #e5c07b;   /* type / class */
+  --col-od-bracket-match: #bad0f847; /* matching-bracket fill (incl. alpha) */
+  --col-od-bracket-line:  #515a6b;   /* matching-bracket outline */
+  --col-od-nomatch:       #ff0000;   /* non-matching bracket (OneDark's literal red) */
+  --col-od-field:         #c0c0c0;   /* CM search textfield border (silver) */
+
+  /* ── APPLICATIONS (semantic; map palette -> UI roles) ─────
+     Each comment lists where the color is used, so this block
+     doubles as a map of which components share each color. */
+
+  /* Surfaces */
+  --bg-base:   var(--col-n900); /* page/editor/topbar bg, kanban-card, empty mention-pill bg, CM5 gutters */
+  --bg-panel:  var(--col-n850); /* sidebars, kanban-column, embed-outer, buttons, borders, table header row */
+  --bg-raised: var(--col-n800); /* popovers/tooltips/datepicker + arrow, inline-code bg, buffer, hover, reference-item, embed-inner, 2ndary cursor, ruler, unchecked checkbox */
+
+  /* Text on dark surfaces */
+  --text-primary:   var(--col-n50);      /* editor chrome text, popovers, buffer, right sidebar, kanban-title border, cm-error, matching bracket, All-Pages title */
+  --text-secondary: var(--col-n300);     /* sidebar items, datepicker weekdays + day numbers, level3 heading, icons, parent-path, sorted headers */
+  --text-muted:     var(--col-comment);  /* CM5 line numbers, page-ref, ref brackets, small buttons, indent guide, title-children */
+  --text-body:      var(--col-n150);     /* body/block text; set with !important in Typography, so it — not --text-primary — is what you read on the page */
+  --title-fg:       var(--col-comment);  /* page title: .roam-app h1 (display) + .rm-title-display/-textarea (edit) */
+
+  /* Text drawn ON a light or filled surface.
+     v1 reused --bg-base / --bg-raised / --bg-panel for these, which
+     only worked because this theme happens to be dark. Naming them
+     as foregrounds means a light palette can retarget them. */
+  --text-on-accent: var(--col-n900);  /* text inside filled mention pills */
+  --text-on-light:  var(--col-n900);  /* search input text, slider label text */
+
+  /* Accent / state colors */
+  --accent:   var(--col-cyan);   /* external links, mention pills, cm5 header/def/link */
+  --success:  var(--col-green);  /* success toast, sync-synced icon, green cm5 tokens (quote/positive/type/variable-3/qualifier/builtin/attribute) */
+  --emphasis: var(--col-orange); /* inline-code fg, warning toast, saving icon, cm5 variable-2, matching tag, datepicker today ring */
+  --keyword:  var(--col-pink);   /* cm5 keyword/tag, find-or-create new-page label, linked-ref page title */
+  --error:    var(--col-red);    /* cm5 negative/invalidchar/non-matching bracket */
+  --special:  var(--col-purple); /* cm5 atom/number, page-ref link color, bold text, search-selected row, datepicker selected day */
+  --string:   var(--col-yellow); /* cm5 string/string-2, slider progress */
+
+  /* Bullets, table, highlights */
+  --bullet-outer:   var(--col-n600);       /* closed/collapsed bullet, slider handle, cm5-meta, fat-cursor color, checkbox :active */
+  --kanban-bg:      var(--col-n600);       /* kanban board backdrop (own var so it can diverge from bullets) */
+  --bullet-inner:   var(--col-n200);       /* open bullet, slider-label bg, cm5 bracket/hr, fat-cursor bg */
+  --table-text:     var(--col-n500);       /* All-Pages cell text — the selector covers body cells, not just headers (v1 called this --table-header) */
+  --highlight-cool: var(--col-dark-teal);  /* block-highlight blue AND grey (both intentionally share one var) */
+  --highlight-warm: var(--col-dark-olive); /* roam-highlight, block-highlight-yellow, cm5-searching */
+
+  /* Find-or-create search (a LIGHT surface inside a dark theme) */
+  --search-bg:            var(--col-n100);   /* search input + menu background */
+  --search-fg:            var(--col-n800);   /* menu text on that light surface (7.5:1) */
+  --search-fg-muted:      var(--col-n600);   /* secondary result line (4.2:1 — was 3.9:1 in v1) */
+  --search-hover-bg:      var(--col-n300);   /* mouse hover; now clearly darker than --search-bg */
+  --search-selected-bg:   var(--col-purple); /* KEYBOARD-selected row (up/down arrows) */
+  --search-selected-text: var(--col-n900);   /* text on the selected row */
+
+  /* Date picker day states.
+     v1 styled only the panel and the month/year selects, so today /
+     selected / hover fell through to Blueprint's light-mode defaults. */
+  --datepicker-today-border:   var(--emphasis);     /* ring around today */
+  --datepicker-selected-bg:    var(--special);      /* selected day fill */
+  --datepicker-selected-text:  var(--col-n900);     /* selected day numeral */
+  --datepicker-hover-bg:       var(--col-n600);     /* day hover fill */
+  --datepicker-hover-text:     var(--col-n50);      /* day hover numeral */
+  --datepicker-outside-text:   var(--col-comment);  /* spill-over days from adjacent months */
+
+  /* Popover */
+  --popover-arrow: var(--bg-raised); /* the little triangle; needs `fill`, not `color` — see components-v2.css */
+
+  /* Selection */
+  --selection-bg:        var(--col-pale-blue);  /* normal text selection bg */
+  --selection-text:      var(--col-steel-blue); /* normal text selection fg */
+  --code-selection-bg:   var(--col-amber);      /* LEGACY CM5 only — see note below */
+  --code-selection-text: var(--col-n400);       /* LEGACY CM5 only */
+  --code-activeline-bg:  rgba(0, 0, 0, 0.04);   /* LEGACY CM5 only */
+
+  /* Code blocks — CodeMirror 6 / .rm-code-block (OneDark).
+     Modern Roam renders ``` blocks with CodeMirror 6. The three
+     --code-* vars above bind only to CM5 (.cm-s-default,
+     .CodeMirror-*), which ``` blocks no longer use, so the amber
+     code selection almost certainly never renders. Selection you
+     actually see inside a code block is --cm6-selection. */
+  --cm6-bg:                 var(--col-od-bg);            /* code block + gutter background */
+  --cm6-fg:                 var(--col-od-fg);            /* default code text, gutter text + border */
+  --cm6-active-line:        var(--col-od-active);        /* active line + active-line gutter */
+  --cm6-selection:          var(--col-od-selection);     /* selected text background */
+  --cm6-cursor:             var(--col-od-cursor);        /* caret + cursor */
+  --cm6-muted:              var(--col-od-gray);          /* comment, placeholder, fold placeholder */
+  --cm6-keyword:            var(--col-od-purple);        /* keywords */
+  --cm6-operator:           var(--col-od-cyan);          /* operators, regexp, special chars */
+  --cm6-string:             var(--col-od-green);         /* strings */
+  --cm6-variable:           var(--col-od-blue);          /* variables */
+  --cm6-number:             var(--col-od-orange);        /* numbers, colors, constants */
+  --cm6-name:               var(--col-od-red);           /* property names, names */
+  --cm6-type:               var(--col-od-yellow);        /* type / class names */
+  --cm6-bracket-match-bg:   var(--col-od-bracket-match); /* matching-bracket fill */
+  --cm6-bracket-match-line: var(--col-od-bracket-line);  /* matching-bracket outline */
+  --cm6-bracket-nomatch-bg: var(--col-od-nomatch);       /* non-matching bracket */
+  --cm6-field-border:       var(--col-od-field);         /* CM search textfield border */
+
+  /* DONE / checked checkbox */
+  --done-checkbox-bg:     var(--col-sage);   /* checked checkbox fill */
+  --done-checkbox-border: var(--col-forest); /* checked checkbox border + hover fill */
+  --done-checkbox-check:  var(--col-n0);     /* the tick mark */
+
+  /* Typography */
+  --font-ui:    "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; /* body/textarea */
+  --font-title: ui-monospace, "SFMono-Regular", Menlo, Consolas,
+                "Liberation Mono", "Courier New", monospace;                              /* page titles only — v1 called this --font-mono, but no code surface uses it */
+}
+
+/* ============================================================
+   Changes from base-v1.css
+   ------------------------------------------------------------
+   Bugs fixed (see components-v2.css):
+     · Popover arrow rendered white in every Roam popover. v1 set
+       `color` on .bp3-popover-arrow, but Blueprint fills the arrow
+       via an SVG path that takes `fill`. The rule was a no-op.
+     · Keyboard-selected search row was ~invisible. Roam writes the
+       highlight INLINE as background-color: rgb(213, 218, 223)
+       (= #d5dadf), and v1's --search-hover-bg was that same value,
+       1.16:1 against --search-bg. Now purple, via an attribute
+       selector + !important (the only way to beat an inline style).
+     · Date picker today / selected / hover / outside-month days
+       were unstyled Blueprint light-mode defaults.
+
+   Comment corrections:
+     · --text-primary no longer claims "body text" (--text-body wins
+       via !important).
+     · --table-header renamed --table-text; its selector hits body
+       cells, not only headers.
+     · --code-selection-* labelled LEGACY CM5; they do not affect
+       ``` blocks.
+     · Removed a stale note referencing --dark-blue, a variable that
+       no longer exists.
+     · Restored the truncated `/* Multiline code blocks with */`.
+
+   Naming:
+     · Neutrals -> numeric ramp; ink/paper and the four unordered
+       gray names are gone. #6272a4 moved to --col-comment.
+     · --font-mono -> --font-title.
+     · New --text-on-accent / --text-on-light / --search-fg so no
+       component paints text with a *-bg var.
+     · --cm6-bracket-nomatch-bg and --cm6-field-border now come from
+       the palette instead of literal `red` / `silver`.
+     · Hex normalised to lowercase.
+
+   Deliberately NOT changed: DONE blocks still render their text
+   identically to normal blocks (no strikethrough or dimming). That
+   is a design decision, not a defect.
+   ============================================================ */

@@ -1,0 +1,897 @@
+/* ============================================================
+   components-v2.css  —  shared Roam theme component rules
+   ------------------------------------------------------------
+   Behaviour is driven entirely by the APPLICATION variables
+   defined in the entry file (base-v2.css). This file references
+   only those semantic vars — never the raw palette, never a
+   literal color, and never a *-bg var as a foreground.
+
+   Sections, in order:
+     CodeMirror 5 (legacy code blocks + syntax)
+     CodeMirror 6 / .rm-code-block (OneDark) · Intercom (hidden)
+     Mentions in All Pages · Find-or-create search · Hover popover
+     Date picker · Kanban · Filter tooltip · Embeds · Checkmarks
+     Sliders · Inline code · Body/topbar/sidebar · Buttons
+     Headings · Right sidebar · Buffer · Highlights · Toasts
+     Sync icon · External links · Reference links · Reference pages
+     Bullets & indent lines · All-Pages table · All-Pages checkmarks
+     Typography · Edge-cases: selection + DONE checkbox
+   ============================================================ */
+
+/* CodeMirror 5 — LEGACY.
+   Roam renders ``` fenced blocks with CodeMirror 6 (see the next
+   section). These .cm-s-default / .CodeMirror-* rules survive for
+   older surfaces and mostly do not render in current Roam. */
+
+.bp3-popover-text {
+  color: var(--text-primary);
+}
+
+.CodeMirror {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  border: 2px solid var(--bg-panel);
+}
+
+.CodeMirror-scrollbar-filler,
+.CodeMirror-gutter-filler {
+  background-color: var(--bg-base);
+}
+
+.CodeMirror-gutters {
+  border-right: 1px solid var(--bg-base);
+  background-color: var(--bg-base);
+}
+
+.CodeMirror-linenumber {
+  color: var(--text-muted);
+}
+
+/* Deliberate camouflage, not a foreground/background mix-up: the marker
+   is painted in the gutter's own background so it disappears. This is
+   the one place a *-bg var is legitimately used as a color. */
+.CodeMirror-guttermarker {
+  color: var(--bg-base);
+}
+
+.CodeMirror-guttermarker-subtle {
+  color: var(--text-muted);
+}
+
+.CodeMirror-cursor {
+  border-left: 1px solid var(--text-primary);
+}
+
+.CodeMirror div.CodeMirror-secondarycursor {
+  border-left: 1px solid var(--bg-raised);
+}
+
+.cm-fat-cursor .CodeMirror-cursor {
+  background: var(--bullet-inner);  /* best guess */
+  color: var(--bullet-outer);       /* best guess */
+}
+
+.CodeMirror-ruler {
+  border-left: 1px solid var(--bg-raised);
+}
+
+.cm-s-default .cm-header {
+  color: var(--accent);
+}
+
+.cm-s-default .cm-quote {
+  color: var(--success);  /* best guess */
+}
+
+.cm-negative {
+  color: var(--error);  /* best guess */
+}
+
+.cm-positive {
+  color: var(--success);  /* best guess */
+}
+
+.cm-s-default .cm-keyword {
+  color: var(--keyword);
+}
+
+.cm-s-default .cm-atom {
+  color: var(--special);
+}
+
+.cm-s-default .cm-number {
+ color: var(--special);
+}
+
+.cm-s-default .cm-def {
+ color: var(--accent);
+}
+
+.cm-s-default .cm-variable-2 {
+ color: var(--emphasis);
+}
+
+.cm-s-default .cm-variable-3,
+.cm-s-default .cm-type {
+ color: var(--success);
+}
+
+.cm-s-default .cm-comment {
+  color: var(--text-muted);
+}
+
+.cm-s-default .cm-string {
+  color: var(--string);
+}
+
+.cm-s-default .cm-string-2 {
+  color: var(--string);  /* best guess */
+}
+
+.cm-s-default .cm-meta {
+  color: var(--bullet-outer);  /* best guess */
+}
+
+.cm-s-default .cm-qualifier {
+  color: var(--success);
+}
+
+.cm-s-default .cm-builtin {
+  color: var(--success);
+}
+
+.cm-s-default .cm-bracket {
+  color: var(--bullet-inner);  /* best guess */
+}
+
+.cm-s-default .cm-tag {
+  color: var(--keyword);
+}
+
+.cm-s-default .cm-attribute {
+  color: var(--success);
+}
+
+.cm-s-default .cm-hr {
+  color: var(--bullet-inner);  /* best guess */
+}
+
+.cm-s-default .cm-link {
+  color: var(--accent);
+}
+
+.cm-s-default .cm-error {
+  color: var(--text-primary);
+}
+
+.cm-invalidchar {
+  color: var(--error);
+}
+
+div.CodeMirror span.CodeMirror-matchingbracket {
+  color: var(--text-primary);
+}
+
+div.CodeMirror span.CodeMirror-nonmatchingbracket {
+  color: var(--error);
+}
+
+.CodeMirror-matchingtag {
+ background: var(--emphasis);  /* best guess */
+}
+
+/* Note: .CodeMirror-selected / activeline / line::selection rules live in the
+   "Selection + DONE checkbox" section near the bottom with !important. */
+
+.cm-searching {
+  background-color: var(--highlight-warm);  /* best guess */
+}
+
+
+/* Code blocks — CodeMirror 6 / .rm-code-block (OneDark)
+   ----------------------------------------------------------------
+   Modern Roam renders ``` fenced code blocks with CodeMirror 6, whose
+   tokens are emitted as generated `.ͼ*` classes plus `.cm-*` chrome
+   (distinct from the legacy CM5 `.cm-s-default` rules above). Ported
+   from theme-one-dark; colors routed through --cm6-* application vars.
+   Applies unconditionally (the source's prefers-color-scheme: dark
+   wrapper was dropped, since this is an always-dark theme). */
+
+.cm-activeLine, .cm-focused .cm-activeLine,
+.cm-activeLineGutter, .cm-focused .cm-activeLineGutter,
+.ͼ2 .cm-activeLine, .ͼ3 .cm-activeLine,
+.ͼ2 .cm-activeLineGutter, .ͼ3 .cm-activeLineGutter {
+  background-color: var(--cm6-active-line) !important;
+}
+
+.rm-code-block {
+  background-color: var(--cm6-bg);
+  color: var(--cm6-fg);
+  border-radius: 5px;
+}
+
+.ͼ2 .cm-content, .ͼ3 .cm-content {
+  caret-color: var(--cm6-cursor);
+}
+
+.ͼ2 .cm-selectionBackground, .ͼ3 .cm-selectionBackground,
+.ͼ2.cm-focused .cm-selectionBackground, .ͼ3.cm-focused .cm-selectionBackground,
+.cm-content::selection {
+  background-color: var(--cm6-selection);
+}
+
+.ͼ1 .cm-cursor, .ͼ3 .cm-cursor {
+  border-left-color: var(--cm6-cursor);
+}
+
+.ͼ2 .cm-specialChar, .ͼ3 .cm-specialChar {
+  color: var(--cm6-operator);
+}
+
+.ͼ1 .cm-placeholder {
+  color: var(--cm6-muted);
+}
+
+.ͼ1 .cm-textfield {
+  vertical-align: middle;
+  color: inherit;
+  font-size: 70%;
+  border: 1px solid var(--cm6-field-border);
+  padding: .2em .5em;
+}
+
+.ͼ1 .cm-foldPlaceholder {
+  background-color: transparent;
+  border-color: var(--cm6-muted);
+  color: var(--cm6-muted);
+}
+
+.ͼ1 .cm-gutters, .ͼ2 .cm-gutters, .ͼ3 .cm-gutters {
+  background-color: var(--cm6-bg);
+  color: var(--cm6-fg);
+  border-right: 1px solid var(--cm6-fg);
+}
+
+.ͼ1 .cm-matchingBracket {
+  background-color: var(--cm6-bracket-match-bg);
+  outline: 1px solid var(--cm6-bracket-match-line);
+}
+
+.ͼ1 .cm-nonmatchingBracket {
+  background-color: var(--cm6-bracket-nomatch-bg);
+}
+
+.ͼa { color: var(--cm6-keyword); }   /* keyword */
+.ͼb { color: var(--cm6-operator); }  /* operator */
+.ͼc { color: var(--cm6-number); }    /* color */
+.ͼd { color: var(--cm6-string); }    /* string */
+.ͼe { color: var(--cm6-operator); }  /* regexp */
+.ͼf { color: var(--cm6-variable); }  /* variable */
+.ͼg { color: var(--cm6-operator); }  /* (cyan) */
+.ͼh { color: var(--cm6-name); }      /* propertyname */
+.ͼi { color: var(--cm6-type); }      /* typename, classname */
+.ͼj { color: var(--cm6-number); }    /* (orange) */
+.ͼk { color: var(--cm6-name); }      /* name */
+.ͼl { color: var(--cm6-muted); }     /* comment */
+.ͼm { color: var(--cm6-string); }    /* (green) */
+.ͼn { color: var(--cm6-number); }    /* (orange) */
+
+
+/* Intercom app */
+
+.intercom-app,
+.intercom-launcher-frame,
+#intercom-container {
+  display: none !important;
+}
+
+/* Mentions in All Pages */
+
+.rm-clickable-pill.empty-pill {
+  color: var(--text-primary);
+  background-color: var(--bg-base);
+}
+
+.rm-clickable-pill {
+  color: var(--text-primary);
+  background-color: var(--accent);
+  opacity: 0.7;
+}
+
+.rm-clickable-pill.level1-pill {
+  color: var(--text-on-accent);
+  background-color: var(--accent);
+  opacity: 0.8;
+}
+
+.rm-clickable-pill.level2-pill {
+  color: var(--text-on-accent);
+  background-color: var(--accent);
+  opacity: 0.9;
+}
+
+.rm-clickable-pill.level3-pill {
+  color: var(--text-on-accent);
+  background-color: var(--accent);
+  opacity: 1;
+}
+
+
+/* Find or Create Page search box */
+
+.bp3-input {
+  background-color: var(--search-bg);
+  color: var(--text-on-light);
+}
+
+.bp3-menu {
+  background-color: var(--search-bg) !important;
+  color: var(--search-fg) !important;  /* dark text on the light search surface */
+}
+
+.bp3-menu div:hover {
+  background-color: var(--search-hover-bg);
+}
+
+.rm-find-or-create-wrapper .rm-menu-item .rm-search-title .rm-new-page {
+  color: var(--keyword);
+}
+
+.rm-find-or-create-wrapper .rm-menu-item .rm-search-list-item {
+  color: var(--search-fg-muted);
+}
+
+.rm-find-or-create-wrapper .rm-menu-item ul {
+  color: var(--search-fg-muted);
+}
+
+
+/* Keyboard-selected row (up/down arrows) in the find-or-create menu,
+   the slash / inline-search popover, and the command palette.
+   ----------------------------------------------------------------
+   Roam does NOT put a class on the selected row — it writes the
+   highlight as an INLINE style, `background-color: rgb(213, 218, 223)`
+   (= #d5dadf). So it can only be overridden by matching the style
+   attribute, and only !important beats an inline declaration.
+
+   base-v1 set --search-hover-bg to that exact same #d5dadf, which is
+   why arrowing through results was ~invisible: 1.16:1 against the
+   #e4e9ed menu background. The selected row now gets a filled accent,
+   and plain mouse hover stays a quieter grey (see .bp3-menu div:hover
+   above), so the two states are no longer competing. */
+.bp3-popover-content .rm-menu-item[style*="rgb(213, 218, 223)"],
+.bp3-elevation-3 .dont-unfocus-block[style*="rgb(213, 218, 223)"],
+.rm-command-palette__scroll-container .bp3-menu .rm-menu-item--active,
+.rm-command-palette__scroll-container .bp3-menu .rm-menu-item--active:hover {
+  background-color: var(--search-selected-bg) !important;
+  color: var(--search-selected-text) !important;
+}
+
+/* Force descendants too — .rm-search-title, .rm-search-list-item and
+   .rm-new-page each set their own color and would otherwise clash
+   with the filled row. */
+.bp3-popover-content .rm-menu-item[style*="rgb(213, 218, 223)"] *,
+.bp3-elevation-3 .dont-unfocus-block[style*="rgb(213, 218, 223)"] *,
+.rm-command-palette__scroll-container .bp3-menu .rm-menu-item--active * {
+  color: var(--search-selected-text) !important;
+}
+
+
+/* Hover window triggered by autocompletion */
+
+.bp3-elevation-3 {
+  background-color: var(--bg-raised) !important;
+}
+
+/* The selected-row rule for .bp3-elevation-3 lives in the search
+   section above, so this popover and the find-or-create menu now
+   share one highlight. base-v1 handled only this surface, and with
+   a different color (--text-muted), which is why the two menus
+   disagreed about what "selected" looks like. */
+
+
+/* Date picker */
+
+.bp3-datepicker,
+.bp3-popover .bp3-popover-content .bp3-datepicker {
+  background-color: var(--bg-raised);
+  color: var(--text-secondary);
+}
+
+.bp3-html-select.bp3-minimal.bp3-datepicker-month-select > select,
+.bp3-html-select.bp3-minimal.bp3-datepicker-year-select > select {
+  color: var(--text-secondary);
+}
+
+/* Day-cell states.
+   base-v1 styled only the panel and the two selects, so today,
+   the selected day, hover and spill-over days all fell through to
+   Blueprint's light-mode defaults — a white chip and a solid white
+   circle, the highest-contrast things on the screen. */
+
+.bp3-datepicker .DayPicker-Day.DayPicker-Day--isToday .bp3-datepicker-day-wrapper {
+  border: 1px solid var(--datepicker-today-border);
+}
+
+.bp3-datepicker .DayPicker-Day--selected,
+.bp3-datepicker .DayPicker-Day--selected:focus {
+  background-color: var(--datepicker-selected-bg) !important;
+  color: var(--datepicker-selected-text) !important;
+}
+
+.bp3-datepicker .DayPicker-Day:hover,
+.bp3-datepicker .DayPicker-Day:focus {
+  background-color: var(--datepicker-hover-bg);
+  color: var(--datepicker-hover-text);
+}
+
+.bp3-datepicker .DayPicker-Day--outside {
+  color: var(--datepicker-outside-text);
+}
+
+
+/* Kanban board */
+
+.kanban-board {
+  background-color: var(--kanban-bg);
+}
+
+.kanban-title {
+  border-bottom: 1px solid var(--text-primary);
+}
+
+.kanban-column {
+  background-color: var(--bg-panel);
+}
+
+.kanban-card {
+  background-color: var(--bg-base);
+}
+
+
+/* Filter tooltip */
+
+.bp3-tooltip .bp3-popover-content,
+.bp3-popover .bp3-popover-content {
+  background-color: var(--bg-raised);
+  color: var(--text-primary);
+}
+
+/* Popover arrow — the little triangle pointing at the trigger.
+   base-v1 set `color` here, but Blueprint paints the arrow as an
+   SVG <path class="bp3-popover-arrow-fill">, which takes `fill`.
+   The `color` rule was a no-op, so every popover in Roam (date
+   picker, tooltips, block menus) rendered a white arrow against
+   the dark theme. */
+.bp3-popover-arrow {
+  color: var(--popover-arrow);
+}
+
+.bp3-popover .bp3-popover-arrow-fill {
+  fill: var(--popover-arrow);
+}
+
+.bp3-popover .bp3-popover-content .bp3-button {
+  background-color: var(--bg-panel) !important;
+  color: var(--text-primary) !important;
+  background-image: none;
+  box-shadow: none;
+}
+
+
+/* Embed containers */
+
+.rm-embed-container{
+  background-color: var(--bg-panel);
+}
+
+.rm-embed-container .rm-embed-container {
+  background-color: var(--bg-raised);
+}
+
+
+/* Checkmarks */
+
+.checkmark {
+  background-color: var(--bg-raised);
+  border-color: var(--bg-panel);
+}
+
+.check-container input:active ~ .bp3-control-indicator {
+  background-color: var(--bullet-outer);
+}
+
+.check-container input:not(:disabled):active:checked ~ .bp3-control-indicator {
+  background-color: var(--bullet-outer);
+}
+
+/* Note: .check-container input:checked ~ .checkmark is set with !important
+   in the "Selection + DONE checkbox" section near the bottom. */
+
+
+/* Sliders */
+
+.bp3-slider-progress.bp3-intent-primary {
+  background-color: var(--string);
+}
+
+.bp3-slider-handle {
+  background-color: var(--bullet-outer);
+  background-image: none;
+}
+
+.bp3-slider-handle .bp3-slider-label {
+  background-color: var(--bullet-inner);
+  color: var(--text-on-light);  /* the label sits on a light chip */
+}
+
+
+/* Inline code blocks with ` */
+
+code {
+  color: var(--emphasis);
+  background-color: var(--bg-raised);
+  border-color: var(--bg-raised);
+}
+
+
+
+/* Body, topbar, sidebar */
+
+.roam-topbar {
+  background-color: var(--bg-base);
+}
+
+.roam-body-main {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+}
+
+/* Page title (display mode) is an <h1>; this is the selector that actually
+   renders the title color. .rm-title-display below covers the edit-mode
+   textarea + sidebar surfaces. Both point at --title-fg. */
+.roam-body .roam-app h1 {
+  color: var(--title-fg);
+}
+
+.roam-app {
+  background-color: var(--bg-base);
+}
+
+.roam-body .roam-app .roam-sidebar-container {
+  background-color: var(--bg-panel);
+}
+
+.roam-body .roam-app .roam-sidebar-container .roam-sidebar-content .starred-pages-wrapper .starred-pages .page,
+.roam-body .roam-app .roam-sidebar-container .roam-sidebar-content .log-button,
+.roam-body .roam-app .roam-sidebar-container .roam-sidebar-content .starred-pages-wrapper,
+.roam-body .roam-app .roam-sidebar-container > * {
+  color: var(--text-secondary);
+  opacity: 0.9;
+}
+
+.roam-body .roam-app .roam-sidebar-container .roam-sidebar-content .starred-pages-wrapper .starred-pages .page:hover,
+.roam-body .roam-app .roam-sidebar-container .roam-sidebar-content .log-button:hover {
+  background: var(--bg-raised);
+  color: var(--text-primary);
+  opacity: 0.9;
+}
+
+.roam-body .roam-app .roam-sidebar-container .roam-sidebar-content .log-button .bp3-button:hover {
+  background-color: var(--text-primary);
+}
+
+.roam-block-container button {
+  background-color: var(--bg-raised);
+  color: var(--text-primary);
+  border-color: var(--bg-panel);
+}
+
+/* Button */
+
+.bp3-button.bp3-minimal.bp3-small {
+  color: var(--text-muted); 
+}
+
+.roam-block .bp3-button,
+.dont-focus-block.bp3-button {
+  background-color: var(--bg-panel);
+  color: var(--text-secondary);
+  background-image: none;
+}
+
+.roam-block .bp3-button:hover,
+.dont-focus-block.bp3-button:hover {
+  background-color: var(--bg-raised);
+  color: var(--text-primary);
+}
+
+/* Heading */
+
+.rm-level3 {
+  color: var(--text-secondary);
+}
+
+
+/* Right sidebar */
+
+#right-sidebar > div {
+  background-color: var(--bg-panel);
+  color: var(--text-primary); /* jun */
+}
+
+
+/* Buffer (the help window in the bottom right corner) */
+
+#buffer {
+  background-color: var(--bg-raised) !important;
+  color: var(--text-primary) !important;
+}
+
+
+/* Highlights */
+
+.roam-highlight {
+  background-color: var(--highlight-warm);
+}
+
+.block-highlight-yellow {
+  background-color: var(--highlight-warm);
+}
+
+/* Blue and grey deliberately share --highlight-cool. (base-v1 carried a
+   note here about "--dark-blue", a variable that no longer exists.) */
+.block-highlight-blue,
+.block-highlight-grey {
+  background-color: var(--highlight-cool);
+}
+
+/* Toast messages */
+
+.bp3-toast.bp3-intent-success {
+  background-color: var(--success);
+}
+
+.bp3-toast.bp3-intent-warning {
+  background-color: var(--emphasis);
+}
+
+
+/* Sync icon */
+
+.rm-saving-inner-icon.rm-synced {
+  background-color: var(--success);
+  opacity: 1;
+}
+
+.rm-saving-inner-icon.rm-saving-remote {
+  background-color: var(--emphasis);
+  opacity: 1;
+}
+
+
+/* External links */
+
+a,
+a:hover {
+  color: var(--accent);
+}
+
+
+/* Reference links */
+
+.rm-block-ref {
+  border-bottom: 0.5px solid var(--bg-raised);
+}
+
+.rm-block-ref:hover {
+  background-color: var(--bg-panel);
+}
+
+.rm-page-ref {  
+  color: var(--text-muted);
+}
+
+.rm-page-ref-link-color {
+  color: var(--special);
+}
+
+.rm-page-ref-brackets {
+  color: var(--text-muted);
+}
+
+
+/* Reference pages */
+
+.rm-ref-page-view-title span {
+  color: var(--keyword);
+}
+
+.rm-reference-item {
+  background-color: var(--bg-raised);
+}
+
+.parent-path-wrapper {
+  color: var(--text-secondary);
+}
+
+.bp3-icon-standard {
+  color: var(--text-secondary);
+}
+
+
+/* Bullet points & indent lines */
+
+.controls .simple-bullet-outer .simple-bullet-inner {
+  background-color: var(--bullet-inner);
+}
+
+.roam-bullet-closed {
+  background-color: var(--bullet-outer);
+}
+
+.block-border-left {
+  border-left: 1px solid var(--text-muted);
+}
+
+
+/* All Pages table */
+
+.rm-pages-title-text {
+  color: var(--text-primary);
+}
+
+.rm-all-pages .table .rm-pages-row.rm-pages-row-header {
+  background-color: var(--bg-panel);
+}
+
+.rm-all-pages .table .rm-pages-row {
+  border-bottom: 1px solid var(--bg-panel); 
+}
+
+.rm-pages-title-col span,
+.rm-pages-col span {
+  color: var(--table-text);
+}
+
+.rm-pages-title-col span.sorted-header-text,
+.rm-pages-col span.sorted-header-text {
+  color: var(--text-secondary);
+}
+
+.sorting-button-group .focused::before {
+  color: var(--text-secondary);
+}
+
+.rm-pages-title-col a.rm-pages-title-text:hover {
+  color: var(--text-secondary);
+}
+
+.rm-pages-title-col span.title-children-text {
+  color: var(--text-muted); 
+}
+
+
+/* All Pages checkmarks */
+
+.bp3-control.bp3-checkbox .bp3-control-indicator {
+  background-color: var(--bg-raised);
+  border-color: var(--bg-panel);
+  background-image: none;
+} 
+
+.bp3-control.bp3-checkbox input:active ~ .bp3-control-indicator {
+  background-color: var(--bullet-outer);
+}
+
+.bp3-control.bp3-checkbox input:not(:disabled):active:checked ~ .bp3-control-indicator {
+  background-color: var(--bullet-outer);
+}
+
+/* Typography */
+
+body,
+.roam-body,
+.roam-app,
+.rm-block-text,
+textarea {
+  font-family: var(--font-ui) !important;
+  color: var(--text-body) !important;
+  font-size: 16px;
+  /* font-size: 14px */
+}
+
+.rm-title-display,
+.rm-title-textarea {
+  font-family: var(--font-title) !important;
+  color: var(--title-fg) !important;
+}
+
+
+
+/* ============================================================
+   Edge-case fixes: selection + DONE checkbox
+   ============================================================ */
+
+/* 1. Normal text selection throughout Roam */
+::selection {
+  background-color: var(--selection-bg) !important;
+  color: var(--selection-text) !important;
+}
+
+/* Firefox */
+::-moz-selection {
+  background-color: var(--selection-bg) !important;
+  color: var(--selection-text) !important;
+}
+
+/* 1b. LEGACY CM5 code-block selection.
+   These bind to .cm-s-default / .CodeMirror-*, which modern Roam no
+   longer uses for ``` blocks, so --code-selection-* very likely never
+   renders. Selection you actually see in a code block is
+   --cm6-selection, set in the CodeMirror 6 section above. */
+.cm-s-default .CodeMirror-selected,
+.CodeMirror-selected {
+  background-color: var(--code-selection-bg) !important;
+}
+
+/* Browser/native text selection inside CodeMirror spans */
+.cm-s-default .CodeMirror-line > span > span::selection,
+.cm-s-default .CodeMirror-line > span::selection,
+.cm-s-default .CodeMirror-line::selection,
+.CodeMirror-line > span > span::selection,
+.CodeMirror-line > span::selection,
+.CodeMirror-line::selection {
+  background-color: var(--code-selection-bg) !important;
+  color: var(--code-selection-text) !important;
+}
+
+/* Firefox */
+.cm-s-default .CodeMirror-line > span > span::-moz-selection,
+.cm-s-default .CodeMirror-line > span::-moz-selection,
+.cm-s-default .CodeMirror-line::-moz-selection,
+.CodeMirror-line > span > span::-moz-selection,
+.CodeMirror-line > span::-moz-selection,
+.CodeMirror-line::-moz-selection {
+  background-color: var(--code-selection-bg) !important;
+  color: var(--code-selection-text) !important;
+}
+
+/* Optional: make the active line in code blocks subtle, not selection-like */
+.cm-s-default .CodeMirror-activeline-background {
+  background-color: var(--code-activeline-bg) !important;
+}
+
+/* 2. Checked / DONE checkbox color */
+.check-container input:checked ~ .checkmark {
+  background-color: var(--done-checkbox-bg) !important;
+  border-color: var(--done-checkbox-border) !important;
+}
+
+/* Checkmark tick itself */
+.check-container input:checked ~ .checkmark::after {
+  border-color: var(--done-checkbox-check) !important;
+}
+
+/* Hover state for checked / DONE checkbox */
+.check-container:hover input:checked ~ .checkmark {
+  background-color: var(--done-checkbox-border) !important;
+  border-color: var(--done-checkbox-border) !important;
+}
+
+/* Blueprint-style checked checkboxes, used in some Roam UI surfaces */
+.bp3-control input:checked ~ .bp3-control-indicator {
+  background-color: var(--done-checkbox-bg) !important;
+  border-color: var(--done-checkbox-border) !important;
+}
+
+.bp3-control input:checked ~ .bp3-control-indicator::before {
+  color: var(--done-checkbox-check) !important;
+}
+
+
+/* Bold text */
+strong,
+.rm-bold {
+  color: var(--special) !important;
+}
