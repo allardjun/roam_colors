@@ -48,7 +48,7 @@
    until THIS url changes too — bump it on every component edit, and bump
    the roam/css import as well so the browser re-reads this file and
    discovers the new nested url. See KNOWLEDGE.md "Caching gotcha". */
-@import url('./components-v2.css?v=g4');
+@import url('./components-v2.css?v=g5');
 
 :root {
   /* ── PALETTE (color-describing) ───────────────────────────
@@ -262,6 +262,13 @@
   --font-mono:    ui-monospace, "SFMono-Regular", Menlo, Consolas,
                   "Liberation Mono", "Courier New", monospace;                     /* code surfaces */
 
+  /* Page title size, applied to BOTH the display <h1> and the edit
+     <textarea> so clicking the title doesn't resize it. This is the one
+     value in this file that was chosen rather than measured — it is an
+     estimate of Roam's own title size. If the displayed title changes
+     size when you install this, tune it here and nowhere else. */
+  --title-size: 3rem;
+
   /* Hairline rule. glamour.md returns to "a thin Champagne Brass rule"
      and "brass one-pixel rules" repeatedly — it is the main structural
      device in the identity, used instead of boxes and borders. Low
@@ -298,6 +305,15 @@
 .roam-body .roam-app h1 {
   font-weight: 600;
   letter-spacing: 0.055em;
+  /* Display and edit modes are two DIFFERENT elements: Roam shows an
+     <h1> and swaps in a <textarea> when you click the title. A textarea
+     does not inherit font-size from its surroundings the way the h1
+     picks it up from Roam's own stylesheet, so without this the title
+     visibly shrinks the moment you click it. Setting the size (and
+     line-height, or it jumps vertically instead) on both makes the
+     swap invisible. */
+  font-size: var(--title-size);
+  line-height: 1.15;
 }
 
 /* The thin brass rule under the title, in place of a box.
@@ -309,21 +325,71 @@
   padding-bottom: 0.12em;
 }
 
-/* In-block headings get the display face too, with tracking scaled
-   down as size goes up — the larger the type, the less it needs.
-   Color is left alone: components-v2.css already gives level 3
-   --text-secondary, and levels 1-2 inherit body color, which keeps
-   headings from competing with brass page links. */
+/* In-block headings: display face AND brass, so `# Heading` gives you
+   the page-title treatment inside a block.
+
+   Why the doubled selectors and the !important. components-v2.css sets
+   font-family and color on `.rm-block-text` with !important (see its
+   Typography section). Depending on the block, Roam puts the heading
+   class either ON that element or on a parent of it — so a bare
+   `.rm-heading-level-1` would tie or lose. Listing both shapes covers
+   either DOM, and !important is required to beat the Typography rule
+   at all.
+
+   If brass headings plus brass page links plus brass bold turns out to
+   be too much metal on a dense page, drop the `color` line here first:
+   the display face alone already separates a heading from body text. */
 .rm-heading-level-1,
-.rm-heading-level-2 {
-  font-family: var(--font-display);
+.rm-heading-level-2,
+.rm-heading-level-3,
+.rm-heading-level-1 .rm-block-text,
+.rm-heading-level-2 .rm-block-text,
+.rm-heading-level-3 .rm-block-text {
+  font-family: var(--font-display) !important;
+  color: var(--special) !important;
+}
+
+/* Tracking scaled down as size goes up — the larger the type, the less
+   it needs. Kept separate from the block above because these differ per
+   level while the family and color do not. */
+.rm-heading-level-1 { letter-spacing: 0.02em; }
+.rm-heading-level-2 { letter-spacing: 0.025em; }
+.rm-heading-level-3 { letter-spacing: 0.03em; }
+
+/* #brand — opt any block into the display face and brass.
+   ----------------------------------------------------------------
+   Tag a block with #brand and the whole block renders in Bodoni and
+   champagne brass, the same treatment as the page title. Intended for
+   the "quiet ownership" lines glamour.md keeps returning to — a
+   statement, a principle, a name — not for general emphasis.
+
+   Roam puts the tag name in a `data-tag` attribute on the tag element,
+   so `:has()` lets the ENCLOSING block react to a tag sitting inside
+   it. Both DOM shapes are covered for the same reason as the headings
+   above, and !important for the same reason again.
+
+   Two caveats worth knowing:
+   · `:has()` needs a 2022-or-later browser engine. Current Chrome and
+     the Roam desktop app (Electron) are fine; a very old browser will
+     simply ignore the rule and the block stays normal.
+   · The styling applies to the RENDERED block. Click into it to edit
+     and you get the raw textarea back, unstyled — that is Roam's edit
+     mode, not a bug. */
+.rm-block-text:has([data-tag="brand"]),
+.roam-block:has([data-tag="brand"]) {
+  font-family: var(--font-display) !important;
+  color: var(--special) !important;
   letter-spacing: 0.02em;
 }
 
-.rm-heading-level-3 {
-  font-family: var(--font-display);
-  letter-spacing: 0.03em;
+/* The tag itself is left visible so you can still see and delete it.
+   To hide it once tagged — the block keeps the styling either way —
+   uncomment this:
+
+.rm-block-text:has([data-tag="brand"]) [data-tag="brand"] {
+  display: none;
 }
+*/
 
 /* Structural hairlines. glamour.md uses a rule where most designs
    would use a border or a filled bar. */
@@ -422,6 +488,12 @@ code,
    overridden is --highlight-* against the page background (2.0
    and 2.4:1), which is correct — that is a mark's visibility, not
    text legibility, and text ON the marks is 6.6 and 5.6:1.
+
+   THE ONE ESTIMATED VALUE is --title-size. Colors could be computed;
+   Roam's own title font-size could not be read without inspecting a
+   live DOM, so it was estimated from a screenshot. It is isolated in
+   a single variable for exactly that reason. Everything else here is
+   either measured or taken straight from glamour.md.
 
    DEVIATIONS FROM glamour.md, and why:
      · Rose-Gold Copper and Cocktail Fuchsia are lifted/deepened
