@@ -1,0 +1,435 @@
+/* ============================================================
+   cyanotype.css  —  "Cyanotype" Roam theme (entry file)
+   ------------------------------------------------------------
+   Prussian blue paper, white line work, and a drafting office's
+   markup pencils.
+
+   A cyanotype is a contact print: paper coated in iron salts,
+   exposed under a drawing, washed in water. Wherever the drawing
+   masked the light the paper stays white; everywhere else it
+   turns Prussian blue. So the ground is not a "background color"
+   — it is the exposed field, and every white thing on the page is
+   line work that was drawn.
+
+   The color comes from what a drawing gets marked up with after
+   it is printed: red grease pencil for corrections, a green check
+   pencil for what has been verified, a yellow wax highlighter,
+   and an indelible copying pencil in aniline violet. Those four
+   pencils are the entire chromatic budget, and each one keeps the
+   meaning it has on a real drawing:
+
+     red    -> errors, and things being newly called out
+     green  -> checked / DONE
+     amber  -> highlighted, warning, in-flight
+     violet -> references to elsewhere in the set
+
+   WHY NOT CYBERPUNK-TEAL, which is what prompted this: the repo
+   already has that ground twice. argon-executive is a charcoal
+   teal (hue 187) and black-lotus-shock is an indigo-black under
+   cyan and violet neon (hue 229). A third would have landed
+   between two themes you already have. What was actually missing
+   was a *chromatic* ground — every other theme here is a
+   near-neutral dark with a tint (saturation .15 to .37), and this
+   one is a real blue you would notice on a swatch.
+
+   Same two-tier structure as base-v2.css and glamour.css:
+     1. PALETTE      — raw, color-describing values (--col-*).
+     2. APPLICATIONS — semantic roles that map palette -> UI.
+   It imports the SAME components-v2.css, unmodified.
+
+   NOTE: @import must come before :root. A CSS @import is dropped
+   by the browser if any style rule precedes it. Both imports are
+   therefore at the top; var() resolution is order-independent, so
+   components-v2.css still sees the vars defined below.
+
+   CONTRAST: every ratio in the comments below is a measured WCAG
+   value against the surface the color actually lands on, not an
+   estimate. Every foreground clears 4.5:1 where it carries text.
+   ============================================================ */
+
+/* IBM Plex, all three widths, all SIL OFL.
+   One family in three roles rather than a display/text pairing,
+   because a drawing set is lettered in one hand: Condensed for the
+   title block, Sans for the notes, Mono for the schedule. Plex was
+   drawn for an engineering company, which is the right accent for
+   this theme in a way a fashionable grotesque would not be.
+   If this request is blocked or offline the stacks below fall back
+   to the system sans and a narrow grotesque, so the theme loses its
+   lettering but not its layout. */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap');
+
+/* The ?v= is a cache-buster, not decoration. The nested sheet is cached
+   independently of this file, so editing components-v2.css is invisible
+   until THIS url changes too — bump it on every component edit, and bump
+   the roam/css import as well so the browser re-reads this file and
+   discovers the new nested url. See KNOWLEDGE.md "Caching gotcha". */
+@import url('./components-v2.css?v=cy1');
+
+:root {
+  /* ── PALETTE (color-describing) ───────────────────────────
+
+     Neutrals use the same numeric ramp convention as base-v2:
+     n900 is the darkest, n50 the lightest. Verified monotonic by
+     WCAG relative luminance (shown in comments).
+
+     The ramp is one material end to end — the same Prussian blue
+     at every exposure, from a full field down to bare paper. That
+     is why even the light steps are blue-tinted: there is no
+     neutral grey anywhere in a cyanotype. */
+
+  /* Neutral ramp (dark -> light) */
+  --col-n900: #071b2e;  /* L .010  "Prussian Ink"    — deepest exposure */
+  --col-n850: #0f2c47;  /* L .024  "Cyanotype Field" — the page itself */
+  --col-n800: #143451;  /* L .032  panel */
+  --col-n750: #1a3f5e;  /* L .046  raised */
+  --col-n700: #2f5b7a;  /* L .095  the wash at half strength */
+  --col-n600: #4d6b7d;  /* L .136  derived — dark text on the bare-paper card */
+  --col-n500: #8aa2b4;  /* L .345  muted text (5.4:1 on the field) */
+  --col-n400: #a8bcc9;  /* L .485  secondary text */
+  --col-n300: #bccbd4;  /* L .582  derived — card hover row */
+  --col-n150: #dde6ea;  /* L .779  "Line White"  — a drawn line at normal weight */
+  --col-n100: #e9eef1;  /* L .848  "Paper White" — a line drawn heavier */
+  --col-n50:  #f2f5f6;  /* L .908  "Bare Paper"  — unexposed; the search card */
+
+  /* The four markup pencils. This is the whole chromatic budget,
+     and it is small on purpose: on a print, color means someone
+     wrote on it. */
+  --col-china-red:      #ef6f6a;  /* red grease pencil — corrections */
+  --col-check-green:    #7cc98f;  /* check pencil — verified */
+  --col-trace-amber:    #e9c07a;  /* wax highlighter — attention */
+  --col-copying-violet: #ab9ee0;  /* indelible copying pencil — cross-references */
+
+  /* The one hue that is not a pencil: the wash itself, at the pale
+     end where a thin coat goes cyan rather than blue. It is the
+     paper's own color, which is why it carries links — a link is
+     part of the medium, not something written on it. */
+  --col-cyan-wash: #7ec8dd;
+
+  /* Red is 2.68:1 on the bare-paper card — the same class of bug as
+     base-v1's invisible search selection. Deepened for that one
+     surface; see the CYANOTYPE-ONLY rule at the bottom. */
+  --col-china-red-deep: #a8302b;  /* 6.14:1 on the card */
+
+  /* Ring for a checked box: the check pencil pressed harder. */
+  --col-check-green-deep: #5fae78;
+
+  /* Fills. Dark enough that they can only ever be backgrounds. */
+  --col-wash-deep:      #22557d;  /* text selection, and selection inside code */
+  --col-verdigris-deep: #1a5a52;  /* the cool block-highlight. NOT a blue: a blue
+                                     mark on blue paper is the one thing that
+                                     cannot show, which is exactly why a drafting
+                                     office reached for a green pencil. It sits at
+                                     the same lightness as --col-wash-deep and is
+                                     told apart by hue, not by contrast — the one
+                                     place in this file a ratio is the wrong
+                                     measure. */
+  --col-amber-deep:     #6e5b24;  /* the warm block-highlight / highlighter */
+
+  /* Matching-bracket fill, highlighter at 25% alpha. */
+  --col-amber-veil: #e9c07a40;
+
+  /* ── APPLICATIONS (semantic; map palette -> UI roles) ─────
+     Each comment lists where the color is used, so this block
+     doubles as a map of which components share each color. The
+     var NAMES and the set of them are identical to base-v2.css —
+     that is the contract components-v2.css depends on. Only the
+     values differ. */
+
+  /* Surfaces. Separations are 1.11 / 1.17 / 1.30:1 — subtle on
+     purpose. On a print the paper does not have panels; these
+     steps exist to place a popover in front of the page, not to
+     draw boxes. */
+  --bg-base:   var(--col-n850); /* page/editor/topbar bg, kanban-card, empty mention-pill bg, CM5 gutters */
+  --bg-panel:  var(--col-n800); /* sidebars, kanban-column, embed-outer, buttons, borders, table header row */
+  --bg-raised: var(--col-n750); /* popovers/tooltips/datepicker + arrow, inline-code bg, buffer, hover, reference-item, embed-inner, 2ndary cursor, ruler, unchecked checkbox */
+
+  /* Text on dark surfaces.
+     --text-body and --text-primary are one ramp step apart, and that
+     step is the theme's whole typographic idea: n150 is a line at
+     normal weight, n100 is a line drawn heavier. Nothing about
+     emphasis in this theme is a hue change. */
+  --text-primary:   var(--col-n100); /* editor chrome text, popovers, buffer, right sidebar, kanban-title border, cm-error, matching bracket, All-Pages title (12.2:1) */
+  --text-secondary: var(--col-n400); /* sidebar items, datepicker weekdays + day numbers, level3 heading, icons, parent-path, sorted headers (7.3:1) */
+  --text-muted:     var(--col-n500); /* CM5 line numbers, page-ref, ref brackets, small buttons, indent guide, title-children (5.4:1) */
+  --text-body:      var(--col-n150); /* body/block text; set with !important in Typography, so it — not --text-primary — is what you read on the page (11.3:1) */
+  --title-fg:       var(--col-n100); /* page title: .roam-app h1 (display) + .rm-title-display/-textarea (edit). White, because the title block of a drawing is line work like everything else — this is the only theme in the repo whose titles are not a hue (12.2:1) */
+
+  /* Text drawn ON a light or filled surface. */
+  --text-on-accent: var(--col-n900); /* text inside filled mention pills (9.3:1 on the wash) */
+  --text-on-light:  var(--col-n900); /* search input text, slider label text (15.9:1) */
+
+  /* Accent / state colors — the four pencils plus the wash. */
+  --accent:   var(--col-cyan-wash);      /* external links, mention pills, cm5 header/def/link (7.6:1) */
+  --success:  var(--col-check-green);    /* success toast, sync-synced icon, green cm5 tokens (7.2:1) */
+  --emphasis: var(--col-trace-amber);    /* inline-code fg, warning toast, saving icon, cm5 variable-2, matching tag (8.4:1 on the page, 6.4:1 on the raised surface inline code actually uses) */
+  --keyword:  var(--col-china-red);      /* cm5 keyword/tag, find-or-create new-page label, linked-ref page title (4.9:1 on dark — but see the light-surface override at the bottom of this file) */
+  --error:    var(--col-china-red);      /* cm5 negative/invalidchar/non-matching bracket. Same value as --keyword: there is one red pencil in the drawer, and both of these mean "look at this, it is wrong or it is new" */
+  --special:  var(--col-copying-violet); /* cm5 atom/number, page-ref link color. Also bold text in components-v2.css — overridden at the bottom of this file, for a measured reason given there (5.9:1) */
+  --string:   var(--col-check-green);    /* cm5 string/string-2, slider progress. Shares the check pencil: four pencils cover seven roles, and a slider filling up is the same idea as a check mark (7.2:1) */
+
+  /* Bullets, table, highlights */
+  --bullet-outer:   var(--col-n500);          /* closed/collapsed bullet, slider handle, cm5-meta, fat-cursor color, checkbox :active. A collapsed bullet hides content, so it is deliberately as visible as muted text rather than dimmer (5.4:1) */
+  --kanban-bg:      var(--col-n700);          /* kanban board backdrop */
+  --bullet-inner:   var(--col-n100);          /* open bullet, slider-label bg, cm5 bracket/hr, fat-cursor bg */
+  --table-text:     var(--col-n400);          /* All-Pages cell text (7.3:1) */
+  --highlight-cool: var(--col-verdigris-deep);/* block-highlight blue AND grey (both intentionally share one var). Body text on it 6.3:1; 1.79:1 vs the page */
+  --highlight-warm: var(--col-amber-deep);    /* roam-highlight, block-highlight-yellow, cm5-searching (body on it 5.2:1; 2.16:1 vs the page) */
+
+  /* Find-or-create search (a LIGHT surface inside a dark theme).
+     Roam builds this card light, and here that is not a concession
+     at all: it is the sheet before it was exposed. The keyboard
+     selection then fills a row back in with the field color, which
+     is the same print run in reverse. */
+  --search-bg:            var(--col-n50);  /* search input + menu background */
+  --search-fg:            var(--col-n800); /* menu text on that light surface (11.7:1) */
+  --search-fg-muted:      var(--col-n600); /* secondary result line (5.2:1) */
+  --search-hover-bg:      var(--col-n300); /* mouse hover (1.52:1 vs the card — base-v2 ships 1.37:1 here) */
+  --search-selected-bg:   var(--col-n800); /* KEYBOARD-selected row (up/down arrows). 11.7:1 against the card and 7.7:1 against plain hover, so the two states cannot be confused — the bug that made base-v1 unusable */
+  --search-selected-text: var(--col-n50);  /* text on the selected row (11.7:1) */
+
+  /* No --datepicker-* day-state vars: day cells are left to Blueprint.
+     See KNOWLEDGE.md "Blueprint date picker: don't bother". */
+
+  /* Popover */
+  --popover-arrow: var(--bg-raised); /* the little triangle; needs `fill`, not `color` — see components-v2.css */
+
+  /* Selection */
+  --selection-bg:        var(--col-wash-deep);      /* normal text selection bg */
+  --selection-text:      var(--col-n150);           /* normal text selection fg (6.2:1) */
+  --code-selection-bg:   var(--col-trace-amber);    /* LEGACY CM5 only — see note below */
+  --code-selection-text: var(--col-n900);           /* LEGACY CM5 only */
+  --code-activeline-bg:  rgba(221, 230, 234, 0.05); /* LEGACY CM5 only. Lightens rather than darkens — base-v2 uses rgba(0,0,0,.04), which is invisible on a dark ground */
+
+  /* Code blocks — CodeMirror 6 / .rm-code-block.
+     Modern Roam renders ``` blocks with CodeMirror 6. The three
+     --code-* vars above bind only to CM5 (.cm-s-default,
+     .CodeMirror-*), which ``` blocks no longer use, so the amber
+     code selection almost certainly never renders. Selection you
+     actually see inside a code block is --cm6-selection.
+
+     base-v2 ships OneDark here, which is a grey scheme with its own
+     opinions about blue; on this page it would read as a window into
+     a different application. The tokens are the same four pencils
+     instead, on a ground one step DARKER than the page, so a code
+     block reads as a deeper exposure (1.22:1). All tokens verified
+     >= 4.5:1 on it. */
+  --cm6-bg:                 var(--col-n900);            /* code block + gutter background */
+  --cm6-fg:                 var(--col-n150);            /* default code text, gutter text + border (13.8:1) */
+  --cm6-active-line:        var(--col-n850);            /* active line + active-line gutter */
+  --cm6-selection:          var(--col-wash-deep);       /* selected text background */
+  --cm6-cursor:             var(--col-trace-amber);     /* caret + cursor — the one warm thing in a code block, so it is findable */
+  --cm6-muted:              var(--col-n500);            /* comment, placeholder, fold placeholder (6.6:1) */
+  --cm6-keyword:            var(--col-copying-violet);  /* keywords (7.2:1) */
+  --cm6-operator:           var(--col-cyan-wash);       /* operators, regexp, special chars (9.3:1) */
+  --cm6-string:             var(--col-check-green);     /* strings (8.8:1) */
+  --cm6-variable:           var(--col-n150);            /* variables — the most common token, so it stays line-colored (13.8:1) */
+  --cm6-number:             var(--col-trace-amber);     /* numbers, colors, constants (10.2:1) */
+  --cm6-name:               var(--col-china-red);       /* property names, names (5.9:1) */
+  --cm6-type:               var(--col-n100);            /* type / class names — the heavier line again, for the same reason bold is (14.9:1) */
+  --cm6-bracket-match-bg:   var(--col-amber-veil);      /* matching-bracket fill */
+  --cm6-bracket-match-line: var(--col-n700);            /* matching-bracket outline */
+  --cm6-bracket-nomatch-bg: var(--col-china-red);       /* non-matching bracket */
+  --cm6-field-border:       var(--col-n500);            /* CM search textfield border */
+
+  /* DONE / checked checkbox — the check pencil, doing its actual job. */
+  --done-checkbox-bg:     var(--col-check-green);      /* checked checkbox fill */
+  --done-checkbox-border: var(--col-check-green-deep); /* checked checkbox border + hover fill */
+  --done-checkbox-check:  var(--col-n900);             /* the tick mark (8.8:1 on fill, 6.5:1 on hover) */
+
+  /* Typography */
+  --font-ui:        "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+                    "Helvetica Neue", sans-serif;                                    /* body/textarea */
+  --font-title:     "IBM Plex Sans Condensed", "Roboto Condensed", "Arial Narrow",
+                    "IBM Plex Sans", sans-serif;                                     /* page titles (consumed by components-v2.css) */
+  --font-condensed: var(--font-title);                                               /* alias used by the rules below */
+  --font-mono:      "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas,
+                    "Liberation Mono", "Courier New", monospace;                     /* code surfaces */
+
+  /* Page title size, applied to BOTH the display <h1> and the edit
+     <textarea> so clicking the title doesn't resize it. Like glamour's,
+     this is the one value in the file that was chosen rather than
+     measured — Roam's own title size cannot be read without a live DOM.
+     It is isolated here so it can be tuned in one place. */
+  --title-size: 3rem;
+}
+
+/* ============================================================
+   CYANOTYPE-ONLY RULES
+   ------------------------------------------------------------
+   Everything above is a variable, which is all a theme normally
+   needs. These exist because part of this idea is typographic —
+   lettering, line weight, leader lines — and none of that can be
+   expressed as a color token.
+
+   They live here, in the entry file, so the other five themes are
+   completely unaffected.
+   ============================================================ */
+
+/* Bold text — Paper White, the heavier line.
+   ----------------------------------------------------------------
+   This is the theme's one real argument, so it is worth stating.
+   components-v2.css paints bold with --special, which here is the
+   copying-pencil violet at 5.9:1. Body text is 11.3:1. Taking the
+   default would therefore make every bold word roughly HALF the
+   contrast of the sentence around it — emphasis that is measurably
+   quieter than what it emphasises.
+
+   Bold instead goes one ramp step brighter than body, which is what
+   "bold" means on a drawing: the same line, drawn heavier. The step
+   is deliberately small (1.08:1 against body). The weight is doing
+   the work; this only stops bold from going dimmer.
+
+   Both declarations are !important, so this one wins purely by
+   coming later in the cascade — the @import above is evaluated as
+   if inserted at its own position, which is before this rule. */
+strong,
+.rm-bold {
+  color: var(--col-n100) !important;
+}
+
+/* In-block headings get the title-block lettering: Condensed, and a
+   touch of tracking that comes off as size goes up.
+
+   THE `> .rm-block__self` IS LOAD-BEARING — do not simplify it away.
+   `.rm-heading-level-N` sits on the block CONTAINER, which holds this
+   block's own content *and* all of its nested children, so a plain
+   descendant selector would drag the entire subtree into the condensed
+   face. `.rm-block__self` is the direct child holding only this block's
+   own text. The same trap applies to letter-spacing, and to any
+   inherited property set on the bare container. See KNOWLEDGE.md
+   "Block styles leak into children".
+
+   Both text-class spellings are listed because `.rm-block__input` is
+   current and `.rm-block-text` is what components-v2.css still uses;
+   inside `.rm-block__self` both are safe. !important is required to
+   beat the Typography rule that sets font-family on `.rm-block-text`.
+
+   Color is deliberately NOT set here: headings are line work like
+   everything else, and they are already distinguished by face, weight
+   and size. */
+.rm-heading-level-1 > .rm-block__self .rm-block__input,
+.rm-heading-level-2 > .rm-block__self .rm-block__input,
+.rm-heading-level-3 > .rm-block__self .rm-block__input,
+.rm-heading-level-1 > .rm-block__self .rm-block-text,
+.rm-heading-level-2 > .rm-block__self .rm-block-text,
+.rm-heading-level-3 > .rm-block__self .rm-block-text {
+  font-family: var(--font-condensed) !important;
+  font-weight: 600;
+}
+
+.rm-heading-level-1 > .rm-block__self .rm-block__input,
+.rm-heading-level-1 > .rm-block__self .rm-block-text { letter-spacing: 0.01em; }
+
+.rm-heading-level-2 > .rm-block__self .rm-block__input,
+.rm-heading-level-2 > .rm-block__self .rm-block-text { letter-spacing: 0.02em; }
+
+.rm-heading-level-3 > .rm-block__self .rm-block__input,
+.rm-heading-level-3 > .rm-block__self .rm-block-text { letter-spacing: 0.03em; }
+
+/* Page title. Family and color come from --font-title / --title-fg in
+   components-v2.css; this adds the letterform treatment and, more
+   importantly, the size.
+
+   Display and edit mode are two DIFFERENT elements: Roam renders the
+   title as an <h1> and swaps in a <textarea> the moment you click it.
+   A textarea does not inherit font-size the way the h1 picks it up
+   from Roam's own stylesheet, so without this the title visibly
+   shrinks on click. Setting size AND line-height on both makes the
+   swap invisible. See KNOWLEDGE.md "Page titles". */
+.rm-title-display,
+.rm-title-textarea,
+.roam-body .roam-app h1 {
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  font-size: var(--title-size);
+  line-height: 1.15;
+}
+
+/* Indent guides as leader lines.
+   The dashed rule is the one piece of drafting grammar in here that
+   is not a color or a typeface: on a drawing, a thin dashed line is
+   what connects a note to the thing it is about, which is exactly
+   what Roam's indent guide does. Color still comes from
+   --text-muted via components-v2.css; only the stroke changes. */
+.block-border-left {
+  border-left: 1px dashed var(--text-muted);
+}
+
+/* Roam styles its divider through the CLASS .rm-hr, which outranks a
+   bare `hr` element selector — so setting border-color on `hr` alone
+   leaves the divider at Roam's pale grey default, which on a blue
+   ground reads as a dead pixel row rather than a rule. Both forms are
+   set, with the same border shorthand Roam uses. */
+hr {
+  border-top: 1px solid var(--col-n700);
+}
+
+.rm-hr {
+  border: 1px solid var(--col-n700);
+}
+
+/* Fix: the "Create page" label is the only --keyword-colored element
+   that lands on the LIGHT bare-paper card instead of the blue field.
+   The red pencil is 2.68:1 there. The deepened red is 6.14:1 and still
+   reads as the same pencil. (base-v2 has this bug unfixed at 1.95:1;
+   glamour and the three palette themes fix it the same way.)
+   The :not() keeps this from fighting the selected-row rule in
+   components-v2.css, which paints the whole row's text pale.
+   Both class names are covered because the row carries bp3-menu-item
+   in the DOM while components-v2.css targets it as rm-menu-item;
+   whichever is present, one of these matches. Each is five classes
+   deep, which outranks the four-class rule it is correcting. */
+.rm-find-or-create-wrapper .bp3-menu-item:not(.bp3-active) .rm-search-title .rm-new-page,
+.rm-find-or-create-wrapper .rm-menu-item:not(.bp3-active) .rm-search-title .rm-new-page {
+  color: var(--col-china-red-deep);
+}
+
+/* Code and inline code use the mono stack explicitly. components-v2.css
+   sets --font-ui on `body`/`.roam-app` with !important, which would
+   otherwise drag IBM Plex Sans into code surfaces. */
+code,
+.rm-code-block,
+.CodeMirror,
+.cm-editor {
+  font-family: var(--font-mono);
+  letter-spacing: 0;
+}
+
+/* ============================================================
+   Notes, and what was deliberately not done
+   ------------------------------------------------------------
+   MEASURED, NOT ESTIMATED: every contrast figure above was
+   computed from WCAG relative luminance against the surface the
+   color actually lands on. The values below 4.5:1 are all
+   surface-vs-surface pairs, where a text threshold is the wrong
+   measure: the two block-highlight marks against the page (1.79
+   and 2.16:1 — that is a mark's visibility, and text ON them is
+   6.3 and 5.2:1), the surface steps, and the search-card hover.
+
+   THE ONE ESTIMATED VALUE is --title-size, for the same reason it
+   is estimated in glamour.css: Roam's own title font-size cannot
+   be read without inspecting a live DOM. It is isolated in a
+   single variable. If titles come out wrong on install, tune it
+   there and nowhere else.
+
+   THE COOL BLOCK-HIGHLIGHT IS GREEN, which looks like a mistake in
+   a variable named --highlight-cool. It is the honest answer to a
+   blue theme: Roam's "blue" and "grey" highlights share one var,
+   and a blue mark on Prussian paper is the one thing that cannot
+   show. It is also the only pair in this file that a contrast
+   ratio cannot judge — it sits at the same lightness as the
+   selection fill and is told apart by hue.
+
+   BOLD IS NOT A HUE, which is the theme's whole idea and also the
+   thing most likely to be wrong for you. If you want colored bold
+   back, delete the `strong, .rm-bold` rule above and it reverts to
+   --special, the copying violet, like base-v2 does with purple.
+
+   NOT ATTEMPTED: the date picker's day cells, for the reasons in
+   KNOWLEDGE.md "Blueprint date picker: don't bother".
+
+   The font import is the only external dependency. If
+   fonts.googleapis.com is blocked the theme falls back to the
+   system sans and a narrow grotesque — still coherent, and
+   noticeably less like a drawing.
+   ============================================================ */
