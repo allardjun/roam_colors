@@ -48,7 +48,7 @@
    until THIS url changes too — bump it on every component edit, and bump
    the roam/css import as well so the browser re-reads this file and
    discovers the new nested url. See KNOWLEDGE.md "Caching gotcha". */
-@import url('./components-v2.css?v=g8');
+@import url('./components-v2.css?v=g9');
 
 :root {
   /* ── PALETTE (color-describing) ───────────────────────────
@@ -332,33 +332,52 @@
 /* In-block headings: display face AND brass, so `# Heading` gives you
    the page-title treatment inside a block.
 
-   Why the doubled selectors and the !important. components-v2.css sets
-   font-family and color on `.rm-block-text` with !important (see its
-   Typography section). Depending on the block, Roam puts the heading
-   class either ON that element or on a parent of it — so a bare
-   `.rm-heading-level-1` would tie or lose. Listing both shapes covers
-   either DOM, and !important is required to beat the Typography rule
-   at all.
+   THE `> .rm-block__self` IS LOAD-BEARING — do not simplify it away.
+   `.rm-heading-level-N` sits on the block CONTAINER, and that container
+   holds this block's own content *and* all of its nested children. A
+   descendant selector like `.rm-heading-level-1 .rm-block-text`
+   therefore reaches straight into every child block and drags the whole
+   subtree into Bodoni. `.rm-block__self` is the direct child holding
+   only this block's own text; children live in a sibling
+   `.rm-block-children`, so scoping through it stops at the heading
+   itself. (Pattern confirmed against RailsRoam.css:1455, which does the
+   same thing for the same reason.)
+
+   The same trap applies to letter-spacing below, and to any inherited
+   property: setting it on the bare `.rm-heading-level-N` container
+   leaks it down the subtree even without a descendant selector, because
+   inheritance does not stop at block boundaries.
+
+   Both text-class spellings are listed for the same BEM reason as the
+   page links — `.rm-block__input` is current, `.rm-block-text` is what
+   components-v2.css still uses. Inside `.rm-block__self` both are safe.
+   !important is required either way, to beat the Typography rule that
+   sets font-family and color on `.rm-block-text`.
 
    If brass headings plus brass page links plus brass bold turns out to
    be too much metal on a dense page, drop the `color` line here first:
    the display face alone already separates a heading from body text. */
-.rm-heading-level-1,
-.rm-heading-level-2,
-.rm-heading-level-3,
-.rm-heading-level-1 .rm-block-text,
-.rm-heading-level-2 .rm-block-text,
-.rm-heading-level-3 .rm-block-text {
+.rm-heading-level-1 > .rm-block__self .rm-block__input,
+.rm-heading-level-2 > .rm-block__self .rm-block__input,
+.rm-heading-level-3 > .rm-block__self .rm-block__input,
+.rm-heading-level-1 > .rm-block__self .rm-block-text,
+.rm-heading-level-2 > .rm-block__self .rm-block-text,
+.rm-heading-level-3 > .rm-block__self .rm-block-text {
   font-family: var(--font-display) !important;
   color: var(--special) !important;
 }
 
 /* Tracking scaled down as size goes up — the larger the type, the less
-   it needs. Kept separate from the block above because these differ per
-   level while the family and color do not. */
-.rm-heading-level-1 { letter-spacing: 0.02em; }
-.rm-heading-level-2 { letter-spacing: 0.025em; }
-.rm-heading-level-3 { letter-spacing: 0.03em; }
+   it needs. Scoped exactly like the rule above; on the bare container
+   it would inherit into every child block. */
+.rm-heading-level-1 > .rm-block__self .rm-block__input,
+.rm-heading-level-1 > .rm-block__self .rm-block-text { letter-spacing: 0.02em; }
+
+.rm-heading-level-2 > .rm-block__self .rm-block__input,
+.rm-heading-level-2 > .rm-block__self .rm-block-text { letter-spacing: 0.025em; }
+
+.rm-heading-level-3 > .rm-block__self .rm-block__input,
+.rm-heading-level-3 > .rm-block__self .rm-block-text { letter-spacing: 0.03em; }
 
 /* #brand — opt any block into the display face and brass.
    ----------------------------------------------------------------

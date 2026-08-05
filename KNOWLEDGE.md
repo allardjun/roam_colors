@@ -109,11 +109,44 @@ Notes:
 - Needs a 2022-or-later engine for `:has()`. Current Chrome and the Roam
   desktop app are fine; older engines ignore the rule harmlessly.
 
-Same trick works for headings — but note the heading class sits either on
-`.rm-block-text` or on a parent of it depending on the block, so list both
-shapes (`.rm-heading-level-1` and `.rm-heading-level-1 .rm-block-text`)
-and use `!important`, since the Typography rules set font-family and
-color on `.rm-block-text` with `!important` already.
+## Block styles leak into children unless you scope through `.rm-block__self`
+
+**This is the single easiest way to break a Roam theme.** A block's
+container holds both its own content *and* its entire nested subtree:
+
+```
+.roam-block-container            <- .rm-heading-level-N lives HERE
+├── .rm-block__self              <- this block's own content
+│   └── .rm-block__input         <- the text you want to style
+└── .rm-block-children           <- every descendant block
+    └── .roam-block-container …
+```
+
+So `.rm-heading-level-1 .rm-block-text` does not mean "the heading's
+text". It means "every block's text anywhere under this heading", and a
+`# Heading` will drag its whole subtree into the heading's font. Scope
+through `.rm-block__self`, which is a *sibling* of `.rm-block-children`:
+
+```css
+.rm-heading-level-1 > .rm-block__self .rm-block__input {
+  font-family: var(--font-display) !important;
+}
+```
+
+RailsRoam.css:1455 uses exactly this shape, for exactly this reason.
+
+**Inherited properties leak even without a descendant selector.** Putting
+`letter-spacing`, `font-family`, `color` or similar on the bare
+`.rm-heading-level-N` container sends it down the whole subtree by normal
+inheritance — block boundaries are not style boundaries. Children only
+escape where some other rule sets that property on them directly (the
+Typography block's `!important` on `.rm-block-text` masks font-family and
+color, which is exactly why a leak can show up in tracking alone and look
+baffling). Scope the container rule the same way.
+
+Note the BEM pairing again: `.rm-block__input` is the current class,
+`.rm-block-text` the older one. Inside `.rm-block__self`, listing both is
+safe. `!important` is still needed to beat the Typography rules.
 
 ## Caching gotcha when iterating via `@import`
 
@@ -318,7 +351,9 @@ stack behind it.
 | Block highlight (^^...^^) | `.roam-highlight`, `.block-highlight-yellow/blue/grey` |
 | Page title input | `.rm-title-display`, `.rm-title-textarea` |
 | In-block headings | `.rm-heading-level-1` / `-2` / `-3` |
-| Block text | `.rm-block-text` |
+| Block text | `.rm-block__input` (current) / `.rm-block-text` (older) |
+| A block's own content, excluding children | `.rm-block__self` — see the leak note above |
+| A block's nested children | `.rm-block-children` |
 | Sync indicator | `.rm-saving-inner-icon.rm-synced` / `.rm-saving-remote` |
 | Intercom widget (to hide) | `.intercom-app`, `.intercom-launcher-frame`, `#intercom-container` |
 
