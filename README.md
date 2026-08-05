@@ -115,7 +115,17 @@ rules, _ = tinycss2.parse_stylesheet_bytes(open('glamour.css','rb').read(),
 print([r for r in rules if r.type == 'error'])
 ```
 
-Worth pairing with a variable-integrity check, since the two-tier layout makes both failure modes easy: every application var the components file consumes is defined by the entry file and vice versa (that set has to match exactly), no `--col-*` entry is defined and never used, and the components file never references `--col-*` directly.
+All of that is `tools/check.py`, which also measures every foreground against the surface it actually lands on:
+
+```bash
+python3 tools/check.py        # every entry file; exit 1 if anything fails
+python3 tools/check.py -v     # show the waived deviations and their reasons
+```
+
+It verifies the application-var contract in both directions, finds orphan `--col-*` entries and duplicate definitions in `:root`, and parse-checks with tinycss2 when it is installed.
+Known deviations live in a `WAIVERS` table in the script — each needs a written reason, and anything new fails loudly.
+
+`tools/bump.sh` increments the `?v=` on every entry file at once, which is otherwise seven manual edits that fail silently when forgotten.
 
 The `localhost.pem`, `localhost-key.pem`, and `rootCA*.pem` files should not be committed (see `.gitignore`).
 

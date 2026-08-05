@@ -22,7 +22,7 @@ Themes are loaded by creating a page literally named `roam/css` (lowercase, no s
 
 Multiple `@import`s and raw blocks can coexist. Last one wins on conflicts (per normal CSS cascade).
 
-Point the URL at an **entry file**, never at a components file — the entry file defines the variables and imports its components. Current entry files: `base-v2.css` (Dracula) and `glamour.css` (Golden-Hour Neo-Deco); `base-v1.css` is kept frozen as the pre-refactor reference.
+Point the URL at an **entry file**, never at a components file — the entry file defines the variables and imports its components. Current entry files: `base-v2.css` (Dracula), `glamour.css` (Golden-Hour Neo-Deco), `argon-executive.css`, `black-lotus-shock.css`, `ukiyo-night.css`, `cyanotype.css` and `offprint.css` (light). All seven share `components-v2.css`; `base-v1.css` + `components.css` are kept frozen as the pre-refactor reference.
 
 ## Specificity and `!important`
 
@@ -33,7 +33,7 @@ Many Roam/Blueprint defaults are themselves high-specificity (deep descendant se
 - Anything Blueprint applies via inline `style="background-color: ..."`
 - Selection (`::selection`) — Roam doesn't set it, but other styles can.
 
-The cost: if you set the same property with `!important` in two places, the earlier one is silently dead. Watch out — `dracula-jun.css` had ~6 dead rules from this. When you override an earlier rule with an `!important` version, delete (or comment-pointer to) the original.
+The cost: if you set the same property with `!important` in two places, the earlier one is silently dead. Watch out — the old `dracula-jun.css` had ~6 dead rules from this (the file is gone now; it is in git history if you want to see them). When you override an earlier rule with an `!important` version, delete (or comment-pointer to) the original.
 
 ## Bold text needs `strong, .rm-bold` and `!important`
 
@@ -158,7 +158,7 @@ When using `@import url('...')` from `roam/css`, browser cache holds the importe
 
 ### The split-file layout multiplies this
 
-The entry file (`base-v1.css`) `@import`s `components.css`, so **two** files are cached independently. Editing a component rule won't show up if you only cache-bust the entry — the nested sheet is held separately. To force the nested sheet to re-fetch you must change *its* URL, e.g. `@import url('./components.css?v=100')`, **and** bump the entry's `?v` so the browser re-reads the entry and discovers the new nested URL. Bumping only one of the two does nothing.
+The entry file (any of the seven) `@import`s its components file, so **two** files are cached independently. Editing a component rule won't show up if you only cache-bust the entry — the nested sheet is held separately. To force the nested sheet to re-fetch you must change *its* URL, e.g. `@import url('./components.css?v=100')`, **and** bump the entry's `?v` so the browser re-reads the entry and discovers the new nested URL. Bumping only one of the two does nothing.
 
 ### The macOS desktop app caches separately from the browser
 
@@ -277,7 +277,10 @@ is defined by the entry file, no application var is defined and unused,
 no palette entry is orphaned, and the components file never references
 `--col-*` directly.
 
-## Designing a second theme on the same components
+All of that, plus contrast, is `tools/check.py` — run it rather than
+re-deriving it.
+
+## Designing more themes on the same components
 
 `glamour.css` was built as a pure palette swap over the same
 `components-v2.css`, which validated the two-tier idea — but four things
@@ -325,6 +328,59 @@ Web fonts work: an `@import` of a Google Fonts URL in the entry file is
 fine, as long as it sits with the other `@import`s before any rule. It is
 the only external dependency in these themes, so keep a real fallback
 stack behind it.
+
+### A light theme is the real test, and the system passed it
+
+`offprint.css` inverts the figure/ground relationship of every surface in the app, and `components-v2.css` needed **no changes at all**.
+That is a much stronger result than a palette swap, which only shows the system survives a change of hue.
+
+The reason it works is that the application vars are named for *roles*, not for directions.
+`--bg-raised` means "the surface a popover and an inline-code chip sit on"; on a dark theme that is lighter than the page and on a light theme it is a shade darker, and no rule cares.
+The same holds for `--text-on-accent`, `--search-selected-bg` and the rest.
+
+**One var did break, and it is the one that names two roles.**
+`--bullet-inner` is the open bullet *and* the background of the slider's value chip, whose text is `--text-on-light`.
+On a dark theme both roles want a light value, so the overload is invisible.
+On a light theme they want opposites: a bullet on paper has to be dark to be seen, which leaves the chip dark with dark text on it.
+If a var has to be described with the word "and", that is the bug — split it before a theme finds it for you.
+
+**Two problems disappear entirely on a light theme.**
+The "Create page" label needs no deepened value, because that whole class of bug only exists when a light island sits inside a dark theme.
+And the Blueprint date-picker day cells this file gives up on look intentional, because their untouched light-mode defaults finally match what is around them.
+
+### On a light ground, only the *dark* end of a palette can carry text
+
+The mirror of the rule above about dark themes, and it bites harder, because the palettes worth borrowing are designed for fills.
+
+`offprint.css` uses Okabe-Ito, the colourblind-safe qualitative set that scientific figure guidelines standardised on.
+Measured as text on its journal-stock ground, **six of its seven hues fail**: yellow at 1.2:1, orange 2.0, sky blue 2.1, purple 2.8, green 3.1, vermilion 3.5, and only blue passes at 4.7.
+Every member had to be darkened, with the original kept in a comment.
+
+Sort the palette by luminance before assigning roles, in either direction.
+The ordering tells you which colours are foreground candidates at all.
+
+### When most of your themes override the same rule, the rule wants a variable
+
+Five of seven entry files had carried an identical `strong, .rm-bold` override, and five an identical "Create page" label override — the same selectors, copy-pasted.
+Both are now `--bold-fg` and `--keyword-on-light` in the contract, and the entry files are shorter for it.
+
+The bold case is worth understanding because it will recur.
+`--special` has to stay mid-toned so it can double as the page-link colour, while `--text-body` sits at the extreme end of the ramp.
+So on any theme with genuinely high body contrast, painting bold with `--special` makes bold **lower contrast than the sentence around it** — emphasis measurably quieter than what it emphasises.
+Three themes hit this independently before it was diagnosed.
+
+### Check the whole matrix, not the theme you are working on
+
+`tools/check.py` verifies the contract in both directions, finds orphan and duplicate vars, and measures every foreground against the surface it actually lands on.
+Run it before committing; it is the only thing that catches a 3.9:1 that looks fine on your monitor.
+
+Its first run found that **`base-v2.css` has the worst contrast in the repo** — seven pairs below threshold, including page titles at 3.03:1 and selected text at 1.96:1 against its own selection background, which makes selected text harder to read than unselected.
+Those values come from Dracula and OneDark upstream, so they are recorded as waivers with written reasons rather than silently changed; changing them means shipping something that is no longer those palettes.
+The lesson is the ordering: the theme nobody was editing was the one with the problems, and no amount of looking at it would have surfaced them.
+
+Two thresholds, not one.
+Text is WCAG 1.4.3's 4.5:1; bullets, tick marks and other graphical objects are 1.4.11's 3:1.
+Holding a 6px dot to a body-text standard is the wrong measure, not a stricter one.
 
 ## Useful class map (the ones that aren't obvious)
 
@@ -381,7 +437,7 @@ When a fix genuinely belongs to the shared components file, remember it changes 
 
 ### `@import` must precede `:root`
 
-`base-v1.css` pulls in components with `@import url('./components.css')` at the very top, *before* the `:root` block. A CSS `@import` is silently dropped by the browser if any style rule (including `:root`) precedes it. This is safe because custom-property resolution is order-independent: `var()` resolves at used-value time against the single `:root`, so `components.css` (imported first) still sees vars defined just below. The relative path resolves against the entry file's own URL, so it works on GitHub Pages and the localhost dev server alike — the install URL is unchanged.
+Every entry file pulls in its components with `@import url('./components-v2.css?v=…')` at the very top, *before* the `:root` block. A CSS `@import` is silently dropped by the browser if any style rule (including `:root`) precedes it. This is safe because custom-property resolution is order-independent: `var()` resolves at used-value time against the single `:root`, so `components.css` (imported first) still sees vars defined just below. The relative path resolves against the entry file's own URL, so it works on GitHub Pages and the localhost dev server alike — the install URL is unchanged.
 
 ## Local prototyping
 
