@@ -57,7 +57,7 @@
    until THIS url changes too — bump it on every component edit, and bump
    the roam/css import as well so the browser re-reads this file and
    discovers the new nested url. See KNOWLEDGE.md "Caching gotcha". */
-@import url('./components-v2.css?v=of1');
+@import url('./components-v2.css?v=of2');
 
 :root {
   /* ── PALETTE (colour-describing) ──────────────────────────
