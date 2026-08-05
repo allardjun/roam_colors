@@ -22,6 +22,8 @@ Themes are loaded by creating a page literally named `roam/css` (lowercase, no s
 
 Multiple `@import`s and raw blocks can coexist. Last one wins on conflicts (per normal CSS cascade).
 
+Point the URL at an **entry file**, never at a components file — the entry file defines the variables and imports its components. Current entry files: `base-v2.css` (Dracula) and `glamour.css` (Golden-Hour Neo-Deco); `base-v1.css` is kept frozen as the pre-refactor reference.
+
 ## Specificity and `!important`
 
 Many Roam/Blueprint defaults are themselves high-specificity (deep descendant selectors) or use inline styles. You will need `!important` more than you'd like, especially for:
@@ -155,6 +157,66 @@ the render and assuming a plausible-looking color came from your rule.
 Corollary: when a color looks "close enough but not quite right", suspect
 a dead selector before suspecting the value.
 
+## Validate with a CSS parser, not with your eyes
+
+Both silent failures found while building `glamour.css` were invisible in
+the render. A quick parse pass catches things no screenshot will:
+
+```python
+import tinycss2
+rules, _ = tinycss2.parse_stylesheet_bytes(open('theme.css','rb').read(),
+                                           skip_whitespace=True)
+print([r for r in rules if r.type == 'error'])
+```
+
+**CSS comments do not nest, and a literal comment-close sequence inside a
+comment ends it right there.** `base-v2.css` had a changelog line quoting
+a comment marker; it terminated the block 15 lines early and the rest of
+the prose was parsed as stray CSS. Nothing broke only because it sat at
+end-of-file — any rule appended after it would have been silently
+swallowed. If you need to mention a comment delimiter in prose, describe
+it instead of quoting it.
+
+Worth pairing with a variable-integrity check, since the two-tier layout
+makes both failure modes easy: every `var()` used by the components file
+is defined by the entry file, no application var is defined and unused,
+no palette entry is orphaned, and the components file never references
+`--col-*` directly.
+
+## Designing a second theme on the same components
+
+`glamour.css` was built as a pure palette swap over the same
+`components-v2.css`, which validated the two-tier idea — but four things
+only show up once you try it.
+
+**Contrast must be measured against the surface the color actually lands
+on, not against the page background.** Inline code is drawn on
+`--bg-raised`, not `--bg-base`; menu text is drawn on the light search
+card. A palette can look fine as a swatch row and still fail in place.
+
+**Watch for one var used on two different surfaces.** `--keyword` paints
+both the linked-ref page title (dark page) and the "Create page" label
+(light search card). No single value can clear 4.5:1 on both — the
+requirements point in opposite directions. The fix is a second, adjusted
+value applied by a narrow rule for the minority surface, not a compromise
+value that is mediocre on each.
+
+**On a dark theme, dark accents can only be backgrounds.** A brand
+palette will happily hand you deep colors that are unusable as text on a
+near-black ground. Those become your filled states — selected rows,
+highlights, checkboxes — while only the light end of the palette can
+carry text. Sort the palette by luminance before assigning roles; the
+ordering tells you which colors are foreground candidates at all.
+
+**`--font-ui` is set with `!important` on `body`/`.roam-app`, which drags
+it into code surfaces.** If the theme's UI font is not monospace, code
+and inline code need the mono stack re-asserted explicitly.
+
+Web fonts work: an `@import` of a Google Fonts URL in the entry file is
+fine, as long as it sits with the other `@import`s before any rule. It is
+the only external dependency in these themes, so keep a real fallback
+stack behind it.
+
 ## Useful class map (the ones that aren't obvious)
 
 | What you want to style | Selector |
@@ -179,6 +241,7 @@ a dead selector before suspecting the value.
 | Indent guide line | `.block-border-left` |
 | Block highlight (^^...^^) | `.roam-highlight`, `.block-highlight-yellow/blue/grey` |
 | Page title input | `.rm-title-display`, `.rm-title-textarea` |
+| In-block headings | `.rm-heading-level-1` / `-2` / `-3` |
 | Block text | `.rm-block-text` |
 | Sync indicator | `.rm-saving-inner-icon.rm-synced` / `.rm-saving-remote` |
 | Intercom widget (to hide) | `.intercom-app`, `.intercom-launcher-frame`, `#intercom-container` |
@@ -189,14 +252,21 @@ CodeMirror tokens you'll actually see in Roam code blocks: `cm-keyword`, `cm-ato
 
 Define everything in a single `:root` block. The cost of a duplicate variable name in the same `:root` is silent override — easy to ship a bug where the "wrong" definition wins. Resist the urge to add a second `:root` further down the file when you add a new feature; just append the variable to the top one.
 
-### Two tiers: palette vs application (`base-v1.css`)
+### Two tiers: palette vs application
 
-`base-v1.css` splits its `:root` into two tiers, and themes built on it should follow the same convention:
+Entry files (`base-v1.css`, `base-v2.css`, `glamour.css`) split their `:root` into two tiers, and themes built on this repo should follow the same convention:
 
 1. **Palette** — raw, color-describing hues, prefixed `--col-*` (e.g. `--col-cyan: #8be9fd`). One entry per distinct hex; this is the *only* place literal colors appear.
 2. **Application** — semantic role vars that map palette → UI (e.g. `--accent: var(--col-cyan)`, `--bg-raised: var(--col-slate)`). Component rules reference *only* these. Each application var carries a comment listing where it's used, so the block doubles as a map of which components share a color.
 
 Components live in a separate `components.css` (see below) and never touch the palette directly. **To make a new theme, change only the palette tier** — the application map and components stay put. (Group application vars by shared color: roles that are meant to track the same hue in every theme share one application var.)
+
+**How well this holds up in practice:** `glamour.css` and `base-v2.css` are entirely different-looking themes sharing one unmodified `components-v2.css`, so the core claim is real. Two caveats learned building the second one:
+
+- A new theme must define the *entire* application-var set the components file consumes, exactly by name — that set is the contract. Diff the two entry files' non-`--col-*` names; the difference should be empty in both directions.
+- Color-only is not quite enough. Anything typographic or structural — letter-spacing, hairline rules, small caps — cannot be expressed as a variable. Put those in a clearly-marked section at the bottom of the *entry* file rather than in the shared components file, so the other themes stay untouched.
+
+When a fix genuinely belongs to the shared components file, remember it changes every theme at once. Commit it separately from the theme that prompted it so it can be reverted on its own.
 
 ### `@import` must precede `:root`
 
