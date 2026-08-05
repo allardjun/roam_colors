@@ -66,6 +66,10 @@
   --col-steel-blue: #6b9ccd;
   --col-amber:      #ffcf70;
   --col-sage:       #6f8f72;
+  --col-pink-deep:  #a8306a;  /* Dracula pink deepened for the ONE place it lands
+                                 on a light surface: the "Create page" label in
+                                 the search card. Brand pink there is 1.95:1,
+                                 this is 5.21:1 */
   --col-forest:     #4f6f52;
 
   /* OneDark code-block hues (CodeMirror 6 / .rm-code-block) */
@@ -116,8 +120,10 @@
   --success:  var(--col-green);  /* success toast, sync-synced icon, green cm5 tokens (quote/positive/type/variable-3/qualifier/builtin/attribute) */
   --emphasis: var(--col-orange); /* inline-code fg, warning toast, saving icon, cm5 variable-2, matching tag */
   --keyword:  var(--col-pink);   /* cm5 keyword/tag, find-or-create new-page label, linked-ref page title */
+  --keyword-on-light: var(--col-pink-deep); /* the "Create page" label, which lands on the LIGHT search card instead of the page (5.2:1; the brand pink is 1.95:1 there) */
   --error:    var(--col-red);    /* cm5 negative/invalidchar/non-matching bracket */
   --special:  var(--col-purple); /* cm5 atom/number, page-ref link color, bold text, search-selected row */
+  --bold-fg:  var(--special); /* bold text (unchanged: this theme agrees with the shared default) */
   --string:   var(--col-yellow); /* cm5 string/string-2, slider progress */
 
   /* Bullets, table, highlights */

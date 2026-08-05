@@ -341,8 +341,21 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   background-color: var(--search-hover-bg);
 }
 
-.rm-find-or-create-wrapper .rm-menu-item .rm-search-title .rm-new-page {
-  color: var(--keyword);
+/* The "Create page" label is the only --keyword-colored element that lands
+   on the LIGHT search card rather than on the page, so on a dark theme it
+   needs a deepened value that would be wrong everywhere else — base-v2
+   shipped the brand pink here at 1.95:1 for its whole life. Its own var
+   rather than a per-theme override rule, which is what five of the seven
+   entry files were carrying, all with the same selector.
+
+   Both class spellings are listed: the row carries bp3-menu-item in
+   current Roam's DOM while this file has always targeted it as
+   rm-menu-item. The keyboard-selected row is unaffected — the rule that
+   paints that row's descendants is !important and beats this one
+   regardless of specificity. */
+.rm-find-or-create-wrapper .rm-menu-item .rm-search-title .rm-new-page,
+.rm-find-or-create-wrapper .bp3-menu-item .rm-search-title .rm-new-page {
+  color: var(--keyword-on-light);
 }
 
 .rm-find-or-create-wrapper .rm-menu-item .rm-search-list-item {
@@ -920,8 +933,20 @@ textarea {
 }
 
 
-/* Bold text */
+/* Bold text.
+   Its own var rather than --special, because five of the seven themes
+   disagreed with that default and each carried an identical override.
+   The reason is structural: --special has to stay mid-toned so it can
+   also serve as the page-link color, while --text-body sits at the
+   extreme end of the ramp — so on any theme with genuinely high body
+   contrast, the shared default paints bold LOWER than the sentence
+   around it. base-v2 and glamour set --bold-fg to var(--special) and
+   are unchanged.
+
+   !important is still required: Roam applies an inline color to bold
+   elements, and .rm-bold is sometimes used instead of <strong>. See
+   KNOWLEDGE.md "Bold text needs strong, .rm-bold". */
 strong,
 .rm-bold {
-  color: var(--special) !important;
+  color: var(--bold-fg) !important;
 }

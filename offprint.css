@@ -171,8 +171,10 @@
   --success:  var(--col-green);      /* success toast, sync-synced icon, green cm5 tokens (4.9:1; white toast text on it 5.2:1) */
   --emphasis: var(--col-amber);      /* inline-code fg, warning toast, saving icon, cm5 variable-2, matching tag (6.4:1 on the sheet, 5.3:1 on the chip inline code actually uses) */
   --keyword:  var(--col-vermillion); /* cm5 keyword/tag, find-or-create new-page label, linked-ref page title (5.0:1 on the sheet, 5.3:1 on the card — see the note at the bottom about why this theme needs no override there) */
+  --keyword-on-light: var(--keyword); /* the "Create page" label. The one theme that needs no deepened value: its card and its page are both light, so the whole class of problem does not arise (5.3:1) */
   --error:    var(--col-vermillion); /* cm5 negative/invalidchar/non-matching bracket. Shares the vermilion: a two-colour job does not get a second red */
   --special:  var(--col-claret);     /* cm5 atom/number, page-ref link color. Also bold in components-v2.css — overridden below, for a measured reason (5.0:1) */
+  --bold-fg:  var(--col-n900); /* bold text. On paper, emphasis is more ink, not different ink. --special would be 5.0:1 against body ink at 13.8:1 (16.0:1) */
   --string:   var(--col-green);      /* cm5 string/string-2, slider progress. Shares the green with --success (4.9:1) */
 
   /* Bullets, table, marks */
@@ -273,7 +275,8 @@
    reasons: the register is typographic before it is chromatic,
    a light page separates things with rules rather than with
    tone, and exactly one component var stops making sense when
-   the polarity flips.
+   the polarity flips. (Bold being ink rather than a hue is a
+   variable now — see --bold-fg in the palette map above.)
 
    They live here, in the entry file, so the other six themes are
    completely unaffected.
@@ -293,24 +296,6 @@
    light/dark flip rather than because of the design. */
 .bp3-slider-handle .bp3-slider-label {
   color: var(--col-n0);
-}
-
-/* Bold text — black.
-   Second theme in this repo to override bold away from --special,
-   and the reason it keeps happening is worth naming: --special has
-   to be a mid-toned hue so it can also serve as a link colour, while
-   --text-body sits at the extreme end of the ramp. Any theme with
-   genuinely high body contrast will therefore find that the shared
-   default paints bold LOWER than the text around it. Here it is
-   claret at 5.0:1 against body ink at 13.8:1.
-
-   On paper the answer is not a different hue anyway. Bold is more
-   ink. Both declarations are !important, so this one wins by coming
-   later in the cascade — the @import above is evaluated as if
-   inserted at its own position, which is before this rule. */
-strong,
-.rm-bold {
-  color: var(--col-n900) !important;
 }
 
 /* The article is set in the serif; the interface is not.
@@ -476,19 +461,21 @@ code,
      · TWO PROBLEMS SIMPLY VANISHED. The "Create page" label needs
        no deepened colour here, because the search card and the
        page are both light — that bug only exists when a light
-       island sits in a dark theme, and every other theme in this
-       repo has to correct it. And the Blueprint date-picker day
-       cells that KNOWLEDGE.md gave up on now look intentional,
-       because their untouched light-mode defaults finally match
-       what is around them.
-     · ONE LATENT COMPONENTS BUG GOT QUIETER. `.rm-clickable-pill`
-       (the base class, before level1/2/3) paints --text-primary
-       on an --accent background at 0.7 opacity. On the dark
-       themes that is light text on a light accent — base-v2
-       lands near 1.3:1 there. Here the same rule composites to
-       ink on a mid blue at 5.3:1. Worth fixing in the components
-       file for the others, as its own commit, since it changes
-       every theme at once.
+       island sits in a dark theme, which is why this is the one
+       theme whose --keyword-on-light is just var(--keyword). And
+       the Blueprint date-picker day cells that KNOWLEDGE.md gave
+       up on now look intentional, because their untouched
+       light-mode defaults finally match what is around them.
+     · ONE LATENT COMPONENTS BUG SURFACED, and has since been
+       fixed. `.rm-clickable-pill` (the base class, before
+       level1/2/3) painted --text-primary on an --accent
+       background at 0.7 opacity — light text on a light accent,
+       2.3 to 2.9:1 across all six dark themes. It was this theme
+       passing the same rule at 5.0:1 that made it obvious. The
+       fix is --text-on-accent-faded, and this is the one theme
+       where that var is not var(--text-on-accent): the composite
+       sits between the accent and the page, so a light theme
+       wants the opposite foreground from its filled pills.
 
    MEASURED, NOT ESTIMATED: every ratio above was computed against
    the surface the colour actually lands on. The figures below

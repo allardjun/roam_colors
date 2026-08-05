@@ -117,8 +117,10 @@
   --success:  var(--col-green);      /* success toast, sync-synced icon, green cm5 tokens (7.7:1) */
   --emphasis: var(--col-chartreuse); /* inline-code fg, warning toast, saving icon, cm5 variable-2, matching tag (9.3:1 on the page, 6.9:1 on the raised surface inline code actually uses) */
   --keyword:  var(--col-clay);       /* cm5 keyword/tag, find-or-create new-page label, linked-ref page title (4.8:1 on dark — but see the light-surface override at the bottom of this file) */
+  --keyword-on-light: var(--col-clay-deep); /* the "Create page" label on the LIGHT search card (6.7:1; clay is 2.67:1 there) */
   --error:    var(--col-clay);       /* cm5 negative/invalidchar/non-matching bracket. Same hue as --keyword: this palette has exactly one warm color and inventing a second red would read as a foreign object */
   --special:  var(--col-mint);       /* cm5 atom/number, page-ref link color, and bold text — except this theme overrides bold to chartreuse at the bottom of this file (10.0:1) */
+  --bold-fg:  var(--col-chartreuse); /* bold text. Chartreuse rather than --special, so bold reads as emphasis rather than as a link (9.3:1) */
   --string:   var(--col-pale-teal);  /* cm5 string/string-2, slider progress. In live Roam this is effectively just the slider */
 
   /* Bullets, table, highlights */
@@ -200,51 +202,11 @@
 }
 
 /* ============================================================
-   ARGON-ONLY RULES
-   ------------------------------------------------------------
-   Everything above is a variable, which is all a theme normally
-   needs. These two rules exist because this theme disagrees with
-   components-v2.css about one color, and because one var lands on
-   a surface no single value can serve.
-
-   They live here, in the entry file, so base-v2.css and
-   glamour.css are completely unaffected.
-   ============================================================ */
-
-/* Bold text — chartreuse, as in the monolithic version.
-   components-v2.css paints bold with --special (mint here), which is
-   also the page-link color; this theme deliberately separates the two,
-   so bold reads as emphasis rather than as a link. Both declarations
-   are !important, so this one wins purely by coming later in the
-   cascade — the @import above is evaluated as if inserted at its own
-   position, which is before this rule. */
-strong,
-.rm-bold {
-  color: var(--col-chartreuse) !important;
-}
-
-/* Fix: the "Create page" label is the only --keyword-colored element
-   that lands on the LIGHT search card instead of the dark page. Clay is
-   2.67:1 there. The deepened clay is 6.68:1 and still reads as the same
-   color family. (base-v2 has this bug unfixed at 1.95:1; glamour fixes
-   it the same way.)
-   The :not() keeps this from fighting the selected-row rule in
-   components-v2.css, which paints the whole row's text light.
-   Both class names are covered because the row carries bp3-menu-item in
-   the DOM while components-v2.css targets it as rm-menu-item; whichever
-   is present, one of these matches. Each is five classes deep, which
-   outranks the four-class rule it is correcting. */
-.rm-find-or-create-wrapper .bp3-menu-item:not(.bp3-active) .rm-search-title .rm-new-page,
-.rm-find-or-create-wrapper .rm-menu-item:not(.bp3-active) .rm-search-title .rm-new-page {
-  color: var(--col-clay-deep);
-}
-
-/* ============================================================
    What changed from the monolithic argon-executive.css
    ------------------------------------------------------------
-   The file went from 760 self-contained lines to a palette plus
-   two rules; every component rule now comes from the shared
-   components-v2.css. Six visible consequences, all of them fixes
+   The file went from 760 self-contained lines to a palette and
+   nothing else — no rules at all. Every rule now comes from the
+   shared components-v2.css. Six visible consequences, all of them fixes
    this theme could not get before:
 
      · PAGE TITLES are pale teal. The old file set that color on

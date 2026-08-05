@@ -164,8 +164,10 @@
   --success:  var(--col-check-green);    /* success toast, sync-synced icon, green cm5 tokens (7.2:1) */
   --emphasis: var(--col-trace-amber);    /* inline-code fg, warning toast, saving icon, cm5 variable-2, matching tag (8.4:1 on the page, 6.4:1 on the raised surface inline code actually uses) */
   --keyword:  var(--col-china-red);      /* cm5 keyword/tag, find-or-create new-page label, linked-ref page title (4.9:1 on dark — but see the light-surface override at the bottom of this file) */
+  --keyword-on-light: var(--col-china-red-deep); /* the "Create page" label on the bare-paper search card (6.1:1; the red pencil is 2.68:1 there) */
   --error:    var(--col-china-red);      /* cm5 negative/invalidchar/non-matching bracket. Same value as --keyword: there is one red pencil in the drawer, and both of these mean "look at this, it is wrong or it is new" */
   --special:  var(--col-copying-violet); /* cm5 atom/number, page-ref link color. Also bold text in components-v2.css — overridden at the bottom of this file, for a measured reason given there (5.9:1) */
+  --bold-fg:  var(--col-n100); /* bold text. Paper White: on a drawing, bold is the same line drawn heavier, not a different color. --special (claret) would be 5.9:1 against body text at 11.3:1 (12.2:1) */
   --string:   var(--col-check-green);    /* cm5 string/string-2, slider progress. Shares the check pencil: four pencils cover seven roles, and a slider filling up is the same idea as a check mark (7.2:1) */
 
   /* Bullets, table, highlights */
@@ -259,34 +261,13 @@
    ------------------------------------------------------------
    Everything above is a variable, which is all a theme normally
    needs. These exist because part of this idea is typographic —
-   lettering, line weight, leader lines — and none of that can be
-   expressed as a color token.
+   lettering, leader lines — and none of that can be expressed as
+   a color token. (The line-weight idea IS a color token: see
+   --bold-fg in the palette map above.)
 
    They live here, in the entry file, so the other five themes are
    completely unaffected.
    ============================================================ */
-
-/* Bold text — Paper White, the heavier line.
-   ----------------------------------------------------------------
-   This is the theme's one real argument, so it is worth stating.
-   components-v2.css paints bold with --special, which here is the
-   copying-pencil violet at 5.9:1. Body text is 11.3:1. Taking the
-   default would therefore make every bold word roughly HALF the
-   contrast of the sentence around it — emphasis that is measurably
-   quieter than what it emphasises.
-
-   Bold instead goes one ramp step brighter than body, which is what
-   "bold" means on a drawing: the same line, drawn heavier. The step
-   is deliberately small (1.08:1 against body). The weight is doing
-   the work; this only stops bold from going dimmer.
-
-   Both declarations are !important, so this one wins purely by
-   coming later in the cascade — the @import above is evaluated as
-   if inserted at its own position, which is before this rule. */
-strong,
-.rm-bold {
-  color: var(--col-n100) !important;
-}
 
 /* In-block headings get the title-block lettering: Condensed, and a
    touch of tracking that comes off as size goes up.
@@ -369,22 +350,6 @@ hr {
   border: 1px solid var(--col-n700);
 }
 
-/* Fix: the "Create page" label is the only --keyword-colored element
-   that lands on the LIGHT bare-paper card instead of the blue field.
-   The red pencil is 2.68:1 there. The deepened red is 6.14:1 and still
-   reads as the same pencil. (base-v2 has this bug unfixed at 1.95:1;
-   glamour and the three palette themes fix it the same way.)
-   The :not() keeps this from fighting the selected-row rule in
-   components-v2.css, which paints the whole row's text pale.
-   Both class names are covered because the row carries bp3-menu-item
-   in the DOM while components-v2.css targets it as rm-menu-item;
-   whichever is present, one of these matches. Each is five classes
-   deep, which outranks the four-class rule it is correcting. */
-.rm-find-or-create-wrapper .bp3-menu-item:not(.bp3-active) .rm-search-title .rm-new-page,
-.rm-find-or-create-wrapper .rm-menu-item:not(.bp3-active) .rm-search-title .rm-new-page {
-  color: var(--col-china-red-deep);
-}
-
 /* Code and inline code use the mono stack explicitly. components-v2.css
    sets --font-ui on `body`/`.roam-app` with !important, which would
    otherwise drag IBM Plex Sans into code surfaces. */
@@ -422,9 +387,12 @@ code,
    selection fill and is told apart by hue.
 
    BOLD IS NOT A HUE, which is the theme's whole idea and also the
-   thing most likely to be wrong for you. If you want colored bold
-   back, delete the `strong, .rm-bold` rule above and it reverts to
-   --special, the copying violet, like base-v2 does with purple.
+   thing most likely to be wrong for you. Bold is one ramp step
+   brighter than body rather than a different color; the shared
+   default would paint it the copying violet at 5.9:1 against body
+   text at 11.3:1, which is emphasis measurably quieter than what
+   it emphasises. If you disagree, set --bold-fg to var(--special)
+   and it reverts to what base-v2 does with purple.
 
    NOT ATTEMPTED: the date picker's day cells, for the reasons in
    KNOWLEDGE.md "Blueprint date picker: don't bother".

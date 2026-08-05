@@ -180,8 +180,10 @@
   --success:  var(--col-sage);    /* success toast, sync-synced icon, green cm5 tokens (8.4:1) */
   --emphasis: var(--col-copper);  /* inline-code fg, warning toast, saving icon, cm5 variable-2, matching tag (4.9:1 on walnut) */
   --keyword:  var(--col-fuchsia); /* cm5 keyword/tag, find-or-create new-page label, linked-ref page title (4.8:1 on dark — but see the light-surface override at the bottom of this file) */
+  --keyword-on-light: var(--col-fuchsia-deep); /* the "Create page" label on the LIGHT search card (5.2:1; brand fuchsia is 3.17:1 there) */
   --error:    var(--col-bitters); /* cm5 negative/invalidchar/non-matching bracket (5.4:1) */
   --special:  var(--col-brass);   /* cm5 atom/number, page-ref link color, bold text, search-selected row (7.9:1) */
+  --bold-fg:  var(--special); /* bold text — brass, same as page links (7.9:1) */
   --string:   var(--col-orchid);  /* cm5 string/string-2, slider progress. In live Roam this is effectively just the slider — one small neon moment, which is the only way glamour.md allows Neon Orchid to be used (6.1:1) */
 
   /* Bullets, table, highlights */
@@ -468,22 +470,6 @@ hr {
   font-size: 0.78em;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-}
-
-/* Fix: the "Create page" label is the only --keyword-colored element
-   that lands on the LIGHT search card instead of the dark page.
-   Brand fuchsia is 3.17:1 there — the same class of bug as base-v1's
-   invisible search selection, just less severe. The deepened fuchsia
-   is 5.23:1 and still reads as the same color family.
-   The :not() keeps this from fighting the selected-row rule in
-   components-v2.css, which paints the whole row's text ivory.
-   Both class names are covered because the row carries bp3-menu-item
-   in the DOM while components-v2.css targets it as rm-menu-item;
-   whichever is present, one of these matches. Each is five classes
-   deep, which outranks the four-class rule it is correcting. */
-.rm-find-or-create-wrapper .bp3-menu-item:not(.bp3-active) .rm-search-title .rm-new-page,
-.rm-find-or-create-wrapper .rm-menu-item:not(.bp3-active) .rm-search-title .rm-new-page {
-  color: var(--col-fuchsia-deep);
 }
 
 /* Page links — brass.
