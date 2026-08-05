@@ -118,8 +118,9 @@
   --title-fg:       var(--col-orange); /* page title: .roam-app h1 (display) + .rm-title-display/-textarea (edit) (6.9:1) */
 
   /* Text drawn ON a light or filled surface. */
-  --text-on-accent: var(--col-n900);  /* text inside filled mention pills (7.8:1 on blue) */
-  --text-on-light:  var(--col-n900);  /* search input text, slider label text (14.8:1) */
+  --text-on-accent:       var(--col-n900);      /* text inside filled mention pills (7.8:1 on blue) */
+  --text-on-accent-faded: var(--text-on-accent); /* text in the FADED mention pill (the base .rm-clickable-pill, drawn at 0.7 opacity, so the accent composites toward the page). Was --text-primary, which is light text on a light accent (4.8:1) */
+  --text-on-light:        var(--col-n900);      /* search input text, slider label text (14.8:1) */
 
   /* Accent / state colors */
   --accent:   var(--col-blue);      /* external links, mention pills, cm5 header/def/link (6.3:1) */

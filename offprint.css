@@ -162,8 +162,9 @@
      both of these are the darkest neutral. Here they part company —
      which is the clearest evidence that naming them as foregrounds
      rather than reusing a *-bg var was the right call in base-v2. */
-  --text-on-accent: var(--col-n0);   /* text inside filled mention pills — now PAPER, not ink (5.9:1 on the filled pill; 5.3:1 on the 0.7-opacity step) */
-  --text-on-light:  var(--col-n900); /* search input text, slider label text (16.9:1 in the input) */
+  --text-on-accent:       var(--col-n0);      /* text inside filled mention pills — now PAPER, not ink (5.9:1 on the filled pill; 5.3:1 on the 0.7-opacity step) */
+  --text-on-accent-faded: var(--text-primary); /* text in the FADED mention pill (the base .rm-clickable-pill, drawn at 0.7 opacity). The one theme where this is not --text-on-accent: the pill composites to a mid blue over the sheet, so it wants ink, while the filled pills want paper (5.0:1) */
+  --text-on-light:        var(--col-n900);    /* search input text, slider label text (16.9:1 in the input) */
 
   /* The plate, applied. Five colours for the whole interface. */
   --accent:   var(--col-blue);       /* external links, mention pills, cm5 header/def/link (5.6:1) */

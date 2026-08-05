@@ -166,8 +166,9 @@
   --title-fg:       var(--col-brass); /* page title: .roam-app h1 (display) + .rm-title-display/-textarea (edit). glamour.md explicitly sanctions brass for large headings, and explicitly forbids it for body copy (7.9:1) */
 
   /* Text drawn ON a light or filled surface. */
-  --text-on-accent: var(--col-n900);  /* text inside filled mention pills */
-  --text-on-light:  var(--col-n900);  /* search input text, slider label text (15.2:1) */
+  --text-on-accent:       var(--col-n900);      /* text inside filled mention pills */
+  --text-on-accent-faded: var(--text-on-accent); /* text in the FADED mention pill (the base .rm-clickable-pill, drawn at 0.7 opacity, so the accent composites toward the page). Was --text-primary, which is light text on a light accent (5.7:1) */
+  --text-on-light:        var(--col-n900);      /* search input text, slider label text (15.2:1) */
 
   /* Accent / state colors.
      Assignment is driven by glamour.md's proportions: brass is the

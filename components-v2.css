@@ -292,8 +292,16 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   background-color: var(--bg-base);
 }
 
+/* The base pill (no level class) is the low-count one, drawn at 0.7 opacity
+   so the accent shows through as a paler tint. It used to paint
+   --text-primary here, which on a dark theme is light text on a light
+   accent: 2.3-2.9:1 across all six dark themes, base-v2 included. It needs
+   the same treatment as the filled pills below, but not the same value —
+   the composited tint sits between the accent and the page, so a light
+   theme wants the opposite foreground from its filled pills. Hence its own
+   var rather than reusing --text-on-accent. */
 .rm-clickable-pill {
-  color: var(--text-primary);
+  color: var(--text-on-accent-faded);
   background-color: var(--accent);
   opacity: 0.7;
 }
