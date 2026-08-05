@@ -48,7 +48,7 @@
    until THIS url changes too — bump it on every component edit, and bump
    the roam/css import as well so the browser re-reads this file and
    discovers the new nested url. See KNOWLEDGE.md "Caching gotcha". */
-@import url('./components-v2.css?v=g7');
+@import url('./components-v2.css?v=g8');
 
 :root {
   /* ── PALETTE (color-describing) ───────────────────────────
@@ -72,6 +72,9 @@
   --col-n500: #97877a;  /* L .253  derived */
   --col-n300: #c3b39d;  /* L .463  derived */
   --col-n200: #d9cbb6;  /* L .608  derived */
+  --col-n175: #e1d2bd;  /* L .658  derived — body text; the midpoint
+                           between Whipped Crema and n200, added because
+                           neither existing step was right (see --text-body) */
   --col-n150: #e8d8c3;  /* L .702  "Whipped Crema"   (glamour.md) */
   --col-n100: #efe8dc;  /* L .812  derived */
   --col-n50:  #f7f2e9;  /* L .892  "Porcelain Ivory" (glamour.md) */
@@ -158,8 +161,8 @@
   --text-primary:   var(--col-n50);   /* editor chrome text, popovers, buffer, right sidebar, kanban-title border, cm-error, matching bracket, All-Pages title (16.6:1) */
   --text-secondary: var(--col-n300);  /* sidebar items, datepicker weekdays + day numbers, level3 heading, icons, parent-path, sorted headers (9.0:1) */
   --text-muted:     var(--col-n500);  /* CM5 line numbers, page-ref, ref brackets, small buttons, indent guide, title-children (5.3:1) */
-  --text-body:      var(--col-n200);  /* body/block text; set with !important in Typography, so it — not --text-primary — is what you read on the page. 11.6:1 on espresso.
-                                         Was n150 (Whipped Crema) at 13.2:1, which measured fine but read as harsher than base-v2's 10.9:1 — this theme's ground is darker (L .007 vs .026), so the same nominal lightness buys more contrast. Stepped down to sit near base-v2. Going further, #d2c3ac lands at 10.7:1, matching base-v2 almost exactly. */
+  --text-body:      var(--col-n175);  /* body/block text; set with !important in Typography, so it — not --text-primary — is what you read on the page. 12.5:1 on espresso.
+                                         Landed by iteration, not calculation. n150 (Whipped Crema, 13.2:1) read harsher than base-v2's 10.9:1; n200 (11.6:1) overshot and read dull. n175 is the midpoint. The reason a straight hex match with base-v2 does not work: this theme's ground is far darker (L .007 vs .026), so identical text lightness buys more contrast here. */
   --title-fg:       var(--col-brass); /* page title: .roam-app h1 (display) + .rm-title-display/-textarea (edit). glamour.md explicitly sanctions brass for large headings, and explicitly forbids it for body copy (7.9:1) */
 
   /* Text drawn ON a light or filled surface. */
@@ -185,8 +188,8 @@
   --kanban-bg:      var(--col-n600);  /* kanban board backdrop (own var so it can diverge from bullets) */
   --bullet-inner:   var(--col-n200);  /* open bullet, slider-label bg, cm5 bracket/hr, fat-cursor bg (11.6:1) */
   --table-text:     var(--col-n500);  /* All-Pages cell text (5.3:1) */
-  --highlight-cool: var(--col-teal);  /* block-highlight blue AND grey (both intentionally share one var). Teal Velvet — glamour.md's "lounge upholstery, special menu panels" (body text on it 4.9:1; 2.4:1 vs the page, so the mark itself is visible) */
-  --highlight-warm: var(--col-ember); /* roam-highlight, block-highlight-yellow, cm5-searching (5.7:1 / 2.0:1) */
+  --highlight-cool: var(--col-teal);  /* block-highlight blue AND grey (both intentionally share one var). Teal Velvet — glamour.md's "lounge upholstery, special menu panels" (body text on it 5.2:1; 2.4:1 vs the page, so the mark itself is visible) */
+  --highlight-warm: var(--col-ember); /* roam-highlight, block-highlight-yellow, cm5-searching (6.2:1 / 2.0:1) */
 
   /* Find-or-create search (a LIGHT surface inside a dark theme).
      Roam builds this card light and base-v1/v2 leaned into it. Here it
@@ -502,7 +505,7 @@ code,
    color actually lands on. The one value below 4.5:1 that is not
    overridden is --highlight-* against the page background (2.0
    and 2.4:1), which is correct — that is a mark's visibility, not
-   text legibility, and text ON the marks is 5.7 and 4.9:1.
+   text legibility, and text ON the marks is 6.2 and 5.2:1.
 
    THE ONE ESTIMATED VALUE is --title-size. Colors could be computed;
    Roam's own title font-size could not be read without inspecting a
