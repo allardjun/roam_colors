@@ -1,0 +1,466 @@
+/* ============================================================
+   glamour.css  —  "Golden-Hour Neo-Deco" Roam theme (entry file)
+   ------------------------------------------------------------
+   Derived from glamour.md: editorial European hospitality +
+   modern executive luxury + restrained nightlife glamour.
+   Espresso and black marble surfaces, porcelain/crema type,
+   champagne brass as the working metal, and pink/teal/violet
+   rationed like a cocktail garnish.
+
+   Same two-tier structure as base-v2.css:
+     1. PALETTE      — raw, color-describing values (--col-*).
+     2. APPLICATIONS — semantic roles that map palette -> UI.
+   It imports the SAME components-v2.css, unmodified, so the two
+   themes stay in sync. Everything specific to this theme is
+   either a variable below or one of the few extra rules in the
+   GLAMOUR-ONLY section at the bottom of this file.
+
+   Which of glamour.md's three operating palettes: the COCKTAIL
+   LOUNGE one (Black Marble + Espresso + Brass, with fuchsia /
+   teal / violet). Reasons: it is the strongest read of the
+   aesthetic, it keeps the dark-on-light polarity that
+   components-v2.css is built around, and a note app is a
+   long-session surface where a near-black ground is kinder.
+   A light "coffee shop" variant (ivory ground, espresso text)
+   is a separate file, not a tweak of this one — it would invert
+   every foreground/background pairing.
+
+   NOTE: @import must come before :root. A CSS @import is dropped
+   by the browser if any style rule precedes it. All three imports
+   below are therefore at the top; var() resolution is
+   order-independent, so components-v2.css still sees the vars.
+
+   CONTRAST: every ratio in the comments below is a measured WCAG
+   value, not an estimate. Every foreground clears 4.5:1 against
+   the surface it actually lands on, with one documented
+   exception (see --col-fuchsia-deep).
+   ============================================================ */
+
+/* Bodoni Moda (editorial display) + Montserrat (UI, labels, body).
+   Both are the fonts glamour.md specifies, and both are open source.
+   If this request is blocked or offline, the stacks in --font-display
+   and --font-ui fall back to Didot/Georgia and Helvetica/system
+   respectively, so the theme degrades in weight but not in layout. */
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Montserrat:ital,wght@0,300..700;1,300..700&display=swap');
+
+/* The ?v= is a cache-buster, not decoration. The nested sheet is cached
+   independently of this file, so editing components-v2.css is invisible
+   until THIS url changes too — bump it on every component edit, and bump
+   the roam/css import as well so the browser re-reads this file and
+   discovers the new nested url. See KNOWLEDGE.md "Caching gotcha". */
+@import url('./components-v2.css?v=g3');
+
+:root {
+  /* ── PALETTE (color-describing) ───────────────────────────
+
+     Neutrals use the same numeric ramp convention as base-v2:
+     n900 is the darkest, n0 is the lightest. Verified
+     monotonic by WCAG relative luminance (shown in comments).
+
+     glamour.md's neutrals are a warm ladder with a hole in the
+     middle — it jumps from Dark Walnut straight to Whipped
+     Crema, because a brand system never needed the mid-tones a
+     UI needs. The five derived steps fill that gap on the same
+     warm axis, so the ramp reads as one material rather than
+     brand colors with grey stitched between them. */
+
+  /* Neutral ramp (dark -> light) */
+  --col-n900: #171310;  /* L .007  "Espresso Ink"    (glamour.md) */
+  --col-n850: #242126;  /* L .016  "Black Marble"    (glamour.md) */
+  --col-n800: #412d24;  /* L .031  "Dark Walnut"     (glamour.md) */
+  --col-n600: #6f5f50;  /* L .121  derived */
+  --col-n500: #97877a;  /* L .253  derived */
+  --col-n300: #c3b39d;  /* L .463  derived */
+  --col-n200: #d9cbb6;  /* L .608  derived */
+  --col-n150: #e8d8c3;  /* L .702  "Whipped Crema"   (glamour.md) */
+  --col-n100: #efe8dc;  /* L .812  derived */
+  --col-n50:  #f7f2e9;  /* L .892  "Porcelain Ivory" (glamour.md) */
+
+  /* The ramp is deliberately gappy — these are the steps this theme
+     uses, not an evenly spaced scale. base-v2's n400 and n0 have no
+     job here: nothing needs a pure white (the lightest thing in this
+     theme is Porcelain Ivory, and a true #fff next to it would look
+     broken) and n300/n500 already bracket everything n400 would do. */
+
+  /* Brand hues, straight from glamour.md */
+  --col-brass:   #c7a46a;  /* Champagne Brass — the working metal */
+  --col-blush:   #e6b9b7;  /* Blush Satin */
+  --col-fuchsia: #d94e8f;  /* Cocktail Fuchsia */
+  --col-orchid:  #ff4fa3;  /* Neon Orchid — "tiny digital accents only" */
+  --col-teal:    #205b59;  /* Teal Velvet */
+  --col-violet:  #67508c;  /* Twilight Violet */
+  --col-sage:    #a8b39c;  /* Soft Sage */
+
+  /* Brand hues adjusted for screen legibility. glamour.md is a print
+     and materials spec; two of its values do not survive contact with
+     a UI surface, so they are lifted here and the original is kept in
+     the comment. Deviating is the honest option — using the brand hex
+     at 3.7:1 would be brand-faithful and unreadable. */
+  --col-copper:       #cf8f7d;  /* Rose-Gold Copper #b97969 lifted; the brand
+                                   value is 3.69:1 on walnut, this is 4.85:1 */
+  --col-fuchsia-deep: #a8306a;  /* Cocktail Fuchsia darkened for the ONE place
+                                   it lands on a light surface: the "Create
+                                   page" label in the search card. Brand
+                                   fuchsia there is 3.17:1; this is 5.23:1 */
+
+  /* Derived colors with no glamour.md equivalent. A brand identity
+     does not need error/highlight/inset-panel tokens; a note app does.
+     Each is mixed on the palette's warm axis so it reads as part of
+     the same system. */
+  --col-ember:     #5b4420;  /* warm highlighter — walnut pushed toward brass */
+  --col-teal-deep: #17403f;  /* Teal Velvet one step down, for borders/hover */
+  --col-bitters:   #e0655c;  /* the palette has no red at all, and errors must
+                                not be mistaken for a decorative accent */
+
+  /* Code-block hues (CodeMirror 6 / .rm-code-block).
+     base-v2 ships OneDark here, which is a cool blue-grey scheme; dropped
+     into an espresso-and-brass page it looks like a foreign object. This
+     is a warm retheme on the same token structure — the ground is walnut
+     rather than slate, and the tokens are drawn from the brand accents.
+     All tokens verified >= 4.5:1 on --col-cm-bg. */
+  --col-cm-bg:            #26201c;    /* editor + gutter ground (1.15:1 vs page) */
+  --col-cm-active:        #332b25;    /* active line */
+  --col-cm-fg:            #d9cbb6;    /* default text + gutter (10.1:1) */
+  --col-cm-selection:     #47392f;    /* selection */
+  --col-cm-cursor:        #c7a46a;    /* caret — brass */
+  --col-cm-muted:         #968677;    /* comment / placeholder / fold (4.6:1) */
+  --col-cm-keyword:       #ff4fa3;    /* keyword — Neon Orchid (5.3:1) */
+  --col-cm-operator:      #7fb0a8;    /* operator / regexp — lifted Teal Velvet */
+  --col-cm-string:        #a8b39c;    /* string — Soft Sage */
+  --col-cm-variable:      #e6b9b7;    /* variable — Blush Satin */
+  --col-cm-number:        #c7a46a;    /* number / constant — Champagne Brass */
+  --col-cm-name:          #cf8f7d;    /* property / name — Rose-Gold Copper */
+  --col-cm-type:          #8fa8bc;    /* type / class — lifted Executive Blue,
+                                         the one cool anchor in the scheme */
+  --col-cm-bracket-match: #c7a46a40;  /* matching-bracket fill (brass, alpha) */
+  --col-cm-bracket-line:  #6f5f50;    /* matching-bracket outline */
+  --col-cm-nomatch:       #e0655c;    /* non-matching bracket */
+  --col-cm-field:         #968677;    /* CM search textfield border */
+
+  /* ── APPLICATIONS (semantic; map palette -> UI roles) ─────
+     Each comment lists where the color is used, so this block
+     doubles as a map of which components share each color.
+     The var NAMES and the set of them are identical to
+     base-v2.css — that is the contract components-v2.css
+     depends on. Only the values differ. */
+
+  /* Surfaces.
+     glamour.md's material stack read as depth: espresso is the
+     page, marble the furniture, walnut the thing that lifts off
+     it. Separations are 1.16 / 1.23 / 1.43:1 — the same subtle
+     steps base-v2 uses, which is what you want for surfaces
+     (a strong step here would read as a box, not a plane). */
+  --bg-base:   var(--col-n900); /* page/editor/topbar bg, kanban-card, empty mention-pill bg, CM5 gutters */
+  --bg-panel:  var(--col-n850); /* sidebars, kanban-column, embed-outer, buttons, borders, table header row */
+  --bg-raised: var(--col-n800); /* popovers/tooltips/datepicker + arrow, inline-code bg, buffer, hover, reference-item, embed-inner, 2ndary cursor, ruler, unchecked checkbox */
+
+  /* Text on dark surfaces */
+  --text-primary:   var(--col-n50);   /* editor chrome text, popovers, buffer, right sidebar, kanban-title border, cm-error, matching bracket, All-Pages title (16.6:1) */
+  --text-secondary: var(--col-n300);  /* sidebar items, datepicker weekdays + day numbers, level3 heading, icons, parent-path, sorted headers (9.0:1) */
+  --text-muted:     var(--col-n500);  /* CM5 line numbers, page-ref, ref brackets, small buttons, indent guide, title-children (5.3:1) */
+  --text-body:      var(--col-n150);  /* body/block text; set with !important in Typography, so it — not --text-primary — is what you read on the page. Whipped Crema on espresso, 13.2:1 */
+  --title-fg:       var(--col-brass); /* page title: .roam-app h1 (display) + .rm-title-display/-textarea (edit). glamour.md explicitly sanctions brass for large headings, and explicitly forbids it for body copy (7.9:1) */
+
+  /* Text drawn ON a light or filled surface. */
+  --text-on-accent: var(--col-n900);  /* text inside filled mention pills */
+  --text-on-light:  var(--col-n900);  /* search input text, slider label text (15.2:1) */
+
+  /* Accent / state colors.
+     Assignment is driven by glamour.md's proportions: brass is the
+     7% workhorse so it takes the frequent structural roles (titles,
+     page links, bold), and the 3% pink/teal/violet budget is spent
+     only on things that are genuinely rare — the "create page"
+     label, linked-ref titles, the slider. */
+  --accent:   var(--col-blush);   /* external links, mention pills, cm5 header/def/link. Pale enough that Roam's 0.7-1.0 pill opacities keep dark text legible (5.7:1 at the worst step) — a mid-tone accent fails there (10.5:1 as text) */
+  --success:  var(--col-sage);    /* success toast, sync-synced icon, green cm5 tokens (8.4:1) */
+  --emphasis: var(--col-copper);  /* inline-code fg, warning toast, saving icon, cm5 variable-2, matching tag (4.9:1 on walnut) */
+  --keyword:  var(--col-fuchsia); /* cm5 keyword/tag, find-or-create new-page label, linked-ref page title (4.8:1 on dark — but see the light-surface override at the bottom of this file) */
+  --error:    var(--col-bitters); /* cm5 negative/invalidchar/non-matching bracket (5.4:1) */
+  --special:  var(--col-brass);   /* cm5 atom/number, page-ref link color, bold text, search-selected row (7.9:1) */
+  --string:   var(--col-orchid);  /* cm5 string/string-2, slider progress. In live Roam this is effectively just the slider — one small neon moment, which is the only way glamour.md allows Neon Orchid to be used (6.1:1) */
+
+  /* Bullets, table, highlights */
+  --bullet-outer:   var(--col-n500);  /* closed/collapsed bullet, slider handle, cm5-meta, fat-cursor color, checkbox :active. Deliberately one ramp step brighter than base-v2's equivalent: a collapsed bullet hides content, so it should be more visible than an open one, not less (5.3:1) */
+  --kanban-bg:      var(--col-n600);  /* kanban board backdrop (own var so it can diverge from bullets) */
+  --bullet-inner:   var(--col-n200);  /* open bullet, slider-label bg, cm5 bracket/hr, fat-cursor bg (11.6:1) */
+  --table-text:     var(--col-n500);  /* All-Pages cell text (5.3:1) */
+  --highlight-cool: var(--col-teal);  /* block-highlight blue AND grey (both intentionally share one var). Teal Velvet — glamour.md's "lounge upholstery, special menu panels" (body text on it 5.6:1; 2.4:1 vs the page, so the mark itself is visible) */
+  --highlight-warm: var(--col-ember); /* roam-highlight, block-highlight-yellow, cm5-searching (6.6:1 / 2.0:1) */
+
+  /* Find-or-create search (a LIGHT surface inside a dark theme).
+     Roam builds this card light and base-v1/v2 leaned into it. Here it
+     stops being a concession and becomes the point: an ivory menu card
+     with espresso text is glamour.md's core pairing — "Porcelain Ivory:
+     paper, menus, website backgrounds" over "Espresso Ink: body text". */
+  --search-bg:            var(--col-n100);  /* search input + menu background */
+  --search-fg:            var(--col-n850);  /* menu text on that light surface (13.1:1) */
+  --search-fg-muted:      var(--col-n600);  /* secondary result line (5.0:1) */
+  --search-hover-bg:      var(--col-n300);  /* mouse hover (1.68:1 vs the card — clearly a different row) */
+  --search-selected-bg:   var(--col-violet);/* KEYBOARD-selected row (up/down arrows). Twilight Violet is too dark to be a foreground on this theme, which makes it ideal as the one filled bar: 5.6:1 against the card and 3.3:1 against plain hover, so the two states cannot be confused — the bug that made base-v1 unusable here */
+  --search-selected-text: var(--col-n50);   /* text on the selected row (6.1:1 on violet) */
+
+  /* No --datepicker-* day-state vars: day cells are left to Blueprint.
+     See KNOWLEDGE.md "Blueprint date picker: don't bother". */
+
+  /* Popover */
+  --popover-arrow: var(--bg-raised); /* the little triangle; needs `fill`, not `color` — see components-v2.css */
+
+  /* Selection.
+     base-v2 pairs a pale blue ground with steel-blue text, which is
+     2.6:1 — selected text there is harder to read than unselected.
+     Violet + ivory fixes that while staying on-brand (glamour.md files
+     Twilight Violet under "evening photography and ambient light"). */
+  --selection-bg:        var(--col-violet);           /* normal text selection bg */
+  --selection-text:      var(--col-n50);              /* normal text selection fg (6.1:1) */
+  --code-selection-bg:   var(--col-brass);            /* LEGACY CM5 only — see note below */
+  --code-selection-text: var(--col-n900);             /* LEGACY CM5 only */
+  --code-activeline-bg:  rgba(255, 253, 249, 0.05);   /* LEGACY CM5 only. Lightens rather than darkens — base-v2 uses rgba(0,0,0,.04), which is invisible on a near-black ground */
+
+  /* Code blocks — CodeMirror 6 / .rm-code-block.
+     Modern Roam renders ``` blocks with CodeMirror 6. The three
+     --code-* vars above bind only to CM5 (.cm-s-default,
+     .CodeMirror-*), which ``` blocks no longer use, so the brass
+     code selection almost certainly never renders. Selection you
+     actually see inside a code block is --cm6-selection. */
+  --cm6-bg:                 var(--col-cm-bg);            /* code block + gutter background */
+  --cm6-fg:                 var(--col-cm-fg);            /* default code text, gutter text + border */
+  --cm6-active-line:        var(--col-cm-active);        /* active line + active-line gutter */
+  --cm6-selection:          var(--col-cm-selection);     /* selected text background */
+  --cm6-cursor:             var(--col-cm-cursor);        /* caret + cursor */
+  --cm6-muted:              var(--col-cm-muted);         /* comment, placeholder, fold placeholder */
+  --cm6-keyword:            var(--col-cm-keyword);       /* keywords */
+  --cm6-operator:           var(--col-cm-operator);      /* operators, regexp, special chars */
+  --cm6-string:             var(--col-cm-string);        /* strings */
+  --cm6-variable:           var(--col-cm-variable);      /* variables */
+  --cm6-number:             var(--col-cm-number);        /* numbers, colors, constants */
+  --cm6-name:               var(--col-cm-name);          /* property names, names */
+  --cm6-type:               var(--col-cm-type);          /* type / class names */
+  --cm6-bracket-match-bg:   var(--col-cm-bracket-match); /* matching-bracket fill */
+  --cm6-bracket-match-line: var(--col-cm-bracket-line);  /* matching-bracket outline */
+  --cm6-bracket-nomatch-bg: var(--col-cm-nomatch);       /* non-matching bracket */
+  --cm6-field-border:       var(--col-cm-field);         /* CM search textfield border */
+
+  /* DONE / checked checkbox.
+     Teal Velvet rather than a green: glamour.md has no green except
+     Soft Sage, and sage is already --success. Sage is also too light
+     to carry a tick — a crema tick on sage is 2.0:1. Teal reads as
+     "completed" without importing a color from outside the system. */
+  --done-checkbox-bg:     var(--col-teal);      /* checked checkbox fill */
+  --done-checkbox-border: var(--col-teal-deep); /* checked checkbox border + hover fill */
+  --done-checkbox-check:  var(--col-n150);      /* the tick mark (5.6:1 on fill, 8.2:1 on hover) */
+
+  /* Typography.
+     glamour.md's pairing, applied by role: Bodoni Moda is display
+     only (page titles, headings) and Montserrat carries everything
+     you actually read. That split is the doc's own rule — "Avoid
+     long passages in Bodoni" — and it is also the usable choice:
+     Bodoni's thin strokes disintegrate at body size on screen. */
+  --font-ui:      "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI",
+                  "Helvetica Neue", sans-serif;                                    /* body/textarea */
+  --font-title:   "Bodoni Moda", "Didot", "Bodoni MT", Georgia, serif;             /* page titles (consumed by components-v2.css) */
+  --font-display: var(--font-title);                                               /* alias used by the glamour-only rules below */
+  --font-mono:    ui-monospace, "SFMono-Regular", Menlo, Consolas,
+                  "Liberation Mono", "Courier New", monospace;                     /* code surfaces */
+
+  /* Hairline rule. glamour.md returns to "a thin Champagne Brass rule"
+     and "brass one-pixel rules" repeatedly — it is the main structural
+     device in the identity, used instead of boxes and borders. Low
+     alpha on purpose: at full strength it is a stripe, not a rule. */
+  --rule-brass: rgba(199, 164, 106, 0.28);
+}
+
+/* ============================================================
+   GLAMOUR-ONLY RULES
+   ------------------------------------------------------------
+   Everything above is a variable, which is all a theme normally
+   needs. These rules exist because part of this aesthetic is
+   typographic and structural — tracking, hairlines, small caps —
+   and none of that can be expressed as a color token.
+
+   They live here, in the entry file, rather than in
+   components-v2.css, so base-v2.css is completely unaffected.
+
+   Kept deliberately short. glamour.md's own summary is "glossy
+   surroundings, quiet branding"; a theme that applied every idea
+   in that document to a note-taking app would be neither.
+   ============================================================ */
+
+/* Page title — the "wordmark".
+   glamour.md's wordmark spec is Bodoni Semibold, ALL CAPS, +0.10 to
+   +0.16em tracking. Tracking and weight are applied; the caps are
+   NOT — a Roam page title is a piece of data you read and retype,
+   not a logo, and forcing uppercase would misrepresent the page's
+   actual name. This is the one place the aesthetic is overruled.
+   Font family and color come from --font-title / --title-fg in
+   components-v2.css; only the letterform treatment is added here. */
+.rm-title-display,
+.rm-title-textarea,
+.roam-body .roam-app h1 {
+  font-weight: 600;
+  letter-spacing: 0.055em;
+}
+
+/* The thin brass rule under the title, in place of a box.
+   Applied to both display and edit surfaces so the layout does not
+   shift when you click into the title. */
+.rm-title-display,
+.rm-title-textarea {
+  border-bottom: 1px solid var(--rule-brass);
+  padding-bottom: 0.12em;
+}
+
+/* In-block headings get the display face too, with tracking scaled
+   down as size goes up — the larger the type, the less it needs.
+   Color is left alone: components-v2.css already gives level 3
+   --text-secondary, and levels 1-2 inherit body color, which keeps
+   headings from competing with brass page links. */
+.rm-heading-level-1,
+.rm-heading-level-2 {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+}
+
+.rm-heading-level-3 {
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+}
+
+/* Structural hairlines. glamour.md uses a rule where most designs
+   would use a border or a filled bar. */
+.roam-topbar {
+  border-bottom: 1px solid var(--rule-brass);
+}
+
+/* Roam styles its divider through the CLASS .rm-hr, which outranks a
+   bare `hr` element selector — so setting border-color on `hr` alone
+   left the divider at Roam's pale default, cool grey against a warm
+   page. Both forms are set, and with the same border shorthand Roam
+   uses rather than border-color, so nothing is left at its value. */
+hr {
+  border-top: 1px solid var(--rule-brass);
+}
+
+.rm-hr {
+  border: 1px solid var(--rule-brass);
+}
+
+/* Code blocks sit only 1.15:1 off the page background — enough to
+   read as a panel, not enough to find at a glance. A brass hairline
+   does the delineating instead of a heavier fill, which keeps the
+   block from becoming the loudest thing on the page. */
+.rm-code-block {
+  border: 1px solid var(--rule-brass);
+}
+
+/* All-Pages column headers get the "menu section heading" treatment
+   from glamour.md: Montserrat Semibold, uppercase, +0.14em. This is
+   the one surface in Roam that is genuinely a list of categories
+   rather than content, so it is the one place the tracked-caps
+   device belongs. */
+.rm-all-pages .rm-pages-row-header .rm-pages-title-col span,
+.rm-all-pages .rm-pages-row-header .rm-pages-col span {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 0.78em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Fix: the "Create page" label is the only --keyword-colored element
+   that lands on the LIGHT search card instead of the dark page.
+   Brand fuchsia is 3.17:1 there — the same class of bug as base-v1's
+   invisible search selection, just less severe. The deepened fuchsia
+   is 5.23:1 and still reads as the same color family.
+   The :not() keeps this from fighting the selected-row rule in
+   components-v2.css, which paints the whole row's text ivory.
+   Both class names are covered because the row carries bp3-menu-item
+   in the DOM while components-v2.css targets it as rm-menu-item;
+   whichever is present, one of these matches. Each is five classes
+   deep, which outranks the four-class rule it is correcting. */
+.rm-find-or-create-wrapper .bp3-menu-item:not(.bp3-active) .rm-search-title .rm-new-page,
+.rm-find-or-create-wrapper .rm-menu-item:not(.bp3-active) .rm-search-title .rm-new-page {
+  color: var(--col-fuchsia-deep);
+}
+
+/* Page links — brass.
+   ----------------------------------------------------------------
+   INTENTIONALLY REDUNDANT. components-v2.css now carries this same
+   rule (it was missing the BEM class name .rm-page-ref--link, so
+   --special never reached a page link and every [[link]] rendered as
+   --text-muted). That fix is committed on its own so it can be
+   reverted if it turns out wrong for base-v2.
+
+   These two rules keep glamour independent of that decision: revert
+   the components commit and this theme still gets brass page links,
+   because the design depends on them. Same var, same value — if both
+   files are present they agree, and nothing conflicts. */
+.rm-page-ref--link {
+  color: var(--special);
+}
+
+.rm-page-ref__brackets {
+  color: var(--text-muted);
+}
+
+/* Code and inline code use the mono stack explicitly. components-v2.css
+   sets --font-ui on `body`/`.roam-app` with !important, which would
+   otherwise drag Montserrat into code surfaces. */
+code,
+.rm-code-block,
+.CodeMirror,
+.cm-editor {
+  font-family: var(--font-mono);
+  letter-spacing: 0;
+}
+
+/* ============================================================
+   Notes, open questions, and what was deliberately not done
+   ------------------------------------------------------------
+   MEASURED, NOT ESTIMATED: every contrast figure in this file was
+   computed from WCAG relative luminance against the surface the
+   color actually lands on. The one value below 4.5:1 that is not
+   overridden is --highlight-* against the page background (2.0
+   and 2.4:1), which is correct — that is a mark's visibility, not
+   text legibility, and text ON the marks is 6.6 and 5.6:1.
+
+   DEVIATIONS FROM glamour.md, and why:
+     · Rose-Gold Copper and Cocktail Fuchsia are lifted/deepened
+       for their specific surfaces. The brand hexes are in the
+       palette comments.
+     · Three colors were added (--col-ember, --col-teal-deep,
+       --col-bitters). The palette has no red and no highlighter;
+       a note app needs both.
+     · Page titles are not forced to ALL CAPS despite the wordmark
+       spec. See the comment on .rm-title-display above.
+     · Neon Orchid is confined to the slider and code keywords.
+       glamour.md says "tiny digital accents only" and means it.
+
+   SELECTOR NAMES: .rm-heading-level-1/2/3, .rm-hr and
+   .rm-page-ref--link are all confirmed present in current Roam
+   (cross-checked against RailsRoam.css). An earlier draft of this
+   file also guessed .rm-block-separator, which does not exist; it
+   was removed once the divider turned out to be .rm-hr.
+
+   Two of Roam's class names have moved to BEM (.rm-page-ref--link,
+   .rm-page-ref__brackets) while components-v2.css still uses the
+   pre-BEM names. Where those matter they are corrected above. The
+   general lesson is in KNOWLEDGE.md: a stale Roam class name fails
+   SILENTLY — the element just keeps its inherited color, so it
+   looks styled and is not.
+
+   THE TITLE RULE is the one visually speculative choice in this
+   file. A brass underline on every page title is either the best
+   or the worst thing here, and it will not be clear which until
+   it is on screen. It is isolated to one rule block so it can be
+   deleted without touching anything else.
+
+   NOT ATTEMPTED: the date picker's day cells, for the reasons in
+   KNOWLEDGE.md "Blueprint date picker: don't bother". They render
+   as Blueprint light-mode defaults in this theme exactly as they
+   do in base-v2.
+
+   The font import is the only external dependency in either
+   theme. If Roam or the network blocks fonts.googleapis.com the
+   theme falls back to Didot/Georgia and system sans — still
+   coherent, noticeably less editorial.
+   ============================================================ */

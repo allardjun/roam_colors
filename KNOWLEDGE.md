@@ -127,6 +127,34 @@ Net result looked worse than the untouched Blueprint defaults. The panel
 (`.bp3-datepicker`) and the month/year selects are worth theming; the day
 grid is not, unless you're willing to design the whole thing.
 
+## Roam moved some class names to BEM, and stale ones fail silently
+
+Roam renamed part of its class vocabulary to BEM-ish double-dash /
+double-underscore forms without removing the old markup everywhere:
+
+| Pre-BEM | Current |
+|---|---|
+| `.rm-page-ref-link-color` | `.rm-page-ref--link` |
+| `.rm-page-ref-brackets` | `.rm-page-ref__brackets` |
+| `.rm-page-ref-namespace-color` | `.rm-page-ref--namespace` |
+
+This bit base-v1 and base-v2 for their whole lives: both styled page
+links via `.rm-page-ref-link-color`, which current Roam never emits, so
+`--special` never reached a single `[[link]]`. They fell through to the
+`.rm-page-ref` wrapper and rendered as `--text-muted` instead — the same
+color as ordinary de-emphasised text, which also costs the link its
+affordance. Fixed by listing both spellings.
+
+**The general hazard is the silent failure.** A stale class name does not
+error and does not leave the element unstyled — the element keeps its
+inherited or wrapper color, so the page still looks deliberately themed.
+The rule appears to work. The only reliable check is to inspect the
+element and confirm the selector actually matches, rather than eyeballing
+the render and assuming a plausible-looking color came from your rule.
+
+Corollary: when a color looks "close enough but not quite right", suspect
+a dead selector before suspecting the value.
+
 ## Useful class map (the ones that aren't obvious)
 
 | What you want to style | Selector |
@@ -137,7 +165,8 @@ grid is not, unless you're willing to design the whole thing.
 | Bottom-right help widget | `#buffer` |
 | Main column | `.roam-body-main` / `.roam-app` |
 | Block reference (((...))) | `.rm-block-ref` |
-| Page reference [[...]] | `.rm-page-ref`, `.rm-page-ref-brackets`, `.rm-page-ref-link-color` |
+| Page reference [[...]] | `.rm-page-ref` (wrapper), `.rm-page-ref--link` (the link text), `.rm-page-ref__brackets` — see the BEM note above; the pre-BEM `.rm-page-ref-link-color` / `.rm-page-ref-brackets` are dead in current Roam |
+| Horizontal rule (`---`) | `.rm-hr` — a bare `hr` selector loses to it on specificity |
 | Linked refs section | `.rm-reference-item`, `.rm-ref-page-view-title` |
 | All Pages table | `.rm-all-pages`, `.rm-pages-row`, `.rm-pages-title-col`, `.rm-pages-col` |
 | Find-or-create palette | `.rm-find-or-create-wrapper` |

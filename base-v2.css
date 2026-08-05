@@ -212,7 +212,10 @@
        ``` blocks.
      · Removed a stale note referencing --dark-blue, a variable that
        no longer exists.
-     · Restored the truncated `/* Multiline code blocks with */`.
+     · Restored the truncated "Multiline code blocks with" comment.
+       (Written without the literal comment-close sequence on purpose:
+       putting one inside a comment ends the comment right there, and
+       the rest of this block gets parsed as stray CSS.)
 
    Naming:
      · Neutrals -> numeric ramp; ink/paper and the four unordered
