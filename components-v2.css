@@ -690,11 +690,27 @@ a:hover {
   color: var(--text-muted);
 }
 
-.rm-page-ref-link-color {
+/* Roam renamed these to BEM: .rm-page-ref-link-color became
+   .rm-page-ref--link, and .rm-page-ref-brackets became
+   .rm-page-ref__brackets. Only the pre-BEM names were listed here, so
+   --special never reached a page link in current Roam — every [[link]]
+   fell through to .rm-page-ref above and rendered as --text-muted, the
+   same color as ordinary de-emphasised text, costing the link its
+   affordance.
+
+   Both spellings are kept. The old ones are harmless if dead and cost
+   nothing if some surface still emits them.
+
+   The general hazard: a stale Roam class fails SILENTLY. Nothing
+   errors; the element simply keeps its inherited color, so the rule
+   looks like it is working. Verify against the DOM, not the render. */
+.rm-page-ref-link-color,
+.rm-page-ref--link {
   color: var(--special);
 }
 
-.rm-page-ref-brackets {
+.rm-page-ref-brackets,
+.rm-page-ref__brackets {
   color: var(--text-muted);
 }
 
