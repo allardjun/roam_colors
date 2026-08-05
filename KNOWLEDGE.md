@@ -54,6 +54,67 @@ Same pattern applies to other inline styles Roam sets — when CSS "doesn't work
 
 **Title `color` is not won by `.rm-title-display`.** The displayed title is an `<h1>`, and the rule that actually paints it is **`.roam-body .roam-app h1`** (this is what RailsRoam.css uses). Setting `color` on `.rm-title-display` alone — even with `!important` — does *not* change the displayed title color, because `.roam-body .roam-app h1` is the governing selector for that element. To recolor titles, set `.roam-body .roam-app h1` (display) and keep `.rm-title-display, .rm-title-textarea` (edit-mode textarea + sidebar surfaces) pointing at the same var. In `base-v1.css` both feed `--title-fg`. Confirm with DevTools: the winning `color:` in the Styles pane is the `h1` rule, not `.rm-title-display`.
 
+### Display and edit mode are two different elements
+
+Roam renders the title as an `<h1>` and **swaps in a `<textarea>`** the
+moment you click it. They are different elements, and a textarea does not
+inherit `font-size` the way the h1 picks it up from Roam's own
+stylesheet — so a theme that sets only family and color gets a title that
+visibly shrinks on entering edit mode.
+
+Set `font-size` on both, and `line-height` too, or it stops shrinking and
+starts jumping vertically instead:
+
+```css
+.rm-title-display,
+.rm-title-textarea {
+  font-size: var(--title-size);
+  line-height: 1.15;
+}
+```
+
+The same applies to anything else you style on a title: padding, borders,
+weight, tracking. If a property is set on only one of the two, clicking
+the title will visibly change it. Roam does not expose the h1's own size,
+so the value has to be chosen and eyeballed — keep it in one variable.
+
+## Styling a whole block from a tag, with `:has()`
+
+Roam puts the tag name in a `data-tag` attribute on the tag element, so
+`:has()` lets the enclosing block react to a tag sitting inside it. This
+gives you user-invokable styles — tag a block `#brand` and restyle the
+whole thing:
+
+```css
+.rm-block-text:has([data-tag="brand"]),
+.roam-block:has([data-tag="brand"]) {
+  font-family: var(--font-display) !important;
+  color: var(--brand-color) !important;
+}
+
+/* and hide the marker itself */
+.rm-block-text:has([data-tag="brand"]) [data-tag="brand"] { display: none; }
+```
+
+Notes:
+
+- Hide the tag with `display: none`, not transparency. A transparent tag
+  still occupies its width — a gap mid-sentence — and is still selected
+  and copied with the block.
+- You do not lose the ability to edit it: Roam replaces the rendered
+  block with a raw textarea on click, where the tag is plain text. So the
+  rule only ever applies when you are *not* editing.
+- Covers `#brand` and `#[[brand]]`, which carry the same `data-tag`.
+  Plain `[[brand]]` is a page link, not a tag, and emits no `data-tag`.
+- Needs a 2022-or-later engine for `:has()`. Current Chrome and the Roam
+  desktop app are fine; older engines ignore the rule harmlessly.
+
+Same trick works for headings — but note the heading class sits either on
+`.rm-block-text` or on a parent of it depending on the block, so list both
+shapes (`.rm-heading-level-1` and `.rm-heading-level-1 .rm-block-text`)
+and use `!important`, since the Typography rules set font-family and
+color on `.rm-block-text` with `!important` already.
+
 ## Caching gotcha when iterating via `@import`
 
 When using `@import url('...')` from `roam/css`, browser cache holds the imported sheet across normal reloads. Cmd-R won't always re-fetch. Two fixes:
@@ -211,6 +272,21 @@ ordering tells you which colors are foreground candidates at all.
 **`--font-ui` is set with `!important` on `body`/`.roam-app`, which drags
 it into code surfaces.** If the theme's UI font is not monospace, code
 and inline code need the mono stack re-asserted explicitly.
+
+**A darker background makes the same text color read as harsher.**
+`glamour.css` and `base-v2.css` both use a near-white body text, but
+glamour's page is much darker (relative luminance .007 vs .026), so
+identical text lightness buys noticeably more contrast — 13.2:1 against
+10.9:1. It looked over-bright next to the older theme even though
+nothing was wrong with the value. **Matching two dark themes by eye means
+deliberately not matching them by hex**; compare the computed ratios, not
+the colors.
+
+**What bounds how far you can dim body text is not the page background.**
+It is whatever body text also sits on — highlight marks, raised panels.
+Dimming glamour's body text hit its floor around 11:1 against the page,
+because below that, text on the teal highlight drops under 4.5:1. Check
+the secondary surfaces before deciding a text color is safe to darken.
 
 Web fonts work: an `@import` of a Google Fonts URL in the entry file is
 fine, as long as it sits with the other `@import`s before any rule. It is
