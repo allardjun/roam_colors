@@ -312,15 +312,6 @@
 .roam-body .roam-app h1 {
   font-weight: 600;
   letter-spacing: 0.055em;
-  /* Display and edit modes are two DIFFERENT elements: Roam shows an
-     <h1> and swaps in a <textarea> when you click the title. A textarea
-     does not inherit font-size from its surroundings the way the h1
-     picks it up from Roam's own stylesheet, so without this the title
-     visibly shrinks the moment you click it. Setting the size (and
-     line-height, or it jumps vertically instead) on both makes the
-     swap invisible. */
-  font-size: var(--title-size);
-  line-height: 1.15;
 }
 
 /* The thin brass rule under the title, in place of a box.
@@ -515,9 +506,10 @@ code,
 
    THE ONE ESTIMATED VALUE is --title-size. Colors could be computed;
    Roam's own title font-size could not be read without inspecting a
-   live DOM, so it was estimated from a screenshot. It is isolated in
-   a single variable for exactly that reason. Everything else here is
-   either measured or taken straight from glamour.md.
+   live DOM, so it was estimated from a screenshot. The rule that
+   consumes it now lives in components-v2.css, shared by every theme;
+   the value stays here so it can be tuned per theme. Everything else
+   here is either measured or taken straight from glamour.md.
 
    DEVIATIONS FROM glamour.md, and why:
      · Rose-Gold Copper and Cocktail Fuchsia are lifted/deepened

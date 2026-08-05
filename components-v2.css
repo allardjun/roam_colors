@@ -576,9 +576,24 @@ code {
 
 /* Page title (display mode) is an <h1>; this is the selector that actually
    renders the title color. .rm-title-display below covers the edit-mode
-   textarea + sidebar surfaces. Both point at --title-fg. */
+   textarea + sidebar surfaces. Both point at --title-fg.
+
+   Display and edit mode are two DIFFERENT elements: Roam renders the title
+   as an <h1> and swaps in a <textarea> the moment you click it. A textarea
+   does not inherit font-size the way the h1 picks it up from Roam's own
+   stylesheet, so a theme that sets only family and color gets a title that
+   visibly shrinks on entering edit mode — and jumps vertically if you fix
+   the size without also fixing line-height. Setting both on both elements
+   makes the swap invisible.
+
+   --title-size is the one value in this system that was chosen rather than
+   measured: Roam's own h1 size cannot be read without inspecting a live
+   DOM. If your titles change size when you install a theme, that variable
+   is the only thing to tune. See KNOWLEDGE.md "Page titles". */
 .roam-body .roam-app h1 {
   color: var(--title-fg);
+  font-size: var(--title-size);
+  line-height: 1.15;
 }
 
 .roam-app {
@@ -848,6 +863,8 @@ textarea {
 .rm-title-textarea {
   font-family: var(--font-title) !important;
   color: var(--title-fg) !important;
+  font-size: var(--title-size);
+  line-height: 1.15;
 }
 
 

@@ -321,23 +321,16 @@ textarea.rm-block-input,
   font-family: var(--font-serif) !important;
 }
 
-/* Page title — the article title. Family and colour come from
-   --font-title / --title-fg in components-v2.css; this adds size and
-   letterform.
-
-   Display and edit mode are two DIFFERENT elements: Roam renders the
-   title as an <h1> and swaps in a <textarea> the moment you click it.
-   A textarea does not inherit font-size the way the h1 picks it up
-   from Roam's own stylesheet, so without this the title visibly
-   changes size on click. Setting size AND line-height on both makes
-   the swap invisible. See KNOWLEDGE.md "Page titles". */
+/* Page title — the article title. Family, colour and size come from
+   components-v2.css (--font-title, --title-fg, --title-size); only the
+   letterform treatment is added here. The family is restated because
+   this theme's --font-ui is the sans, and the h1 would otherwise pick
+   that up. */
 .rm-title-display,
 .rm-title-textarea,
 .roam-body .roam-app h1 {
   font-family: var(--font-serif);
   font-weight: 600;
-  font-size: var(--title-size);
-  line-height: 1.15;
   letter-spacing: -0.008em;
 }
 

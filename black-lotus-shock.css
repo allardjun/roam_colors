@@ -191,6 +191,13 @@
   --done-checkbox-border: var(--col-jade);       /* checked checkbox border + hover fill */
   --done-checkbox-check:  var(--col-n900);       /* the tick mark (13.6:1 on fill, 9.1:1 on hover) */
 
+  /* Page title size, applied by components-v2.css to BOTH the display
+     <h1> and the edit <textarea>, so clicking a title does not resize it.
+     Chosen rather than measured — Roam's own h1 size cannot be read
+     without a live DOM — and isolated here so it is the only thing to
+     tune if titles come out wrong. */
+  --title-size: 3rem;
+
   /* Typography — unchanged from the monolithic version, which is also
      what base-v2 uses. This theme's identity is entirely in its color;
      nothing here depends on a web font, so there is no external

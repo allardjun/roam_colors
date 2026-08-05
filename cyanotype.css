@@ -308,23 +308,14 @@
 .rm-heading-level-3 > .rm-block__self .rm-block__input,
 .rm-heading-level-3 > .rm-block__self .rm-block-text { letter-spacing: 0.03em; }
 
-/* Page title. Family and color come from --font-title / --title-fg in
-   components-v2.css; this adds the letterform treatment and, more
-   importantly, the size.
-
-   Display and edit mode are two DIFFERENT elements: Roam renders the
-   title as an <h1> and swaps in a <textarea> the moment you click it.
-   A textarea does not inherit font-size the way the h1 picks it up
-   from Roam's own stylesheet, so without this the title visibly
-   shrinks on click. Setting size AND line-height on both makes the
-   swap invisible. See KNOWLEDGE.md "Page titles". */
+/* Page title. Family, colour and size all come from components-v2.css
+   (--font-title, --title-fg, --title-size); only the letterform
+   treatment is added here. */
 .rm-title-display,
 .rm-title-textarea,
 .roam-body .roam-app h1 {
   font-weight: 600;
   letter-spacing: 0.005em;
-  font-size: var(--title-size);
-  line-height: 1.15;
 }
 
 /* Indent guides as leader lines.
@@ -373,10 +364,9 @@ code,
    6.3 and 5.2:1), the surface steps, and the search-card hover.
 
    THE ONE ESTIMATED VALUE is --title-size, for the same reason it
-   is estimated in glamour.css: Roam's own title font-size cannot
-   be read without inspecting a live DOM. It is isolated in a
-   single variable. If titles come out wrong on install, tune it
-   there and nowhere else.
+   is estimated in every theme here: Roam's own title font-size
+   cannot be read without inspecting a live DOM. If titles come out
+   wrong on install, tune that variable and nothing else.
 
    THE COOL BLOCK-HIGHLIGHT IS GREEN, which looks like a mistake in
    a variable named --highlight-cool. It is the honest answer to a

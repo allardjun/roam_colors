@@ -203,6 +203,13 @@
   --done-checkbox-border: var(--col-moss-up); /* checked checkbox border + hover fill */
   --done-checkbox-check:  var(--col-n900);    /* the tick mark (5.8:1 on fill, 7.2:1 on hover). The monolithic version used the paper color here, which was 2.05:1 on moss — a tick you had to look for */
 
+  /* Page title size, applied by components-v2.css to BOTH the display
+     <h1> and the edit <textarea>, so clicking a title does not resize it.
+     Chosen rather than measured — Roam's own h1 size cannot be read
+     without a live DOM — and isolated here so it is the only thing to
+     tune if titles come out wrong. */
+  --title-size: 3rem;
+
   /* Typography — unchanged from the monolithic version, which is also
      what base-v2 uses. This theme's identity is entirely in its color;
      nothing here depends on a web font, so there is no external
