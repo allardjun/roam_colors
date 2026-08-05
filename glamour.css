@@ -48,7 +48,7 @@
    until THIS url changes too — bump it on every component edit, and bump
    the roam/css import as well so the browser re-reads this file and
    discovers the new nested url. See KNOWLEDGE.md "Caching gotcha". */
-@import url('./components-v2.css?v=g5');
+@import url('./components-v2.css?v=g6');
 
 :root {
   /* ── PALETTE (color-describing) ───────────────────────────
@@ -382,14 +382,28 @@
   letter-spacing: 0.02em;
 }
 
-/* The tag itself is left visible so you can still see and delete it.
-   To hide it once tagged — the block keeps the styling either way —
-   uncomment this:
+/* Hide the #brand tag itself, so the block shows only its text.
+   The styling above still applies — :has() matches the tag whether or
+   not the tag is visible.
 
-.rm-block-text:has([data-tag="brand"]) [data-tag="brand"] {
+   `display: none` rather than transparency: a transparent tag still
+   occupies its full width, leaving a conspicuous gap mid-sentence, and
+   is still selected and copied with the block. Removing it from layout
+   is what actually makes the marker invisible.
+
+   You do not lose the ability to edit it. Roam replaces the whole
+   rendered block with a raw textarea when you click in, and `#brand`
+   is plain text there — so this rule only ever applies when you are
+   NOT editing, which is exactly the ask.
+
+   Covers the `#brand` and `#[[brand]]` spellings; both carry the same
+   data-tag. If you ever write it as `[[brand]]` — a plain page link
+   rather than a tag — Roam emits no data-tag, so neither this rule nor
+   the styling above will fire. */
+.rm-block-text:has([data-tag="brand"]) [data-tag="brand"],
+.roam-block:has([data-tag="brand"]) [data-tag="brand"] {
   display: none;
 }
-*/
 
 /* Structural hairlines. glamour.md uses a rule where most designs
    would use a border or a filled bar. */
