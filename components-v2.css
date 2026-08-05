@@ -363,12 +363,21 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
    mouse hover stays a quieter grey (see .bp3-menu div:hover above),
    so the two states no longer compete. */
 
-/* Specificity matters here. Roam puts its own class (rm-find-or-create__menu)
-   on the UL and styles the active row through it, so a bare
-   `.bp3-menu-item.bp3-active` — even with !important — loses. These
-   selectors are deliberately over-qualified to outrank it. */
-.bp3-popover-content .bp3-menu.rm-find-or-create__menu li.bp3-menu-item.bp3-active,
-.bp3-popover-content .bp3-menu li.bp3-menu-item.bp3-active,
+/* This rule used to carry two extra `.bp3-popover-content …` selectors,
+   one of them further qualified with `.rm-find-or-create__menu`, on the
+   theory that Roam's own rule outranked ours. That reasoning was wrong.
+
+   `!important` beats any non-`!important` declaration no matter how
+   specific the loser is; specificity only breaks ties BETWEEN two
+   `!important` declarations. So unless Roam marks its own active-row
+   rule `!important` — it does not — the padding could never have been
+   load-bearing. The measurement that seemed to prove otherwise was
+   taken while the browser was serving a stale cached copy of this
+   file, so the plain selector had in fact never been exercised.
+
+   Reduced to the selectors that name real surfaces. If the
+   keyboard-selected row ever goes pale again, this is the first place
+   to look — but check the cache before rewriting the selector. */
 .bp3-menu li.bp3-menu-item.bp3-active,
 .bp3-menu li.bp3-menu-item.bp3-active:hover,
 .rm-command-palette__scroll-container .bp3-menu .rm-menu-item--active,
@@ -389,7 +398,6 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
 /* Force descendants too — .rm-search-title, .rm-search-list-item,
    .rm-new-page and the bolded query match each set their own color
    and would otherwise clash with the filled row. */
-.bp3-popover-content .bp3-menu li.bp3-menu-item.bp3-active *,
 .bp3-menu li.bp3-menu-item.bp3-active *,
 .rm-command-palette__scroll-container .bp3-menu .rm-menu-item--active *,
 .bp3-elevation-3 .dont-unfocus-block[style~="background-color:"] * {
