@@ -1,761 +1,286 @@
-/* dracula-jun.css */
-
-/* Multiline code blocks with  */
-
-.bp3-popover-text {
-  color: var(--foreground);
-}
-
-.CodeMirror {
-  background-color: var(--background);
-  color: var(--foreground);
-  border: 2px solid var(--background2);
-}
-
-.CodeMirror-scrollbar-filler,
-.CodeMirror-gutter-filler {
-  background-color: var(--background);
-}
-
-.CodeMirror-gutters {
-  border-right: 1px solid var(--background);
-  background-color: var(--background);
-}
-
-.CodeMirror-linenumber {
-  color: var(--comment);
-}
-
-.CodeMirror-guttermarker {
-  color: var(--background);
-}
-
-.CodeMirror-guttermarker-subtle {
-  color: var(--comment);
-}
-
-.CodeMirror-cursor {
-  border-left: 1px solid var(--foreground);
-}
-
-.CodeMirror div.CodeMirror-secondarycursor {
-  border-left: 1px solid var(--current-line);
-}
-
-.cm-fat-cursor .CodeMirror-cursor {
-  background: var(--bullet-inner);  /* best guess */
-  color: var(--bullet-outer);       /* best guess */
-}
-
-.CodeMirror-ruler {
-  border-left: 1px solid var(--current-line);
-}
-
-.cm-s-default .cm-header {
-  color: var(--blue);
-}
-
-.cm-s-default .cm-quote {
-  color: var(--green);  /* best guess */
-}
-
-.cm-negative {
-  color: var(--red);  /* best guess */
-}
-
-.cm-positive {
-  color: var(--green);  /* best guess */
-}
-
-.cm-s-default .cm-keyword {
-  color: var(--pink);
-}
-
-.cm-s-default .cm-atom {
-  color: var(--purple);
-}
-
-.cm-s-default .cm-number {
- color: var(--purple);
-}
-
-.cm-s-default .cm-def {
- color: var(--blue);
-}
-
-.cm-s-default .cm-variable-2 {
- color: var(--orange);
-}
-
-.cm-s-default .cm-variable-3,
-.cm-s-default .cm-type {
- color: var(--green);
-}
-
-.cm-s-default .cm-comment {
-  color: var(--comment);
-}
-
-.cm-s-default .cm-string {
-  color: var(--yellow);
-}
-
-.cm-s-default .cm-string-2 {
-  color: var(--yellow);  /* best guess */
-}
-
-.cm-s-default .cm-meta {
-  color: var(--bullet-outer);  /* best guess */
-}
-
-.cm-s-default .cm-qualifier {
-  color: var(--green);
-}
-
-.cm-s-default .cm-builtin {
-  color: var(--green);
-}
-
-.cm-s-default .cm-bracket {
-  color: var(--bullet-inner);  /* best guess */
-}
-
-.cm-s-default .cm-tag {
-  color: var(--pink);
-}
-
-.cm-s-default .cm-attribute {
-  color: var(--green);
-}
-
-.cm-s-default .cm-hr {
-  color: var(--bullet-inner);  /* best guess */
-}
-
-.cm-s-default .cm-link {
-  color: var(--blue);
-}
-
-.cm-s-default .cm-error {
-  color: var(--foreground);
-}
-
-.cm-invalidchar {
-  color: var(--red);
-}
-
-div.CodeMirror span.CodeMirror-matchingbracket {
-  color: var(--foreground);
-}
-
-div.CodeMirror span.CodeMirror-nonmatchingbracket {
-  color: var(--red);
-}
-
-.CodeMirror-matchingtag {
- background: var(--orange);  /* best guess */
-}
-
-/* Note: .CodeMirror-selected / activeline / line::selection rules live in the
-   "Selection + DONE checkbox" section near the bottom with !important. */
-
-.cm-searching {
-  background-color: var(--dark-yellow);  /* best guess */
-}
- 
-
-/* Intercom app */
-
-.intercom-app,
-.intercom-launcher-frame,
-#intercom-container {
-  display: none !important;
-}
-
-/* Mentions in All Pages */
-
-.rm-clickable-pill.empty-pill {
-  color: var(--foreground);
-  background-color: var(--background);
-}
-
-.rm-clickable-pill {
-  color: var(--foreground);
-  background-color: var(--blue);
-  opacity: 0.7;
-}
-
-.rm-clickable-pill.level1-pill {
-  color: var(--background);
-  background-color: var(--blue);
-  opacity: 0.8;
-}
-
-.rm-clickable-pill.level2-pill {
-  color: var(--background);
-  background-color: var(--blue);
-  opacity: 0.9;
-}
-
-.rm-clickable-pill.level3-pill {
-  color: var(--background);
-  background-color: var(--blue);
-  opacity: 1;
-}
-
-
-/* Find or Create Page search box */
-
-.bp3-input {
-  background-color: var(--search-input);
-  color: var(--background);
-}
-
-.bp3-menu {
-  background-color: var(--search-input) !important;
-  color: var(--current-line) !important;
-}
-
-.bp3-menu div:hover {
-  background-color: var(--search-hover);
-}
-
-.rm-find-or-create-wrapper .rm-menu-item .rm-search-title .rm-new-page {
-  color: var(--pink); 
-}
-
-.rm-find-or-create-wrapper .rm-menu-item .rm-search-list-item {
-  color: var(--comment); 
-}
-
-.rm-find-or-create-wrapper .rm-menu-item ul {
-  color: var(--comment);
-}
-
-
-/* Hover window triggered by autocompletion */
-
-.bp3-elevation-3 {
-  background-color: var(--current-line) !important;
-}
-
-.bp3-elevation-3 .dont-unfocus-block[style~="background-color:"] {
-  background-color: var(--comment) !important;
-}
-
-
-/* Date picker */
-
-.bp3-datepicker{
-  background-color: var(--current-line);
-  color: var(--foreground2);
-}
-
-.bp3-html-select.bp3-minimal.bp3-datepicker-month-select > select,
-.bp3-html-select.bp3-minimal.bp3-datepicker-year-select > select {
-  color: var(--foreground2);
-}
-
-
-/* Kanban board */
-
-.kanban-board {
-  background-color: #6c6f75;
-}
-
-.kanban-title {
-  border-bottom: 1px solid var(--foreground);
-}
-
-.kanban-column {
-  background-color: var(--background2);
-}
-
-.kanban-card {
-  background-color: var(--background);
-}
-
-
-/* Filter tooltip */
-
-.bp3-tooltip .bp3-popover-content,
-.bp3-popover .bp3-popover-content {
-  background-color: var(--current-line);
-  color: var(--foreground);
-}
-
-.bp3-popover-arrow {
-  color: var(--current-line);
-}
-
-.bp3-popover .bp3-popover-content .bp3-button {
-  background-color: var(--background2) !important;
-  color: var(--foreground) !important;
-  background-image: none;
-  box-shadow: none;
-}
-
-
-/* Embed containers */
-
-.rm-embed-container{
-  background-color: var(--background2);
-}
-
-.rm-embed-container .rm-embed-container {
-  background-color: var(--current-line);
-}
-
-
-/* Checkmarks */
-
-.checkmark {
-  background-color: var(--current-line);
-  border-color: var(--background2);
-}
-
-.check-container input:active ~ .bp3-control-indicator {
-  background-color: var(--bullet-outer);
-}
-
-.check-container input:not(:disabled):active:checked ~ .bp3-control-indicator {
-  background-color: var(--bullet-outer);
-}
-
-/* Note: .check-container input:checked ~ .checkmark is set with !important
-   in the "Selection + DONE checkbox" section near the bottom. */
-
-
-/* Sliders */
-
-.bp3-slider-progress.bp3-intent-primary {
-  background-color: var(--yellow);
-}
-
-.bp3-slider-handle {
-  background-color: var(--bullet-outer);
-  background-image: none;
-}
-
-.bp3-slider-handle .bp3-slider-label {
-  background-color: var(--bullet-inner);
-  color: var(--background2);
-}
-
-
-/* Inline code blocks with ` */
-
-code {
-  color: var(--orange);
-  background-color: var(--current-line);
-  border-color: var(--current-line);
-}
-
-/*
-Black Lotus Shock theme for Roam Research.
-Black resin, violet neon, cyan HUD, amber warning LEDs. Built on
-dracula-jun.css; only the palette differs. Variable names keep their
-Dracula slot names but hold Black Lotus Shock colors.
-*/
-
-:root {
-  /* Black Lotus Shock palette (mapped to Dracula slots) */
-  --blue:   #00D1FF;  /* accent — neon cyan */
-  --green:  #69F0AE;  /* success — neon green */
-  --orange: #FFB86B;  /* emphasis — amber */
-  --pink:   #FF5C8A;  /* danger — neon pink */
-  --purple: #B877FF;  /* accent2 — neon violet */
-  --red:    #FF5C8A;  /* danger */
-  --yellow: #E6E1FF;  /* title (pale lavender — substituted for warm yellow) */
-
-  /* Black & white surfaces — lifted up the palette so Roam reads like the
-     card preview instead of near-black. Main editor uses bg2 (the most
-     visible/themed surface), sidebar uses surface, hovers use surface2. */
-  --background:   #181B29;  /* bg2 (was bg0) */
-  --current-line: #292E46;  /* surface2 (was surface) */
-  --foreground:   #D7DAE8;  /* text */
-  --comment:      #7C849F;  /* comment */
-
-  /* Other UI colors */
-  --dark-blue:    #302B4F;  /* highlight */
-  --dark-yellow:  #5A3F1A;  /* dim amber for highlighter */
-  --background2:  #202438;  /* surface (was bg2) */
-  --foreground2:  #9AA1B8;  /* muted */
-  --search-input: #D7DAE8;  /* text (light surface for search popover) */
-  --search-hover: #9AA1B8;  /* muted */
-  --bullet-outer: #4A5173;  /* border */
-  --bullet-inner: #D7DAE8;  /* text */
-  --column-title: #9AA1B8;  /* muted */
-
-  /* Typography */
-  --my-text: #D7DAE8;
-  --my-font: "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas,
-               "Liberation Mono", "Courier New", monospace;
-
-  /* Selection + DONE checkbox */
-  --selection-bg: #253C55;       /* selection */
-  --selection-text: #D7DAE8;     /* text */
-  --code-selection-bg: #FFB86B;  /* emphasis */
-  --code-selection-text: #0B0D12;/* bg0 */
-  --done-checkbox-bg: #69F0AE;   /* success */
-  --done-checkbox-border: #4FC78A;
-  --done-checkbox-check: #0B0D12;
-}
-
-
-/* Body, topbar, sidebar */
-
-.roam-topbar {
-  background-color: var(--background);
-}
-
-.roam-body-main {
-  background-color: var(--background);
-  color: var(--foreground);
-}
-
-.roam-body .roam-app h1 {
-  color: var(--foreground);
-}
-
-.roam-app {
-  background-color: var(--background);
-}
-
-.roam-body .roam-app .roam-sidebar-container {
-  background-color: var(--background2);
-}
-
-.roam-body .roam-app .roam-sidebar-container .roam-sidebar-content .starred-pages-wrapper .starred-pages .page,
-.roam-body .roam-app .roam-sidebar-container .roam-sidebar-content .log-button,
-.roam-body .roam-app .roam-sidebar-container .roam-sidebar-content .starred-pages-wrapper,
-.roam-body .roam-app .roam-sidebar-container > * {
-  color: var(--foreground2);
-  opacity: 0.9;
-}
-
-.roam-body .roam-app .roam-sidebar-container .roam-sidebar-content .starred-pages-wrapper .starred-pages .page:hover,
-.roam-body .roam-app .roam-sidebar-container .roam-sidebar-content .log-button:hover {
-  background: var(--current-line);
-  color: var(--foreground);
-  opacity: 0.9;
-}
-
-.roam-body .roam-app .roam-sidebar-container .roam-sidebar-content .log-button .bp3-button:hover {
-  background-color: var(--foreground);
-}
-
-.roam-block-container button {
-  background-color: var(--current-line);
-  color: var(--foreground);
-  border-color: var(--background2);
-}
-
-/* Button */
-
-.bp3-button.bp3-minimal.bp3-small {
-  color: var(--comment); 
-}
-
-.roam-block .bp3-button,
-.dont-focus-block.bp3-button {
-  background-color: var(--background2);
-  color: var(--foreground2);
-  background-image: none;
-}
-
-.roam-block .bp3-button:hover,
-.dont-focus-block.bp3-button:hover {
-  background-color: var(--current-line);
-  color: var(--foreground);
-}
-
-/* Heading */
-
-.rm-level3 {
-  color: var(--foreground2);
-}
-
-
-/* Right sidebar */
-
-#right-sidebar > div {
-  background-color: var(--background2);
-  color: var(--foreground); /* jun */
-}
-
-
-/* Buffer (the help window in the bottom right corner) */
-
-#buffer {
-  background-color: var(--current-line) !important;
-  color: var(--foreground) !important;
-}
-
-
-/* Highlights */
-
-.roam-highlight {
-  background-color: var(--dark-yellow);
-}
-
-.block-highlight-yellow {
-  background-color: var(--dark-yellow);
-}
-
-/* Note: -grey reuses --dark-blue — possibly intentional, possibly a bug. */
-.block-highlight-blue,
-.block-highlight-grey {
-  background-color: var(--dark-blue);
-}
-
-/* Toast messages */
-
-.bp3-toast.bp3-intent-success {
-  background-color: var(--green);
-}
-
-.bp3-toast.bp3-intent-warning {
-  background-color: var(--orange);
-}
-
-
-/* Sync icon */
-
-.rm-saving-inner-icon.rm-synced {
-  background-color: var(--green);
-  opacity: 1;
-}
-
-.rm-saving-inner-icon.rm-saving-remote {
-  background-color: var(--orange);
-  opacity: 1;
-}
-
-
-/* External links */
-
-a,
-a:hover {
-  color: var(--blue);
-}
-
-
-/* Reference links */
-
-.rm-block-ref {
-  border-bottom: 0.5px solid var(--current-line);
-}
-
-.rm-block-ref:hover {
-  background-color: var(--background2);
-}
-
-.rm-page-ref {  
-  color: var(--comment);
-}
-
-.rm-page-ref-link-color {
-  color: var(--purple);
-}
-
-.rm-page-ref-brackets {
-  color: var(--comment);
-}
-
-
-/* Reference pages */
-
-.rm-ref-page-view-title span {
-  color: var(--pink);
-}
-
-.rm-reference-item {
-  background-color: var(--current-line);
-}
-
-.parent-path-wrapper {
-  color: var(--foreground2);
-}
-
-.bp3-icon-standard {
-  color: var(--foreground2);
-}
-
-
-/* Bullet points & indent lines */
-
-.controls .simple-bullet-outer .simple-bullet-inner {
-  background-color: var(--bullet-inner);
-}
-
-.roam-bullet-closed {
-  background-color: var(--bullet-outer);
-}
-
-.block-border-left {
-  border-left: 1px solid var(--comment);
-}
-
-
-/* All Pages table */
-
-.rm-pages-title-text {
-  color: var(--foreground);
-}
-
-.rm-all-pages .table .rm-pages-row.rm-pages-row-header {
-  background-color: var(--background2);
-}
-
-.rm-all-pages .table .rm-pages-row {
-  border-bottom: 1px solid var(--background2); 
-}
-
-.rm-pages-title-col span,
-.rm-pages-col span {
-  color: var(--column-title);
-}
-
-.rm-pages-title-col span.sorted-header-text,
-.rm-pages-col span.sorted-header-text {
-  color: var(--foreground2);
-}
-
-.sorting-button-group .focused::before {
-  color: var(--foreground2);
-}
-
-.rm-pages-title-col a.rm-pages-title-text:hover {
-  color: var(--foreground2);
-}
-
-.rm-pages-title-col span.title-children-text {
-  color: var(--comment); 
-}
-
-
-/* All Pages checkmarks */
-
-.bp3-control.bp3-checkbox .bp3-control-indicator {
-  background-color: var(--current-line);
-  border-color: var(--background2);
-  background-image: none;
-} 
-
-.bp3-control.bp3-checkbox input:active ~ .bp3-control-indicator {
-  background-color: var(--bullet-outer);
-}
-
-.bp3-control.bp3-checkbox input:not(:disabled):active:checked ~ .bp3-control-indicator {
-  background-color: var(--bullet-outer);
-}
-
-/* Note: .bp3-control...input:checked ~ .bp3-control-indicator is set with
-   !important in the "Selection + DONE checkbox" section near the bottom. */
-
-
-/* Typography */
-
-body,
-.roam-body,
-.roam-app,
-.rm-block-text,
-textarea {
-  font-family: var(--my-font) !important;
-  color: var(--my-text) !important;
-  font-size: 16px;
-  /* font-size: 14px */
-}
-
-.rm-title-display,
-.rm-title-textarea {
-  font-family: var(--font-mono) !important;
-  color: var(--yellow) !important;  /* Black Lotus "title" — pale lavender */
-}
-
-/* Bold text — Black Lotus emphasis (amber). Needs !important because Roam
-   applies inline color via `color: rgb(...)` on the <strong> element. */
-strong,
-.rm-bold {
-  color: var(--orange) !important;
-}
-
-
-
 /* ============================================================
-   Edge-case fixes: selection + DONE checkbox
+   black-lotus-shock.css  —  "Black Lotus Shock" Roam theme (entry file)
+   ------------------------------------------------------------
+   Black resin, violet neon, cyan HUD, amber warning LEDs. Almost
+   the whole page is unlit indigo-black; the color is rationed out
+   as light sources, which is why the accents are allowed to be as
+   loud as they are.
+
+   Refactored from the monolithic 760-line version, which was a
+   copy of dracula-jun.css with the palette swapped. It is now an
+   entry file in the same two-tier shape as base-v2.css and
+   glamour.css:
+     1. PALETTE      — raw, color-describing values (--col-*).
+     2. APPLICATIONS — semantic roles that map palette -> UI.
+   It imports the SAME components-v2.css, unmodified, so this
+   theme now tracks every fix made there. What changed in the
+   render is listed at the bottom of this file.
+
+   NOTE: @import must come before :root. A CSS @import is dropped
+   by the browser if any style rule precedes it. var() resolution
+   is order-independent, so components-v2.css (imported first)
+   still sees the vars defined just below.
+
+   CONTRAST: every ratio in the comments below is a measured WCAG
+   value against the surface the color actually lands on, not an
+   estimate. Every foreground clears 4.5:1 where it carries text.
    ============================================================ */
 
-/* 1. Normal text selection throughout Roam */
-::selection {
-  background-color: var(--selection-bg) !important;
-  color: var(--selection-text) !important;
+/* The ?v= is a cache-buster, not decoration. The nested sheet is cached
+   independently of this file, so editing components-v2.css is invisible
+   until THIS url changes too — bump it on every component edit, and bump
+   the roam/css import as well so the browser re-reads this file and
+   discovers the new nested url. See KNOWLEDGE.md "Caching gotcha". */
+@import url('./components-v2.css?v=bls1');
+
+:root {
+  /* ── PALETTE (color-describing) ───────────────────────────
+
+     Neutrals use the same numeric ramp convention as base-v2:
+     n900 is the darkest, n50 the lightest. Verified monotonic by
+     WCAG relative luminance (shown in comments).
+
+     The monolithic version named these --background / --background2 /
+     --current-line / --comment / --foreground2, which carried no
+     ordering and had --background2 sitting between --background and
+     --current-line despite the name. The numbers are the ordering. */
+
+  /* Neutral ramp (dark -> light) */
+  --col-n900: #0b0d12;  /* L .004  the original palette's bg0 */
+  --col-n850: #181b29;  /* L .011  page ground */
+  --col-n800: #202438;  /* L .019  panel */
+  --col-n750: #292e46;  /* L .029  raised */
+  --col-n700: #4a5173;  /* L .086  the palette's "border" */
+  --col-n600: #5c6280;  /* L .126  derived — dark text on the light search card */
+  --col-n500: #7c849f;  /* L .233  "comment" (4.6:1 on the page, so unlike the
+                           other two refactored themes it needed no lift) */
+  --col-n400: #9aa1b8;  /* L .358  "muted" */
+  --col-n300: #bfc3d8;  /* L .551  derived — search-card hover row */
+  --col-n100: #d7dae8;  /* L .704  "text" */
+  --col-n50:  #e9eaf2;  /* L .826  derived — the light search card */
+
+  /* Neon hues. These are light sources, not pigments: every one of them
+     is a saturated emitter that works only because the ground under it
+     is nearly black. */
+  --col-cyan:       #00d1ff;  /* HUD cyan — accent */
+  --col-violet:     #b877ff;  /* neon violet — second accent */
+  --col-pink:       #ff5c8a;  /* neon pink — danger */
+  --col-amber:      #ffb86b;  /* warning LED — emphasis */
+  --col-neon-green: #69f0ae;  /* success */
+  --col-lavender:   #e6e1ff;  /* the palette's "title" color */
+  --col-jade:       #4fc78a;  /* checked-checkbox ring */
+
+  /* Fills. Dark enough that they can only ever be backgrounds — on a
+     near-black page the deep end of a palette cannot carry text. */
+  --col-indigo-sel: #253c55;  /* text selection */
+  --col-hl-cool:    #302b4f;  /* block-highlight blue/grey */
+  --col-hl-warm:    #6b4a1d;  /* highlighter; the original #5a3f1a was 1.76:1
+                                 against the page — lifted to 2.14:1, matching
+                                 base-v2's own warm mark (2.29:1) */
+
+  /* Neon pink is 2.45:1 on the light search card — the same class of bug
+     as base-v1's invisible search selection. Deepened for that one
+     surface; see the LOTUS-ONLY rule at the bottom. */
+  --col-pink-deep: #a8235c;   /* 5.72:1 on the card */
+
+  /* Matching-bracket fill, violet at 25% alpha. */
+  --col-violet-veil: #b877ff40;
+
+  /* ── APPLICATIONS (semantic; map palette -> UI roles) ─────
+     Each comment lists where the color is used, so this block
+     doubles as a map of which components share each color. The
+     var NAMES and the set of them are identical to base-v2.css —
+     that is the contract components-v2.css depends on. Only the
+     values differ. */
+
+  /* Surfaces. Separations are 1.12 / 1.15 / 1.28:1 — this is the
+     darkest ground in the repo, and the surfaces are meant to be
+     barely separable; the neon does the signalling. */
+  --bg-base:   var(--col-n850); /* page/editor/topbar bg, kanban-card, empty mention-pill bg, CM5 gutters */
+  --bg-panel:  var(--col-n800); /* sidebars, kanban-column, embed-outer, buttons, borders, table header row */
+  --bg-raised: var(--col-n750); /* popovers/tooltips/datepicker + arrow, inline-code bg, buffer, hover, reference-item, embed-inner, 2ndary cursor, ruler, unchecked checkbox */
+
+  /* Text on dark surfaces */
+  --text-primary:   var(--col-n100);     /* editor chrome text, popovers, buffer, right sidebar, kanban-title border, cm-error, matching bracket, All-Pages title (12.3:1) */
+  --text-secondary: var(--col-n400);     /* sidebar items, datepicker weekdays + day numbers, level3 heading, icons, parent-path, sorted headers (6.7:1) */
+  --text-muted:     var(--col-n500);     /* CM5 line numbers, page-ref, ref brackets, small buttons, indent guide, title-children (4.6:1) */
+  --text-body:      var(--col-n100);     /* body/block text; set with !important in Typography, so it — not --text-primary — is what you read on the page (12.3:1) */
+  --title-fg:       var(--col-lavender); /* page title: .roam-app h1 (display) + .rm-title-display/-textarea (edit) (13.5:1) */
+
+  /* Text drawn ON a light or filled surface. */
+  --text-on-accent: var(--col-n900);  /* text inside filled mention pills (10.7:1 on cyan) */
+  --text-on-light:  var(--col-n900);  /* search input text, slider label text (16.2:1) */
+
+  /* Accent / state colors */
+  --accent:   var(--col-cyan);       /* external links, mention pills, cm5 header/def/link (9.4:1) */
+  --success:  var(--col-neon-green); /* success toast, sync-synced icon, green cm5 tokens (12.0:1) */
+  --emphasis: var(--col-amber);      /* inline-code fg, warning toast, saving icon, cm5 variable-2, matching tag (10.0:1 on the page, 7.8:1 on the raised surface inline code actually uses) */
+  --keyword:  var(--col-pink);       /* cm5 keyword/tag, find-or-create new-page label, linked-ref page title (5.8:1 on dark — but see the light-surface override at the bottom of this file) */
+  --error:    var(--col-pink);       /* cm5 negative/invalidchar/non-matching bracket. Same value as --keyword, as in the monolithic version: this palette's one red IS its pink */
+  --special:  var(--col-violet);     /* cm5 atom/number, page-ref link color, and bold text — except this theme overrides bold to amber at the bottom of this file (5.8:1) */
+  --string:   var(--col-lavender);   /* cm5 string/string-2, slider progress. In live Roam this is effectively just the slider (13.5:1) */
+
+  /* Bullets, table, highlights */
+  --bullet-outer:   var(--col-n500);     /* closed/collapsed bullet, slider handle, cm5-meta, fat-cursor color, checkbox :active. Deliberately brighter than the palette's "border" #4a5173, which was 2.2:1: a collapsed bullet hides content, so it should be more visible than an open one, not less (4.6:1) */
+  --kanban-bg:      var(--col-n700);     /* kanban board backdrop. The monolithic version hard-coded Dracula's #6c6f75 here, so the kanban board was the one surface that never got themed */
+  --bullet-inner:   var(--col-n100);     /* open bullet, slider-label bg, cm5 bracket/hr, fat-cursor bg */
+  --table-text:     var(--col-n400);     /* All-Pages cell text (6.7:1) */
+  --highlight-cool: var(--col-hl-cool);  /* block-highlight blue AND grey (both intentionally share one var). Body text on it 9.5:1; 1.29:1 vs the page, in the same range as base-v2's cool mark (1.39:1) */
+  --highlight-warm: var(--col-hl-warm);  /* roam-highlight, block-highlight-yellow, cm5-searching (body on it 5.8:1; 2.14:1 vs the page) */
+
+  /* Find-or-create search (a LIGHT surface inside a dark theme).
+     Roam builds this card light and the theme leans into it — the one
+     lit panel in an otherwise unlit room. */
+  --search-bg:            var(--col-n50);    /* search input + menu background */
+  --search-fg:            var(--col-n800);   /* menu text on that light surface (12.8:1) */
+  --search-fg-muted:      var(--col-n600);   /* secondary result line (5.0:1) */
+  --search-hover-bg:      var(--col-n300);   /* mouse hover (1.46:1 vs the card — base-v2 ships 1.37:1 here) */
+  --search-selected-bg:   var(--col-violet); /* KEYBOARD-selected row (up/down arrows). A filled neon bar: 2.46:1 against the card and 1.69:1 against plain hover, and unlike them it is chromatic, so the three states cannot be confused — the bug that made base-v1 unusable */
+  --search-selected-text: var(--col-n900);   /* text on the selected row (6.6:1 on violet) */
+
+  /* No --datepicker-* day-state vars: day cells are left to Blueprint.
+     See KNOWLEDGE.md "Blueprint date picker: don't bother". */
+
+  /* Popover */
+  --popover-arrow: var(--bg-raised); /* the little triangle; needs `fill`, not `color` — see components-v2.css */
+
+  /* Selection */
+  --selection-bg:        var(--col-indigo-sel);     /* normal text selection bg */
+  --selection-text:      var(--col-n100);           /* normal text selection fg (8.1:1) */
+  --code-selection-bg:   var(--col-amber);          /* LEGACY CM5 only — see note below */
+  --code-selection-text: var(--col-n900);           /* LEGACY CM5 only */
+  --code-activeline-bg:  rgba(215, 218, 232, 0.05); /* LEGACY CM5 only. Lightens rather than darkens — base-v2 uses rgba(0,0,0,.04), which is invisible on a near-black ground */
+
+  /* Code blocks — CodeMirror 6 / .rm-code-block.
+     Modern Roam renders ``` blocks with CodeMirror 6. The three
+     --code-* vars above bind only to CM5 (.cm-s-default,
+     .CodeMirror-*), which ``` blocks no longer use, so the amber
+     code selection almost certainly never renders. Selection you
+     actually see inside a code block is --cm6-selection.
+
+     The monolithic version had no CM6 section at all, so ``` blocks
+     rendered as unthemed CodeMirror defaults. base-v2 ships OneDark
+     here; its muted blue-greys would be the quietest thing on this
+     page, so the tokens are drawn from the theme's own neon instead.
+     The ground is the palette's bg0 — one step DARKER than the page,
+     so a code block reads as an inset panel (1.14:1). All tokens
+     verified >= 4.5:1 on it. */
+  --cm6-bg:                 var(--col-n900);        /* code block + gutter background */
+  --cm6-fg:                 var(--col-n100);        /* default code text, gutter text + border (14.0:1) */
+  --cm6-active-line:        var(--col-n850);        /* active line + active-line gutter */
+  --cm6-selection:          var(--col-indigo-sel);  /* selected text background */
+  --cm6-cursor:             var(--col-cyan);        /* caret + cursor */
+  --cm6-muted:              var(--col-n500);        /* comment, placeholder, fold placeholder (5.2:1) */
+  --cm6-keyword:            var(--col-violet);      /* keywords (6.6:1) */
+  --cm6-operator:           var(--col-cyan);        /* operators, regexp, special chars (10.7:1) */
+  --cm6-string:             var(--col-neon-green);  /* strings (13.6:1) */
+  --cm6-variable:           var(--col-n100);        /* variables — the most common token, so it stays neutral (14.0:1) */
+  --cm6-number:             var(--col-amber);       /* numbers, colors, constants (11.4:1) */
+  --cm6-name:               var(--col-pink);        /* property names, names (6.6:1) */
+  --cm6-type:               var(--col-lavender);    /* type / class names (15.3:1) */
+  --cm6-bracket-match-bg:   var(--col-violet-veil); /* matching-bracket fill */
+  --cm6-bracket-match-line: var(--col-n700);        /* matching-bracket outline */
+  --cm6-bracket-nomatch-bg: var(--col-pink);        /* non-matching bracket */
+  --cm6-field-border:       var(--col-n500);        /* CM search textfield border */
+
+  /* DONE / checked checkbox */
+  --done-checkbox-bg:     var(--col-neon-green); /* checked checkbox fill */
+  --done-checkbox-border: var(--col-jade);       /* checked checkbox border + hover fill */
+  --done-checkbox-check:  var(--col-n900);       /* the tick mark (13.6:1 on fill, 9.1:1 on hover) */
+
+  /* Typography — unchanged from the monolithic version, which is also
+     what base-v2 uses. This theme's identity is entirely in its color;
+     nothing here depends on a web font, so there is no external
+     dependency to fail. */
+  --font-ui:    "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; /* body/textarea */
+  --font-title: ui-monospace, "SFMono-Regular", Menlo, Consolas,
+                "Liberation Mono", "Courier New", monospace;                              /* page titles only */
 }
 
-/* Firefox */
-::-moz-selection {
-  background-color: var(--selection-bg) !important;
-  color: var(--selection-text) !important;
+/* ============================================================
+   LOTUS-ONLY RULES
+   ------------------------------------------------------------
+   Everything above is a variable, which is all a theme normally
+   needs. These two rules exist because this theme disagrees with
+   components-v2.css about one color, and because one var lands on
+   a surface no single value can serve.
+
+   They live here, in the entry file, so base-v2.css and
+   glamour.css are completely unaffected.
+   ============================================================ */
+
+/* Bold text — amber, as in the monolithic version.
+   components-v2.css paints bold with --special (violet here), which is
+   also the page-link color; this theme deliberately separates the two,
+   so bold reads as emphasis rather than as a link. Both declarations
+   are !important, so this one wins purely by coming later in the
+   cascade — the @import above is evaluated as if inserted at its own
+   position, which is before this rule. */
+strong,
+.rm-bold {
+  color: var(--col-amber) !important;
 }
 
-/* 1b. CodeMirror / Roam code-block selection */
-.cm-s-default .CodeMirror-selected,
-.CodeMirror-selected {
-  background-color: var(--code-selection-bg) !important;
+/* Fix: the "Create page" label is the only --keyword-colored element
+   that lands on the LIGHT search card instead of the dark page. Neon
+   pink is 2.45:1 there. The deepened pink is 5.72:1 and still reads as
+   the same color family. (base-v2 has this bug unfixed at 1.95:1;
+   glamour fixes it the same way.)
+   The :not() keeps this from fighting the selected-row rule in
+   components-v2.css, which paints the whole row's text dark.
+   Both class names are covered because the row carries bp3-menu-item in
+   the DOM while components-v2.css targets it as rm-menu-item; whichever
+   is present, one of these matches. Each is five classes deep, which
+   outranks the four-class rule it is correcting. */
+.rm-find-or-create-wrapper .bp3-menu-item:not(.bp3-active) .rm-search-title .rm-new-page,
+.rm-find-or-create-wrapper .rm-menu-item:not(.bp3-active) .rm-search-title .rm-new-page {
+  color: var(--col-pink-deep);
 }
 
-/* Browser/native text selection inside CodeMirror spans */
-.cm-s-default .CodeMirror-line > span > span::selection,
-.cm-s-default .CodeMirror-line > span::selection,
-.cm-s-default .CodeMirror-line::selection,
-.CodeMirror-line > span > span::selection,
-.CodeMirror-line > span::selection,
-.CodeMirror-line::selection {
-  background-color: var(--code-selection-bg) !important;
-  color: var(--code-selection-text) !important;
-}
+/* ============================================================
+   What changed from the monolithic black-lotus-shock.css
+   ------------------------------------------------------------
+   The file went from 760 self-contained lines to a palette plus
+   two rules; every component rule now comes from the shared
+   components-v2.css. Six visible consequences, all of them fixes
+   this theme could not get before:
 
-/* Firefox */
-.cm-s-default .CodeMirror-line > span > span::-moz-selection,
-.cm-s-default .CodeMirror-line > span::-moz-selection,
-.cm-s-default .CodeMirror-line::-moz-selection,
-.CodeMirror-line > span > span::-moz-selection,
-.CodeMirror-line > span::-moz-selection,
-.CodeMirror-line::-moz-selection {
-  background-color: var(--code-selection-bg) !important;
-  color: var(--code-selection-text) !important;
-}
+     · PAGE TITLES are pale lavender. The old file set that color on
+       .rm-title-display only, which does not win — the displayed
+       title is an <h1> painted by .roam-body .roam-app h1, and that
+       rule was pointed at --foreground. So the intended title color
+       rendered only in the edit-mode textarea. Both now feed
+       --title-fg. See KNOWLEDGE.md "Page titles".
+     · PAGE LINKS are violet. The old file colored them via
+       .rm-page-ref-link-color, a class current Roam no longer emits,
+       so every [[link]] fell through to the wrapper and rendered as
+       muted grey — the same color as de-emphasised text, which costs
+       a link its affordance.
+     · POPOVER ARROWS are themed. The old file set `color` on
+       .bp3-popover-arrow; Blueprint fills that arrow with an SVG
+       path that takes `fill`, so every popover in Roam rendered a
+       white triangle.
+     · THE KEYBOARD-SELECTED SEARCH ROW is a filled violet bar. The
+       old file left it at Roam's own pale grey.
+     · ``` CODE BLOCKS are themed at all. The old file predates
+       CodeMirror 6, so fenced blocks rendered as unstyled
+       CodeMirror defaults.
+     · THE KANBAN BOARD backdrop is themed. The old file hard-coded
+       Dracula's #6c6f75 there.
 
-/* Optional: make the active line in code blocks subtle, not selection-like */
-.cm-s-default .CodeMirror-activeline-background {
-  background-color: rgba(0, 0, 0, 0.04) !important;
-}
+   Palette changes, all of them measured rather than taste:
+     · Warm highlight #5a3f1a -> #6b4a1d (1.76 -> 2.14:1 against the
+       page), so a highlighted block is visibly highlighted.
+     · Three derived neutrals added for the light search card
+       (#e9eaf2 card, #bfc3d8 hover, #5c6280 secondary text) and one
+       deepened pink for the label that lands on it. The old file
+       reused the theme's text color as the card and its "muted" grey
+       as the hover, which left hover and card 1.4:1 apart with no
+       distinct selected state at all.
+     · Nothing else moved. Alone among the three refactored themes,
+       every Black Lotus hue already cleared 4.5:1 on its own surface
+       — the near-black ground buys a lot of headroom.
 
-/* 2. Checked / DONE checkbox color */
-.check-container input:checked ~ .checkmark {
-  background-color: var(--done-checkbox-bg) !important;
-  border-color: var(--done-checkbox-border) !important;
-}
-
-/* Checkmark tick itself */
-.check-container input:checked ~ .checkmark::after {
-  border-color: var(--done-checkbox-check) !important;
-}
-
-/* Hover state for checked / DONE checkbox */
-.check-container:hover input:checked ~ .checkmark {
-  background-color: var(--done-checkbox-border) !important;
-  border-color: var(--done-checkbox-border) !important;
-}
-
-/* Blueprint-style checked checkboxes, used in some Roam UI surfaces */
-.bp3-control input:checked ~ .bp3-control-indicator {
-  background-color: var(--done-checkbox-bg) !important;
-  border-color: var(--done-checkbox-border) !important;
-}
-
-.bp3-control input:checked ~ .bp3-control-indicator::before {
-  color: var(--done-checkbox-check) !important;
-}
+   Deliberately NOT changed: the fonts, and the fact that DONE blocks
+   render their text identically to normal blocks.
+   ============================================================ */
