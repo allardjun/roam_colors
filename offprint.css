@@ -1,0 +1,508 @@
+/* ============================================================
+   offprint.css  —  "Offprint" Roam theme (entry file)
+   ------------------------------------------------------------
+   The register both a journal article and a strategy deck are
+   written in: ink on paper, hairline rules, generous margins, and
+   colour used so sparingly that when it appears it means
+   something. An offprint is the separately-printed copy of a
+   paper that authors used to mail to colleagues — formal, plain,
+   and produced to be read rather than admired.
+
+   THIS IS THE FIRST LIGHT THEME IN THE REPO, and that is not a
+   stylistic preference — it is what the brief requires. Nature,
+   Cell, Science and every consulting deck ever made are white.
+   A dark "academic" theme would be a different and much more
+   familiar idea.
+
+   What that proves, and what it costs, is written up at the
+   bottom of this file. Short version: components-v2.css needed no
+   changes at all. Its variable names turn out to describe roles
+   rather than directions, so inverting the polarity is a palette
+   edit like any other — with exactly one exception, documented in
+   the OFFPRINT-ONLY section.
+
+   Same two-tier structure as base-v2.css and glamour.css:
+     1. PALETTE      — raw, colour-describing values (--col-*).
+     2. APPLICATIONS — semantic roles that map palette -> UI.
+
+   NOTE: @import must come before :root. A CSS @import is dropped
+   by the browser if any style rule precedes it. Both imports are
+   therefore at the top; var() resolution is order-independent, so
+   components-v2.css still sees the vars defined below.
+
+   CONTRAST: every ratio in the comments below is a measured WCAG
+   value against the surface the colour actually lands on, not an
+   estimate. Every foreground clears 4.5:1 where it carries text.
+   ============================================================ */
+
+/* Source Serif 4 (the article), Public Sans (the interface),
+   Source Code Pro (the supplementary material). All three SIL OFL.
+
+   Deliberately NOT one superfamily. In a journal the running text
+   and the apparatus around it — running heads, figure captions,
+   table rules, the masthead — are set in different voices on
+   purpose, and that separation is most of what makes a page look
+   edited rather than typed. Source Serif carries what you wrote;
+   Public Sans, a Franklin-lineage grotesque drawn for the US Web
+   Design System, carries the machinery around it and brings the
+   institutional flatness the consulting half of the brief wants.
+
+   If the request is blocked or offline the stacks fall back to
+   Georgia and the system sans: the hierarchy survives, the
+   authority does not. */
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Source+Code+Pro:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..600&display=swap');
+
+/* The ?v= is a cache-buster, not decoration. The nested sheet is cached
+   independently of this file, so editing components-v2.css is invisible
+   until THIS url changes too — bump it on every component edit, and bump
+   the roam/css import as well so the browser re-reads this file and
+   discovers the new nested url. See KNOWLEDGE.md "Caching gotcha". */
+@import url('./components-v2.css?v=of1');
+
+:root {
+  /* ── PALETTE (colour-describing) ──────────────────────────
+
+     Neutrals keep the repo's numeric ramp convention — n900 is
+     the darkest, n0 the lightest — which means that on this
+     theme the ramp is used from the OTHER END. Verified monotonic
+     by WCAG relative luminance (shown in comments).
+
+     The greys are warm and the ink is cool. That is how a printed
+     page actually behaves: stock yellows slightly with age, and
+     process black sits cool on top of it. A cool grey ramp under
+     cool ink would read as a screenshot of a UI kit. */
+
+  /* Neutral ramp (dark -> light) */
+  --col-n900: #16181c;  /* L .009  "Process Black" — titles, bold, primary text */
+  --col-n800: #23252b;  /* L .019  body ink; also the filled search row */
+  --col-n700: #3a3e45;  /* L .043  collapsed bullets */
+  --col-n600: #585d65;  /* L .108  secondary ink, open bullets, table cells */
+  --col-n500: #61666d;  /* L .128  muted ink (5.2:1 on the sheet) */
+  --col-n300: #b8bcc0;  /* L .500  hover row, kanban backdrop, rules inside code */
+  --col-n150: #e2ded6;  /* L .733  raised — inline-code chips, popovers, hover */
+  --col-n100: #ece9e3;  /* L .817  panel — sidebars, table header, buttons */
+  --col-n50:  #f5f3ef;  /* L .897  "Journal Stock" — the sheet you read on */
+  --col-n0:   #fbfaf8;  /* L .957  a fresh sheet — the find-or-create card */
+
+  /* The hairline. Journals separate things with rules, not with
+     tonal steps, which is lucky: on a light theme the tonal steps
+     available between one off-white and another are tiny (the three
+     surfaces above are 1.09 and 1.11 apart). The rule does the work
+     that a darker panel does on the other five themes. */
+  --col-rule: #c4bfb4;  /* 1.65:1 on the sheet — a printed hairline, not a border */
+
+  /* ── The plate ────────────────────────────────────────────
+     This is the Okabe-Ito palette: the colourblind-safe
+     qualitative set that scientific figure guidelines have
+     standardised on for twenty years. Using it here is not a
+     costume — it is the actual palette the register is drawn in,
+     and it makes this the one theme in the repo that is safe for
+     the ~8% of men with a red-green deficiency.
+
+     It was designed for FILLS ON WHITE, and that is exactly the
+     trap KNOWLEDGE.md describes for glamour, in mirror image. On
+     a dark theme only the light end of a palette can carry text;
+     on a light theme only the dark end can. Measured on this
+     sheet, six of the seven Okabe-Ito hues fail as text —
+     yellow at 1.2:1, orange at 2.0:1, sky blue at 2.1:1, purple
+     at 2.8:1, green at 3.1:1, vermillion at 3.5:1, and only blue
+     passes at 4.7:1.
+
+     So every member is darkened until it carries text, and the
+     original is kept in the comment. Sorting by luminance before
+     assigning roles is the same discipline as on a dark theme;
+     the direction is just reversed. */
+  --col-blue:       #00669e;  /* Okabe-Ito Blue      #0072B2 darkened (5.6:1) */
+  --col-green:      #00795c;  /* Okabe-Ito Green     #009E73 darkened (4.9:1) */
+  --col-vermillion: #b04a00;  /* Okabe-Ito Vermilion #D55E00 darkened (5.0:1) */
+  --col-claret:     #9c4f7c;  /* Okabe-Ito Purple    #CC79A7 darkened (5.0:1) */
+  --col-amber:      #7d4e00;  /* Okabe-Ito Orange    #E69F00 darkened (6.4:1) */
+
+  --col-green-deep: #005f48;  /* the checked box, pressed */
+
+  /* Marks and washes. A highlighter on paper is a chromatic event,
+     not a tonal one — it barely changes how much light comes off the
+     page (1.20 and 1.27:1 here), and it is completely obvious anyway
+     because nothing else on the sheet is yellow. Contrast ratio is
+     the wrong instrument for these two; body ink on them is 11.5 and
+     10.9:1, which is the number that matters. */
+  --col-tint-yellow: #f2e08a;  /* the highlighter */
+  --col-tint-blue:   #c9dcf0;  /* the other highlighter */
+  --col-tint-select: #cfe0f2;  /* text selection */
+
+  /* Code sits on its own stock, a shade off the sheet. */
+  --col-stock:     #efece6;  /* code-block ground */
+  --col-cm-active: #e8e4dc;  /* active line inside it */
+  --col-blue-veil: #00669e33; /* matching-bracket fill */
+
+  /* ── APPLICATIONS (semantic; map palette -> UI roles) ─────
+     Each comment lists where the colour is used, so this block
+     doubles as a map of which components share each colour. The
+     var NAMES and the set of them are identical to base-v2.css —
+     that is the contract components-v2.css depends on. Only the
+     values differ, and here they differ by polarity as well as hue. */
+
+  /* Surfaces. On a dark theme "raised" means lighter; here it means
+     a shade darker, because a tinted box is how a light page shows
+     that something sits apart — which is also, conveniently, how a
+     journal prints a Box 1 sidebar. Same role, opposite direction,
+     no rule change. */
+  --bg-base:   var(--col-n50);  /* page/editor/topbar bg, kanban-card, empty mention-pill bg, CM5 gutters */
+  --bg-panel:  var(--col-n100); /* sidebars, kanban-column, embed-outer, buttons, borders, table header row */
+  --bg-raised: var(--col-n150); /* popovers/tooltips/datepicker + arrow, inline-code bg, buffer, hover, reference-item, embed-inner, 2ndary cursor, ruler, unchecked checkbox */
+
+  /* Ink */
+  --text-primary:   var(--col-n900); /* editor chrome text, popovers, buffer, right sidebar, kanban-title border, cm-error, matching bracket, All-Pages title (16.0:1) */
+  --text-secondary: var(--col-n600); /* sidebar items, datepicker weekdays + day numbers, level3 heading, icons, parent-path, sorted headers (6.0:1) */
+  --text-muted:     var(--col-n500); /* CM5 line numbers, page-ref, ref brackets, small buttons, indent guide, title-children (5.2:1) */
+  --text-body:      var(--col-n800); /* body/block text; set with !important in Typography, so it — not --text-primary — is what you read on the page (13.8:1) */
+  --title-fg:       var(--col-n900); /* page title: .roam-app h1 (display) + .rm-title-display/-textarea (edit). Black, like an article title: on this theme the colour budget is spent on links and status, never on headings (16.0:1) */
+
+  /* Text drawn ON a filled or light surface. On the five dark themes
+     both of these are the darkest neutral. Here they part company —
+     which is the clearest evidence that naming them as foregrounds
+     rather than reusing a *-bg var was the right call in base-v2. */
+  --text-on-accent: var(--col-n0);   /* text inside filled mention pills — now PAPER, not ink (5.9:1 on the filled pill; 5.3:1 on the 0.7-opacity step) */
+  --text-on-light:  var(--col-n900); /* search input text, slider label text (16.9:1 in the input) */
+
+  /* The plate, applied. Five colours for the whole interface. */
+  --accent:   var(--col-blue);       /* external links, mention pills, cm5 header/def/link (5.6:1) */
+  --success:  var(--col-green);      /* success toast, sync-synced icon, green cm5 tokens (4.9:1; white toast text on it 5.2:1) */
+  --emphasis: var(--col-amber);      /* inline-code fg, warning toast, saving icon, cm5 variable-2, matching tag (6.4:1 on the sheet, 5.3:1 on the chip inline code actually uses) */
+  --keyword:  var(--col-vermillion); /* cm5 keyword/tag, find-or-create new-page label, linked-ref page title (5.0:1 on the sheet, 5.3:1 on the card — see the note at the bottom about why this theme needs no override there) */
+  --error:    var(--col-vermillion); /* cm5 negative/invalidchar/non-matching bracket. Shares the vermilion: a two-colour job does not get a second red */
+  --special:  var(--col-claret);     /* cm5 atom/number, page-ref link color. Also bold in components-v2.css — overridden below, for a measured reason (5.0:1) */
+  --string:   var(--col-green);      /* cm5 string/string-2, slider progress. Shares the green with --success (4.9:1) */
+
+  /* Bullets, table, marks */
+  --bullet-outer:   var(--col-n700);        /* closed/collapsed bullet, slider handle, cm5-meta, fat-cursor color, checkbox :active. Darker than an open bullet, because a collapsed one is hiding something (9.7:1) */
+  --kanban-bg:      var(--col-n300);        /* kanban board backdrop */
+  --bullet-inner:   var(--col-n600);        /* open bullet, slider-label bg, cm5 bracket/hr, fat-cursor bg (6.0:1) */
+  --table-text:     var(--col-n600);        /* All-Pages cell text (6.0:1) */
+  --highlight-cool: var(--col-tint-blue);   /* block-highlight blue AND grey (both intentionally share one var). Body ink on it 10.9:1 */
+  --highlight-warm: var(--col-tint-yellow); /* roam-highlight, block-highlight-yellow, cm5-searching. Body ink on it 11.5:1 */
+
+  /* Find-or-create search.
+     On the five dark themes this card is the awkward surface — Roam
+     builds it light and every one of them has to reason about a light
+     island. Here it is simply a fresh sheet, and the whole class of
+     problem disappears. */
+  --search-bg:            var(--col-n0);   /* search input + menu background */
+  --search-fg:            var(--col-n800); /* menu text (14.7:1) */
+  --search-fg-muted:      var(--col-n500); /* secondary result line (5.6:1) */
+  --search-hover-bg:      var(--col-n300); /* mouse hover (1.83:1 vs the card — the widest hover step of any theme here, because a light card can afford it) */
+  --search-selected-bg:   var(--col-n800); /* KEYBOARD-selected row (up/down arrows). Filled ink: 14.7:1 against the card and 4.9:1 against plain hover, so the two states cannot be confused — the bug that made base-v1 unusable */
+  --search-selected-text: var(--col-n0);   /* text on the selected row (14.7:1) */
+
+  /* No --datepicker-* day-state vars: day cells are left to Blueprint.
+     See KNOWLEDGE.md "Blueprint date picker: don't bother" — and note
+     that on this theme those untouched light-mode defaults finally
+     match the rest of the interface instead of glaring out of it. */
+
+  /* Popover */
+  --popover-arrow: var(--bg-raised); /* the little triangle; needs `fill`, not `color` — see components-v2.css */
+
+  /* Selection */
+  --selection-bg:        var(--col-tint-select); /* normal text selection bg */
+  --selection-text:      var(--col-n800);        /* normal text selection fg (11.4:1) */
+  --code-selection-bg:   var(--col-tint-select); /* LEGACY CM5 only — see note below */
+  --code-selection-text: var(--col-n900);        /* LEGACY CM5 only */
+  --code-activeline-bg:  rgba(0, 0, 0, 0.04);    /* LEGACY CM5 only. This is base-v2's original value, unchanged — and this is the only theme in the repo where darkening rather than lightening is the correct move */
+
+  /* Code blocks — CodeMirror 6 / .rm-code-block.
+     Modern Roam renders ``` blocks with CodeMirror 6. The three
+     --code-* vars above bind only to CM5 (.cm-s-default,
+     .CodeMirror-*), which ``` blocks no longer use. Selection you
+     actually see inside a code block is --cm6-selection.
+
+     Same five colours as the rest of the theme, which makes this a
+     colourblind-safe syntax scheme — rare enough to be worth saying
+     out loud. Declarations (types, classes) are set in full black
+     for the same reason bold is: on paper, emphasis is more ink,
+     not different ink. All tokens verified >= 4.5:1 on the stock. */
+  --cm6-bg:                 var(--col-stock);      /* code block + gutter background */
+  --cm6-fg:                 var(--col-n800);       /* default code text, gutter text + border (13.0:1) */
+  --cm6-active-line:        var(--col-cm-active);  /* active line + active-line gutter */
+  --cm6-selection:          var(--col-tint-select);/* selected text background */
+  --cm6-cursor:             var(--col-blue);       /* caret + cursor */
+  --cm6-muted:              var(--col-n500);       /* comment, placeholder, fold placeholder (4.9:1) */
+  --cm6-keyword:            var(--col-claret);     /* keywords (4.7:1) */
+  --cm6-operator:           var(--col-blue);       /* operators, regexp, special chars (5.3:1) */
+  --cm6-string:             var(--col-green);      /* strings (4.6:1) */
+  --cm6-variable:           var(--col-n800);       /* variables — the most common token, so it stays ink (13.0:1) */
+  --cm6-number:             var(--col-amber);      /* numbers, colors, constants (6.0:1) */
+  --cm6-name:               var(--col-vermillion); /* property names, names (4.7:1) */
+  --cm6-type:               var(--col-n900);       /* type / class names (15.1:1) */
+  --cm6-bracket-match-bg:   var(--col-blue-veil);  /* matching-bracket fill */
+  --cm6-bracket-match-line: var(--col-n300);       /* matching-bracket outline */
+  --cm6-bracket-nomatch-bg: var(--col-vermillion); /* non-matching bracket */
+  --cm6-field-border:       var(--col-n300);       /* CM search textfield border */
+
+  /* DONE / checked checkbox */
+  --done-checkbox-bg:     var(--col-green);      /* checked checkbox fill */
+  --done-checkbox-border: var(--col-green-deep); /* checked checkbox border + hover fill */
+  --done-checkbox-check:  var(--col-n0);         /* the tick mark (5.2:1 on fill, 7.4:1 on hover) */
+
+  /* Typography.
+     --font-ui is what components-v2.css puts on body/.roam-app, so it
+     is the interface voice, not the reading voice. The serif is applied
+     to block text by a rule below — see the note there for why it is
+     done that way round. */
+  --font-ui:    "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+                "Helvetica Neue", Arial, sans-serif;                              /* chrome, menus, labels */
+  --font-title: "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman",
+                serif;                                                            /* page titles (consumed by components-v2.css) */
+  --font-serif: var(--font-title);                                                /* alias used by the rules below */
+  --font-mono:  "Source Code Pro", ui-monospace, "SFMono-Regular", Menlo, Consolas,
+                "Liberation Mono", "Courier New", monospace;                      /* code surfaces */
+
+  /* Page title size, applied to BOTH the display <h1> and the edit
+     <textarea> so clicking the title doesn't resize it. Set smaller
+     than glamour's and cyanotype's 3rem on purpose: an article title
+     is large, but it is still text on a page rather than a wordmark.
+     Like theirs, this is the one chosen rather than measured value in
+     the file, isolated so it can be tuned in one place. */
+  --title-size: 2.7rem;
+}
+
+/* ============================================================
+   OFFPRINT-ONLY RULES
+   ------------------------------------------------------------
+   Everything above is a variable. These rules exist for three
+   reasons: the register is typographic before it is chromatic,
+   a light page separates things with rules rather than with
+   tone, and exactly one component var stops making sense when
+   the polarity flips.
+
+   They live here, in the entry file, so the other six themes are
+   completely unaffected.
+   ============================================================ */
+
+/* THE ONE PLACE THE POLARITY INVERSION ACTUALLY BITES.
+   --bullet-inner does double duty in components-v2.css: it is the
+   open bullet AND the background of the slider's value chip, whose
+   text is --text-on-light. On a dark theme both wants are the same
+   want — a light value. Here they are opposites: a bullet on paper
+   has to be dark to be seen, which leaves the chip dark with dark
+   text on it (4.3:1 and falling).
+
+   The bullet wins, because you look at bullets constantly and at a
+   Blueprint slider almost never, and the chip is corrected here.
+   This is the only rule in the file that exists because of the
+   light/dark flip rather than because of the design. */
+.bp3-slider-handle .bp3-slider-label {
+  color: var(--col-n0);
+}
+
+/* Bold text — black.
+   Second theme in this repo to override bold away from --special,
+   and the reason it keeps happening is worth naming: --special has
+   to be a mid-toned hue so it can also serve as a link colour, while
+   --text-body sits at the extreme end of the ramp. Any theme with
+   genuinely high body contrast will therefore find that the shared
+   default paints bold LOWER than the text around it. Here it is
+   claret at 5.0:1 against body ink at 13.8:1.
+
+   On paper the answer is not a different hue anyway. Bold is more
+   ink. Both declarations are !important, so this one wins by coming
+   later in the cascade — the @import above is evaluated as if
+   inserted at its own position, which is before this rule. */
+strong,
+.rm-bold {
+  color: var(--col-n900) !important;
+}
+
+/* The article is set in the serif; the interface is not.
+   ----------------------------------------------------------------
+   components-v2.css puts --font-ui on body/.roam-app/.rm-block-text/
+   textarea with !important, which makes it both voices at once. Rather
+   than pointing --font-ui at the serif and then clawing the sans back
+   for every piece of chrome — sidebars, menus, buttons, the table, and
+   whatever Roam ships next — the narrow surface is the one overridden:
+   block text and its edit textarea. Everything else stays sans by
+   default, which is the correct default for an interface and means
+   nothing breaks when Roam adds a panel.
+
+   Both class spellings are listed for the usual BEM reason:
+   .rm-block__input is current, .rm-block-text is what
+   components-v2.css targets. !important and source order beat the
+   Typography rule. */
+.rm-block-text,
+.rm-block__input,
+.roam-block,
+textarea.rm-block-input,
+.rm-title-textarea {
+  font-family: var(--font-serif) !important;
+}
+
+/* Page title — the article title. Family and colour come from
+   --font-title / --title-fg in components-v2.css; this adds size and
+   letterform.
+
+   Display and edit mode are two DIFFERENT elements: Roam renders the
+   title as an <h1> and swaps in a <textarea> the moment you click it.
+   A textarea does not inherit font-size the way the h1 picks it up
+   from Roam's own stylesheet, so without this the title visibly
+   changes size on click. Setting size AND line-height on both makes
+   the swap invisible. See KNOWLEDGE.md "Page titles". */
+.rm-title-display,
+.rm-title-textarea,
+.roam-body .roam-app h1 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: var(--title-size);
+  line-height: 1.15;
+  letter-spacing: -0.008em;
+}
+
+/* Section heads, the way a paper sets them: sans for the two ranks
+   that organise the argument, and an italic serif run-in for the
+   third, which is the oldest trick in scholarly typesetting for
+   getting a level of hierarchy without another line of white space.
+
+   THE `> .rm-block__self` IS LOAD-BEARING — do not simplify it away.
+   `.rm-heading-level-N` sits on the block CONTAINER, which holds this
+   block's own content *and* all of its nested children, so a plain
+   descendant selector would drag the whole subtree into the heading's
+   face. `.rm-block__self` is the direct child holding only this
+   block's own text. See KNOWLEDGE.md "Block styles leak into
+   children".
+
+   Size is deliberately not set — Roam's own heading sizes are fine,
+   and overriding them is how themes end up fighting the editor.
+
+   NOT DONE, though the register invites it: forcing rank 1 to
+   uppercase. `# Smith 2019 replication` becoming `SMITH 2019
+   REPLICATION` misrepresents what you typed, which is the same
+   objection glamour.css raises against all-caps page titles. Add
+   `text-transform: uppercase` to the first block below if you
+   disagree — it is a one-line change and it does look right. */
+.rm-heading-level-1 > .rm-block__self .rm-block__input,
+.rm-heading-level-1 > .rm-block__self .rm-block-text,
+.rm-heading-level-2 > .rm-block__self .rm-block__input,
+.rm-heading-level-2 > .rm-block__self .rm-block-text {
+  font-family: var(--font-ui) !important;
+  font-weight: 600;
+}
+
+.rm-heading-level-1 > .rm-block__self .rm-block__input,
+.rm-heading-level-1 > .rm-block__self .rm-block-text { letter-spacing: 0.035em; }
+
+.rm-heading-level-2 > .rm-block__self .rm-block__input,
+.rm-heading-level-2 > .rm-block__self .rm-block-text { letter-spacing: 0.015em; }
+
+.rm-heading-level-3 > .rm-block__self .rm-block__input,
+.rm-heading-level-3 > .rm-block__self .rm-block-text {
+  font-family: var(--font-serif) !important;
+  font-style: italic;
+  font-weight: 600;
+}
+
+/* Hairlines.
+   ----------------------------------------------------------------
+   This is the structural half of the theme. The three surfaces are
+   only 1.09 and 1.11 apart in luminance — that is simply what is
+   available between one off-white and another, and cranking it would
+   turn a printed page into a set of grey boxes. A journal has the
+   same constraint and solves it the same way: a rule, not a fill.
+
+   Note the popover is NOT given a border. Blueprint draws its arrow
+   as a separate SVG path that no border can follow, so a bordered
+   popover with an unbordered arrow reads as a mistake. */
+.roam-topbar {
+  border-bottom: 1px solid var(--col-rule);
+}
+
+.roam-body .roam-app .roam-sidebar-container {
+  border-right: 1px solid var(--col-rule);
+}
+
+.rm-reference-item,
+.rm-code-block {
+  border: 1px solid var(--col-rule);
+}
+
+/* Roam styles its divider through the CLASS .rm-hr, which outranks a
+   bare `hr` element selector, so setting border-color on `hr` alone
+   leaves it at Roam's default. Both forms, with the same shorthand
+   Roam uses. */
+hr {
+  border-top: 1px solid var(--col-rule);
+}
+
+.rm-hr {
+  border: 1px solid var(--col-rule);
+}
+
+/* The All-Pages table is the one genuinely tabular surface in Roam,
+   and components-v2.css rules its rows in --bg-panel, which on a
+   light theme is very nearly the page itself (1.09:1). A table whose
+   rules you cannot see is a list. */
+.rm-all-pages .table .rm-pages-row {
+  border-bottom: 1px solid var(--col-rule);
+}
+
+/* Code and inline code use the mono stack explicitly. components-v2.css
+   sets --font-ui on `body`/`.roam-app` with !important, which would
+   otherwise drag Public Sans into code surfaces. */
+code,
+.rm-code-block,
+.CodeMirror,
+.cm-editor {
+  font-family: var(--font-mono);
+  letter-spacing: 0;
+}
+
+/* ============================================================
+   What a light theme proved, and what it cost
+   ------------------------------------------------------------
+   components-v2.css is UNCHANGED. A theme that inverts the
+   figure/ground relationship of every surface in the app needed
+   one entry file and no edits to the shared rules, which is a
+   much stronger result than glamour's palette swap — that only
+   demonstrated the system survives a change of hue.
+
+   Three things this exercise found:
+
+     · THE VARIABLE NAMES HELD, with one exception. --bg-raised,
+       --text-on-accent, --text-on-light and the rest describe
+       roles, and roles survive a polarity flip. The exception is
+       --bullet-inner, which is two roles wearing one name (an
+       open bullet and the slider's value chip); they want the
+       same value on a dark theme and opposite values on a light
+       one. Fixed above in one rule. If components-v2.css is ever
+       revised, splitting that var is the change to make.
+     · TWO PROBLEMS SIMPLY VANISHED. The "Create page" label needs
+       no deepened colour here, because the search card and the
+       page are both light — that bug only exists when a light
+       island sits in a dark theme, and every other theme in this
+       repo has to correct it. And the Blueprint date-picker day
+       cells that KNOWLEDGE.md gave up on now look intentional,
+       because their untouched light-mode defaults finally match
+       what is around them.
+     · ONE LATENT COMPONENTS BUG GOT QUIETER. `.rm-clickable-pill`
+       (the base class, before level1/2/3) paints --text-primary
+       on an --accent background at 0.7 opacity. On the dark
+       themes that is light text on a light accent — base-v2
+       lands near 1.3:1 there. Here the same rule composites to
+       ink on a mid blue at 5.3:1. Worth fixing in the components
+       file for the others, as its own commit, since it changes
+       every theme at once.
+
+   MEASURED, NOT ESTIMATED: every ratio above was computed against
+   the surface the colour actually lands on. The figures below
+   4.5:1 are all surface-vs-surface, where a text threshold does
+   not apply: the three page surfaces, the search card against the
+   sheet, and the two highlighter marks (1.20 and 1.27:1 — a
+   highlighter changes hue, not luminance; body ink on them is
+   11.5 and 10.9:1).
+
+   THE ONE ESTIMATED VALUE is --title-size, for the same reason as
+   in the other themes.
+
+   THE RISK: a serif at Roam's body size is a real commitment, and
+   it is the thing most likely to be wrong for you. Point
+   --font-serif at var(--font-ui) and the theme becomes an
+   all-sans consulting document instead of a journal one, with
+   nothing else changed.
+   ============================================================ */
