@@ -108,8 +108,8 @@
   --title-fg:       var(--col-pale-teal); /* page title: .roam-app h1 (display) + .rm-title-display/-textarea (edit) (11.0:1) */
 
   /* Text drawn ON a light or filled surface. */
-  --text-on-accent:       var(--col-n900);      /* text inside filled mention pills (9.4:1 on teal) */
-  --text-on-accent-faded: var(--text-on-accent); /* text in the FADED mention pill (the base .rm-clickable-pill, drawn at 0.7 opacity, so the accent composites toward the page). Was --text-primary, which is light text on a light accent (5.6:1) */
+  --text-on-accent:       var(--col-n900);      /* text inside filled mention pills (9.3:1 on teal) */
+  --text-on-accent-faded: var(--text-on-accent); /* text in the FADED mention pill (the base .rm-clickable-pill, drawn at 0.7 opacity, so the accent composites toward the page). Was --text-primary, which is light text on a light accent (5.5:1) */
   --text-on-light:        var(--col-n900);      /* search input text, slider label text (16.1:1) */
 
   /* Accent / state colors */
@@ -176,7 +176,7 @@
   --cm6-cursor:             var(--col-teal);            /* caret + cursor */
   --cm6-muted:              var(--col-n500);            /* comment, placeholder, fold placeholder (6.1:1) */
   --cm6-keyword:            var(--col-clay);            /* keywords (6.0:1) */
-  --cm6-operator:           var(--col-teal);            /* operators, regexp, special chars (9.4:1) */
+  --cm6-operator:           var(--col-teal);            /* operators, regexp, special chars (9.3:1) */
   --cm6-string:             var(--col-green);           /* strings (9.6:1) */
   --cm6-variable:           var(--col-n100);            /* variables — the most common token, so it stays neutral (14.4:1) */
   --cm6-number:             var(--col-chartreuse);      /* numbers, colors, constants (11.6:1) */

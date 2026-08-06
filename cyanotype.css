@@ -162,7 +162,7 @@
   /* Accent / state colors — the four pencils plus the wash. */
   --accent:   var(--col-cyan-wash);      /* external links, mention pills, cm5 header/def/link (7.6:1) */
   --success:  var(--col-check-green);    /* success toast, sync-synced icon, green cm5 tokens (7.2:1) */
-  --emphasis: var(--col-trace-amber);    /* inline-code fg, warning toast, saving icon, cm5 variable-2, matching tag (8.4:1 on the page, 6.4:1 on the raised surface inline code actually uses) */
+  --emphasis: var(--col-trace-amber);    /* inline-code fg, warning toast, saving icon, cm5 variable-2, matching tag (8.3:1 on the page, 6.4:1 on the raised surface inline code actually uses) */
   --keyword:  var(--col-china-red);      /* cm5 keyword/tag, find-or-create new-page label, linked-ref page title (4.9:1 on dark — but see the light-surface override at the bottom of this file) */
   --keyword-on-light: var(--col-china-red-deep); /* the "Create page" label on the bare-paper search card (6.1:1; the red pencil is 2.68:1 there) */
   --error:    var(--col-china-red);      /* cm5 negative/invalidchar/non-matching bracket. Same value as --keyword: there is one red pencil in the drawer, and both of these mean "look at this, it is wrong or it is new" */

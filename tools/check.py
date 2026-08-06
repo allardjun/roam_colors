@@ -20,11 +20,14 @@ What it checks, per entry file:
               override — see KNOWLEDGE.md "Variables-first design")
   contrast    every foreground measured against the surface it actually
               lands on, not against the page
+  claims      every "N.N:1" written in a comment still matches a pair
+              that exists in the file (a note, not a failure)
   parse       tinycss2, if installed
 
 Exit status is 1 if anything failed, so it can gate a commit.
 """
 
+import itertools
 import os
 import re
 import sys
@@ -210,6 +213,39 @@ def components_uses():
                           strip_comments(read(COMPONENTS))))
 
 
+def stale_claims(name, defs):
+    """Ratio claims in comments that match no computable pair.
+
+    Every "N.N:1" in these files asserts a measured value, and the
+    numbers rot: change a palette entry late and the prose around it
+    still quotes the old figure.  Nothing catches that — the CSS is
+    valid and the page looks right.
+
+    So: compute the contrast of every pair of literal-valued vars in
+    the file (plus the 0.7-composited mention pill), round to the same
+    precision the comments use, and flag any claim that lands on none
+    of them.
+
+    This is a heuristic and it reports NOTES, not failures, because a
+    claim can be legitimate and still not match: glamour.css cites
+    base-v2's body contrast to explain why it diverged, and a
+    cross-file reference is invisible from here.  A note means "check
+    this number", not "this number is wrong".
+    """
+    literal = {k: v for k, v in
+               ((k, resolve(defs, k)) for k in defs) if v}
+    real = set()
+    for a, b in itertools.combinations(literal, 2):
+        real.add(round(contrast(literal[a], literal[b]), 1))
+    accent, base = literal.get("--accent"), literal.get("--bg-base")
+    if accent and base:
+        pill = composite(accent, base, FADED_PILL[3])
+        real.update(round(contrast(v, pill), 1) for v in literal.values())
+
+    claimed = {float(m) for m in re.findall(r"(\d+\.\d+):1", read(name))}
+    return sorted(c for c in claimed if round(c, 1) not in real)
+
+
 def check_entry(name, contract, used):
     problems = []
     defs = declarations(name)
@@ -251,6 +287,10 @@ def check_entry(name, contract, used):
         if ratio < MIN_TEXT:
             problems.append("%.2f:1  %s on the %.0f%%-opacity pill  (needs %.1f)"
                             % (ratio, fg, alpha * 100, MIN_TEXT))
+
+    for claim in stale_claims(name, defs):
+        notes.append("comment claims %.1f:1, which matches no pair in "
+                     "this file" % claim)
     return problems, notes
 
 
@@ -306,7 +346,7 @@ def main(argv):
         else:
             tail = "" if errors is not None else "  (install tinycss2 to parse-check)"
             if notes:
-                tail = "  (%d waived, -v to show)%s" % (len(notes), tail)
+                tail = "  (%d notes, -v to show)%s" % (len(notes), tail)
             print("  %-24s ok%s" % (name, tail))
         if notes and verbose:
             for note in notes:

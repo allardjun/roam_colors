@@ -1,3 +1,6 @@
 localhost.pem
 localhost-key.pem
 rootCA*.pem
+
+# tools/check.py is imported by ad-hoc scripts, so it compiles
+__pycache__/
