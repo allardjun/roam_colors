@@ -22,7 +22,7 @@ Themes are loaded by creating a page literally named `roam/css` (lowercase, no s
 
 Multiple `@import`s and raw blocks can coexist. Last one wins on conflicts (per normal CSS cascade).
 
-Point the URL at an **entry file**, never at a components file — the entry file defines the variables and imports its components. Current entry files: `base-v2.css` (Dracula), `glamour.css` (Golden-Hour Neo-Deco), `argon-executive.css`, `black-lotus-shock.css`, `ukiyo-night.css`, `cyanotype.css` and `offprint.css` (light). All seven share `components-v2.css`; `base-v1.css` + `components.css` are kept frozen as the pre-refactor reference.
+Point the URL at an **entry file**, never at a components file — the entry file defines the variables and imports its components. Current entry files: `base-v2.css` (Dracula), `glamour.css` (Golden-Hour Neo-Deco), `argon-executive.css`, `black-lotus-shock.css`, `ukiyo-night.css`, `cyanotype.css`, `heads-down.css` and `offprint.css` (light). All eight share `components-v2.css`; `base-v1.css` + `components.css` are kept frozen as the pre-refactor reference.
 
 ## Specificity and `!important`
 
@@ -381,6 +381,31 @@ The lesson is the ordering: the theme nobody was editing was the one with the pr
 Two thresholds, not one.
 Text is WCAG 1.4.3's 4.5:1; bullets, tick marks and other graphical objects are 1.4.11's 3:1.
 Holding a 6px dot to a body-text standard is the wrong measure, not a stricter one.
+
+### The contrast numbers written in the comments rot, and nothing notices
+
+Every `N.N:1` in these files is an assertion about a measured value, and the assertions decay the moment a palette entry changes.
+Deepen one hex late in the session and every sentence quoting the old figure is now a lie that parses, validates, renders correctly and looks authoritative.
+
+Building `heads-down.css` produced seventeen of them in a single sitting, purely from adjusting two palette entries — `--col-n900` and the coral — after the comments around them were already written.
+A sweep across the rest of the repo then found six more that had been committed and pushed weeks earlier.
+
+`tools/check.py` now re-derives them: it computes the contrast of every pair of literal-valued vars in a file, rounds to the precision the comments use, and flags any claim matching none of them.
+It reports these as notes rather than failures, because a claim can be legitimate and unmatchable — `glamour.css` cites base-v2's body contrast to explain why it diverged, and a cross-file reference is invisible to a single-file matcher.
+
+The general lesson is worth more than the specific check.
+**A number written in prose next to the code is not documentation, it is an untested assertion.**
+If it is worth writing down, it is worth re-deriving; if it cannot be re-derived, expect it to be wrong within two sessions.
+
+### An achromatic ramp is a design constraint, not an absence of one
+
+Six of the eight themes here tint their greys — a teal charcoal, an indigo black, an espresso brown.
+`heads-down.css` holds R = G = B at all fourteen steps instead, and the consequence is not that the theme looks plainer but that it can make a stronger claim: with no tint anywhere in the neutrals, a hue on the page cannot be read as atmosphere and can only be read as a signal.
+
+That turns the palette into a budget with meanings attached rather than a mood board, which in turn decides questions that are otherwise arbitrary — headings get no colour, and code comments are grey rather than the green every editor uses, because under the rule a comment is prose.
+
+The constraint is also mechanically checkable, which the mood is not: `len(set(rgb(value))) == 1` at every step.
+Prefer premises you can assert in code.
 
 ## Useful class map (the ones that aren't obvious)
 

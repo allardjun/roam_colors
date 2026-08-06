@@ -2,7 +2,7 @@
 
 Custom CSS themes for [Roam Research](https://roamresearch.com).
 
-Seven themes are current, and they all share one components file — the palette is very nearly the only thing that differs between them:
+Eight themes are current, and they all share one components file — the palette is very nearly the only thing that differs between them:
 
 | Theme | Look |
 |---|---|
@@ -12,6 +12,7 @@ Seven themes are current, and they all share one components file — the palette
 | [`black-lotus-shock.css`](black-lotus-shock.css) | Black resin, violet neon, cyan HUD, amber warning LEDs. The darkest ground here; the color is rationed out as light sources. |
 | [`ukiyo-night.css`](ukiyo-night.css) | Indigo ink, weathered paper, antique gold. Its neutral ramp changes hue as it climbs — indigo at the dark end, paper at the light end. |
 | [`cyanotype.css`](cyanotype.css) | Prussian blue paper, white line work, and a drafting office's markup pencils — red for corrections, green for checked, amber for attention, violet for cross-references. IBM Plex in all three widths. The only saturated ground here, and the only theme whose bold text is a line weight rather than a color. |
+| [`heads-down.css`](heads-down.css) | Graphite and a signal palette — a working screen at 11pm. The only exactly achromatic ramp here (R = G = B at all fourteen steps), sitting on VS Code Dark+'s ground and foreground, so a hue is never atmosphere and can only mean something: teal *resolved*, azure *referenced*, violet *declared*, amber *literal*, green *passing*, coral *failing*. Geist over Geist Mono, with teal monospace page titles. |
 | [`offprint.css`](offprint.css) | **The light one.** A journal article: warm journal stock, cool process-black ink, hairline rules, and the colorblind-safe Okabe-Ito plate darkened to carry text on paper. Source Serif 4 for what you wrote; Public Sans in executive navy for every title and heading. |
 
 ## Installing
@@ -26,7 +27,7 @@ In Roam, create a page called `roam/css`, add a code block, switch its type to "
 @import url('https://allardjun.github.io/roam_colors/glamour.css');
 ```
 
-…or any of the other five entry files in the table above.
+…or any of the other six entry files in the table above.
 
 Point the URL at an **entry file**, never at a components file — the entry file defines the variables and pulls in its own components.
 
@@ -34,16 +35,17 @@ Point the URL at an **entry file**, never at a components file — the entry fil
 
 Two files, two tiers:
 
-1. **Entry file** (any of the seven in the table) — a `:root` block split into a *palette* tier of raw colors (`--col-*`, the only place literal hexes appear) and an *application* tier of semantic roles (`--bg-raised`, `--accent`, `--search-selected-bg`) that map palette onto UI.
+1. **Entry file** (any of the eight in the table) — a `:root` block split into a *palette* tier of raw colors (`--col-*`, the only place literal hexes appear) and an *application* tier of semantic roles (`--bg-raised`, `--accent`, `--search-selected-bg`) that map palette onto UI.
 2. **Components** (`components-v2.css`) — every actual rule.
    It references only the semantic vars, never the palette and never a literal color.
 
 So **a new theme is mostly a new palette**: copy an entry file, change the colors, keep the application map.
-All seven share `components-v2.css` byte for byte and look nothing alike — including one that inverts the figure/ground relationship of every surface in the app.
+All eight share `components-v2.css` byte for byte and look nothing alike — including one that inverts the figure/ground relationship of every surface in the app.
 
 "Mostly" is doing some work in that sentence.
-Six of the seven carry a short theme-only section at the bottom of the entry file — glamour, cyanotype and offprint for their typography, and the three palette themes for a bold color that disagrees with `--special` plus the one label that lands on the light search card.
-Everything else is variables.
+Four of the eight carry a short theme-only section at the bottom of the entry file — glamour, cyanotype, offprint and heads-down, all of them for typographic or structural work that has no variable form.
+The other four, base-v2 and the three palette themes, are `:root` and nothing else.
+They used to carry overrides too, until it turned out five files were repeating the same two rules; those became `--bold-fg` and `--keyword-on-light` in the contract, and the files got shorter.
 
 Two caveats, both learned the hard way:
 
@@ -94,13 +96,13 @@ An untrusted cert makes the stylesheet fail **silently** as a subresource.
 The entry file imports its components with a `?v=` on the URL:
 
 ```css
-@import url('./components-v2.css?v=9');
+@import url('./components-v2.css?v=10');
 ```
 
 That query string is load-bearing, not decoration.
 The two files cache independently, so **editing `components-v2.css` is invisible until you bump that number** — and bump the `roam/css` import too, so the browser re-reads the entry file and discovers the new nested URL.
 Changing only one of the two does nothing.
-Each entry file carries its own tag (`?v=9`, `?v=g9`, `?v=ae1`, `?v=bls1`, `?v=un1`, `?v=cy1`, `?v=of1`), so a components edit means bumping the tag in every entry file you are actually testing.
+Each entry file carries its own tag (`?v=10`, `?v=g10`, `?v=ae2`, `?v=bls2`, `?v=un2`, `?v=cy2`, `?v=of2`, `?v=hd1`), so a components edit means bumping the tag in every entry file you are actually testing.
 This has eaten several debugging sessions; see [KNOWLEDGE.md](KNOWLEDGE.md) for the full version, including the fact that the Roam desktop app keeps its own cache separate from any browser.
 
 ### Check your work with a parser
@@ -123,9 +125,10 @@ python3 tools/check.py -v     # show the waived deviations and their reasons
 ```
 
 It verifies the application-var contract in both directions, finds orphan `--col-*` entries and duplicate definitions in `:root`, and parse-checks with tinycss2 when it is installed.
+It also re-derives every `N.N:1` written in a comment and flags any that no longer matches a real pair, because those numbers rot silently when a palette entry changes late.
 Known deviations live in a `WAIVERS` table in the script — each needs a written reason, and anything new fails loudly.
 
-`tools/bump.sh` increments the `?v=` on every entry file at once, which is otherwise seven manual edits that fail silently when forgotten.
+`tools/bump.sh` increments the `?v=` on every entry file at once, which is otherwise eight manual edits that fail silently when forgotten.
 
 The `localhost.pem`, `localhost-key.pem`, and `rootCA*.pem` files should not be committed (see `.gitignore`).
 
