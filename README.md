@@ -12,7 +12,7 @@ Seven themes are current, and they all share one components file — the palette
 | [`black-lotus-shock.css`](black-lotus-shock.css) | Black resin, violet neon, cyan HUD, amber warning LEDs. The darkest ground here; the color is rationed out as light sources. |
 | [`ukiyo-night.css`](ukiyo-night.css) | Indigo ink, weathered paper, antique gold. Its neutral ramp changes hue as it climbs — indigo at the dark end, paper at the light end. |
 | [`cyanotype.css`](cyanotype.css) | Prussian blue paper, white line work, and a drafting office's markup pencils — red for corrections, green for checked, amber for attention, violet for cross-references. IBM Plex in all three widths. The only saturated ground here, and the only theme whose bold text is a line weight rather than a color. |
-| [`offprint.css`](offprint.css) | **The light one.** A journal article: warm journal stock, cool process-black ink, hairline rules, and the colorblind-safe Okabe-Ito plate darkened to carry text on paper. Source Serif 4 for what you wrote, Public Sans for the interface around it. |
+| [`offprint.css`](offprint.css) | **The light one.** A journal article: warm journal stock, cool process-black ink, hairline rules, and the colorblind-safe Okabe-Ito plate darkened to carry text on paper. Source Serif 4 for what you wrote; Public Sans in executive navy for every title and heading. |
 
 ## Installing
 

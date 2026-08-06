@@ -35,22 +35,26 @@
    estimate. Every foreground clears 4.5:1 where it carries text.
    ============================================================ */
 
-/* Source Serif 4 (the article), Public Sans (the interface),
+/* Source Serif 4 (the article), Public Sans (everything else),
    Source Code Pro (the supplementary material). All three SIL OFL.
 
    Deliberately NOT one superfamily. In a journal the running text
-   and the apparatus around it — running heads, figure captions,
-   table rules, the masthead — are set in different voices on
-   purpose, and that separation is most of what makes a page look
-   edited rather than typed. Source Serif carries what you wrote;
-   Public Sans, a Franklin-lineage grotesque drawn for the US Web
-   Design System, carries the machinery around it and brings the
+   and the apparatus around it — titles, section heads, running
+   heads, figure captions, the masthead — are set in different
+   voices on purpose, and that separation is most of what makes a
+   page look edited rather than typed. Source Serif carries what
+   you wrote, and only that; Public Sans, a Franklin-lineage
+   grotesque drawn for the US Web Design System, carries every
+   title, every heading rank and all the machinery, and brings the
    institutional flatness the consulting half of the brief wants.
+
+   The division of labour is the point: the serif is the voice of
+   the author, the sans is the voice of the publication.
 
    If the request is blocked or offline the stacks fall back to
    Georgia and the system sans: the hierarchy survives, the
    authority does not. */
-@import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Source+Code+Pro:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Source+Code+Pro:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..600&display=swap');
 
 /* The ?v= is a cache-buster, not decoration. The nested sheet is cached
    independently of this file, so editing components-v2.css is invisible
@@ -120,6 +124,14 @@
 
   --col-green-deep: #005f48;  /* the checked box, pressed */
 
+  /* Executive navy — page titles and every heading rank. Not part of
+     Okabe-Ito and not trying to be: the plate is for things that carry
+     meaning (a link, an error, a DONE box), and a heading is structure.
+     Structure gets the house colour.
+     10.5:1 on the sheet, and 1.88:1 lighter than --col-blue, so a heading
+     reads as navy while a link inside it still reads as a link. */
+  --col-navy: #1b3a5c;
+
   /* Marks and washes. A highlighter on paper is a chromatic event,
      not a tonal one — it barely changes how much light comes off the
      page (1.20 and 1.27:1 here), and it is completely obvious anyway
@@ -156,7 +168,7 @@
   --text-secondary: var(--col-n600); /* sidebar items, datepicker weekdays + day numbers, level3 heading, icons, parent-path, sorted headers (6.0:1) */
   --text-muted:     var(--col-n500); /* CM5 line numbers, page-ref, ref brackets, small buttons, indent guide, title-children (5.2:1) */
   --text-body:      var(--col-n800); /* body/block text; set with !important in Typography, so it — not --text-primary — is what you read on the page (13.8:1) */
-  --title-fg:       var(--col-n900); /* page title: .roam-app h1 (display) + .rm-title-display/-textarea (edit). Black, like an article title: on this theme the colour budget is spent on links and status, never on headings (16.0:1) */
+  --title-fg:       var(--col-navy); /* page title: .roam-app h1 (display) + .rm-title-display/-textarea (edit), and the in-block heading ranks below. The one structural use of colour in the theme (10.5:1) */
 
   /* Text drawn ON a filled or light surface. On the five dark themes
      both of these are the darkest neutral. Here they part company —
@@ -248,14 +260,14 @@
 
   /* Typography.
      --font-ui is what components-v2.css puts on body/.roam-app, so it
-     is the interface voice, not the reading voice. The serif is applied
-     to block text by a rule below — see the note there for why it is
-     done that way round. */
+     is the interface voice AND the title voice, since headings are set
+     in the sans here. The serif is applied to block text by a rule
+     below — see the note there for why it is done that way round. */
   --font-ui:    "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
-                "Helvetica Neue", Arial, sans-serif;                              /* chrome, menus, labels */
-  --font-title: "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman",
-                serif;                                                            /* page titles (consumed by components-v2.css) */
-  --font-serif: var(--font-title);                                                /* alias used by the rules below */
+                "Helvetica Neue", Arial, sans-serif;                              /* chrome, menus, labels — and every heading */
+  --font-serif: "Source Serif 4", "Source Serif Pro", Georgia, "Times New Roman",
+                serif;                                                            /* the article: block text, applied by a rule below */
+  --font-title: var(--font-ui);                                                   /* page titles (consumed by components-v2.css) */
   --font-mono:  "Source Code Pro", ui-monospace, "SFMono-Regular", Menlo, Consolas,
                 "Liberation Mono", "Courier New", monospace;                      /* code surfaces */
 
@@ -298,7 +310,7 @@
   color: var(--col-n0);
 }
 
-/* The article is set in the serif; the interface is not.
+/* The article is set in the serif; nothing else is.
    ----------------------------------------------------------------
    components-v2.css puts --font-ui on body/.roam-app/.rm-block-text/
    textarea with !important, which makes it both voices at once. Rather
@@ -321,60 +333,80 @@ textarea.rm-block-input,
   font-family: var(--font-serif) !important;
 }
 
-/* Page title — the article title. Family, colour and size come from
-   components-v2.css (--font-title, --title-fg, --title-size); only the
-   letterform treatment is added here. The family is restated because
-   this theme's --font-ui is the sans, and the h1 would otherwise pick
-   that up. */
+/* Page title. Family, colour and size come from components-v2.css
+   (--font-title, --title-fg, --title-size); only the letterform
+   treatment is added here.
+
+   The family is restated on the h1 anyway: components-v2.css sets it on
+   .rm-title-display/.rm-title-textarea, and this keeps the display and
+   edit elements from disagreeing if Roam ever stops putting the display
+   class on the h1.
+
+   Slight negative tracking because a grotesque at 2.7rem opens up if you
+   leave it alone; the serif it replaced wanted the same correction for a
+   different reason. */
 .rm-title-display,
 .rm-title-textarea,
 .roam-body .roam-app h1 {
-  font-family: var(--font-serif);
+  font-family: var(--font-ui);
   font-weight: 600;
-  letter-spacing: -0.008em;
+  letter-spacing: -0.012em;
 }
 
-/* Section heads, the way a paper sets them: sans for the two ranks
-   that organise the argument, and an italic serif run-in for the
-   third, which is the oldest trick in scholarly typesetting for
-   getting a level of hierarchy without another line of white space.
+/* Section heads. All three ranks are the sans, in the same navy as the
+   page title, so a heading is recognisable as structure from across the
+   page rather than by size alone.
 
    THE `> .rm-block__self` IS LOAD-BEARING — do not simplify it away.
    `.rm-heading-level-N` sits on the block CONTAINER, which holds this
    block's own content *and* all of its nested children, so a plain
    descendant selector would drag the whole subtree into the heading's
-   face. `.rm-block__self` is the direct child holding only this
-   block's own text. See KNOWLEDGE.md "Block styles leak into
-   children".
+   face and colour. `.rm-block__self` is the direct child holding only
+   this block's own text. Colour is the dangerous one here: it is an
+   inherited property, so getting this wrong turns every child block navy
+   too. See KNOWLEDGE.md "Block styles leak into children".
 
-   Size is deliberately not set — Roam's own heading sizes are fine,
-   and overriding them is how themes end up fighting the editor.
+   !important on both properties, to beat the Typography rule that sets
+   font-family and colour on `.rm-block-text`.
 
-   NOT DONE, though the register invites it: forcing rank 1 to
-   uppercase. `# Smith 2019 replication` becoming `SMITH 2019
-   REPLICATION` misrepresents what you typed, which is the same
-   objection glamour.css raises against all-caps page titles. Add
-   `text-transform: uppercase` to the first block below if you
-   disagree — it is a one-line change and it does look right. */
+   Size is deliberately not set — Roam's own heading sizes are fine, and
+   overriding them is how themes end up fighting the editor. They are
+   also what separates rank 1 from rank 2 here, since both are now the
+   same face, weight and colour; only the tracking differs, which is the
+   usual correction for a grotesque as it gets larger.
+
+   Rank 3 is italic. In a printed paper the third rank is a run-in
+   subhead, and italic is how it has been set for about four centuries —
+   the one piece of the serif treatment worth keeping now that the heads
+   are sans.
+
+   NOT DONE, though the register invites it: forcing rank 1 to uppercase.
+   `# Smith 2019 replication` becoming `SMITH 2019 REPLICATION`
+   misrepresents what you typed, which is the same objection glamour.css
+   raises against all-caps page titles. Add `text-transform: uppercase`
+   to the first block below if you disagree — it is a one-line change and
+   it does look right. */
 .rm-heading-level-1 > .rm-block__self .rm-block__input,
 .rm-heading-level-1 > .rm-block__self .rm-block-text,
 .rm-heading-level-2 > .rm-block__self .rm-block__input,
-.rm-heading-level-2 > .rm-block__self .rm-block-text {
+.rm-heading-level-2 > .rm-block__self .rm-block-text,
+.rm-heading-level-3 > .rm-block__self .rm-block__input,
+.rm-heading-level-3 > .rm-block__self .rm-block-text {
   font-family: var(--font-ui) !important;
   font-weight: 600;
+  color: var(--title-fg) !important;
 }
 
 .rm-heading-level-1 > .rm-block__self .rm-block__input,
-.rm-heading-level-1 > .rm-block__self .rm-block-text { letter-spacing: 0.035em; }
+.rm-heading-level-1 > .rm-block__self .rm-block-text { letter-spacing: -0.004em; }
 
 .rm-heading-level-2 > .rm-block__self .rm-block__input,
-.rm-heading-level-2 > .rm-block__self .rm-block-text { letter-spacing: 0.015em; }
+.rm-heading-level-2 > .rm-block__self .rm-block-text { letter-spacing: 0.004em; }
 
 .rm-heading-level-3 > .rm-block__self .rm-block__input,
 .rm-heading-level-3 > .rm-block__self .rm-block-text {
-  font-family: var(--font-serif) !important;
   font-style: italic;
-  font-weight: 600;
+  letter-spacing: 0.012em;
 }
 
 /* Hairlines.
@@ -486,4 +518,13 @@ code,
    --font-serif at var(--font-ui) and the theme becomes an
    all-sans consulting document instead of a journal one, with
    nothing else changed.
+
+   TITLES AND HEADINGS ARE NAVY AND SANS, which is the one place
+   this theme spends colour on structure rather than on meaning.
+   Everything else here follows the rule that colour marks a link,
+   an error or a state; a heading is neither. It is a deliberate
+   exception, and it is what makes the page read as a corporate
+   document rather than a manuscript. Set --title-fg back to
+   var(--col-n900) for black heads, or --font-title back to
+   var(--font-serif) for serif ones; the two are independent.
    ============================================================ */
