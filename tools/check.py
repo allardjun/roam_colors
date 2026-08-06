@@ -35,7 +35,7 @@ COMPONENTS = "components-v2.css"
 REFERENCE = "base-v2.css"          # the entry file that defines the contract
 ENTRIES = ["base-v2.css", "glamour.css", "argon-executive.css",
            "black-lotus-shock.css", "ukiyo-night.css", "cyanotype.css",
-           "offprint.css"]
+           "offprint.css", "heads-down.css"]
 
 # A theme may invent vars for its own use — fonts it needs beyond the two
 # in the contract, a hairline colour, and so on.  They are not part of the

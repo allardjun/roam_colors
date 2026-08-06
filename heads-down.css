@@ -1,0 +1,441 @@
+/* ============================================================
+   heads-down.css  —  "Heads Down" Roam theme (entry file)
+   ------------------------------------------------------------
+   Graphite, and a signal palette. A working screen at 11pm.
+
+   THE RULE THIS THEME IS BUILT ON: grey is what you typed,
+   colour is what the app resolved.
+
+   That is how an editor already behaves and nobody says it out
+   loud. Everything you write is the foreground colour until the
+   tokenizer works out what it is; then, and only then, does it
+   get a hue. Roam does the same thing — a [[page]], a #tag, a
+   ((block ref)), a url, a DONE — those are the places the app
+   followed something for you. So they are the places that get
+   colour, and prose stays graphite.
+
+   Which means the amount of colour on screen is information.
+   A page that is nearly all grey is a page of raw thinking; a
+   page speckled with teal is one that is wired into the rest of
+   the graph. That is the Hacker News front page's discipline
+   (one face, grey metadata, hierarchy from size and tone rather
+   than decoration) and a trading board's (colour is a status,
+   never a mood), applied to a note-taking app.
+
+   THE NEUTRAL RAMP IS EXACTLY ACHROMATIC: R = G = B at all
+   fourteen steps, verified, not eyeballed. That is the one thing
+   no other theme in this repo does — argon-executive is a teal
+   charcoal, black-lotus an indigo black, ukiyo an indigo ink,
+   glamour an espresso brown, cyanotype a saturated Prussian
+   field. Every one of them tints its greys, so on those pages a
+   hue is atmosphere. Here there is no atmosphere to compete
+   with, and a hue can only be a signal. The page itself is
+   #1e1e1e, which is VS Code Dark+'s exact ground, and the body
+   text is #d4d4d4, which is its exact foreground.
+
+   THE CHROMATIC BUDGET IS SIX HUES, one job each:
+
+     teal    #4ec9b0   resolved   — links, mentions, page titles
+     azure   #6fb3e0   referenced — page refs, block refs, atoms
+     violet  #c586c0   declared   — tags, keywords, a new page
+     amber   #d7ba7d   literal    — inline code, numbers, warning
+     green   #7ec699   passing    — DONE, success, strings
+     coral   #f2776f   failing    — errors
+
+   Teal is the flagship because it is the one you see most: it
+   carries links, mention pills and every page title. It is also
+   VS Code Dark+'s *type* colour — the colour of a thing the
+   language server figured out — which is where the whole idea
+   came from, and why --cm6-type below is not a coincidence.
+
+   Same two-tier structure as base-v2.css and glamour.css:
+     1. PALETTE      — raw, colour-describing values (--col-*).
+     2. APPLICATIONS — semantic roles that map palette -> UI.
+   It imports the SAME components-v2.css, unmodified.
+
+   NOTE: @import must come before :root. A CSS @import is dropped
+   by the browser if any style rule precedes it. Both imports are
+   therefore at the top; var() resolution is order-independent, so
+   components-v2.css still sees the vars defined below.
+
+   CONTRAST: every ratio in the comments below is a measured WCAG
+   value against the surface the colour actually lands on, not an
+   estimate. Every foreground clears 4.5:1 where it carries text.
+   ============================================================ */
+
+/* Geist and Geist Mono, both SIL OFL.
+   One superfamily in two roles, because the theme's argument is
+   that prose and code are the same material at different degrees
+   of resolution — a display/text pairing would contradict it.
+   Geist was drawn for developer tooling, which is the correct
+   accent here in the way a fashion grotesque would not be, and it
+   ships proper tabular figures, which the table rule below uses.
+   If this request is blocked or offline the stacks fall back to
+   the system UI sans and the system mono; the theme loses its
+   lettering but not its structure. */
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap');
+
+/* The ?v= is a cache-buster, not decoration. The nested sheet is cached
+   independently of this file, so editing components-v2.css is invisible
+   until THIS url changes too — bump it on every component edit, and bump
+   the roam/css import as well so the browser re-reads this file and
+   discovers the new nested url. See KNOWLEDGE.md "Caching gotcha". */
+@import url('./components-v2.css?v=hd1');
+
+:root {
+  /* ── PALETTE (colour-describing) ───────────────────────────
+
+     Neutrals use the same numeric ramp convention as base-v2:
+     n900 is the darkest, n50 the lightest. Monotonic by WCAG
+     relative luminance (shown), and achromatic by construction —
+     every value below is #xyxyxy with the three channels equal.
+     If you edit one, keep them equal or the theme's premise goes
+     with it. */
+
+  /* Neutral ramp (dark -> light) */
+  --col-n900: #0d0d0d;  /* L .004  code-block ground; the one surface below the page */
+  --col-n850: #171717;  /* L .009  active line inside a code block */
+  --col-n800: #1e1e1e;  /* L .013  the page. VS Code Dark+'s editor background */
+  --col-n750: #262626;  /* L .019  panel */
+  --col-n700: #303030;  /* L .030  raised */
+  --col-n650: #3d3d3d;  /* L .047  rules, dividers, kanban backdrop, bracket outline */
+  --col-n600: #484848;  /* L .065  indent guides */
+  --col-n550: #5c5c5c;  /* L .107  secondary text on the light search card */
+  --col-n500: #8a8a8a;  /* L .254  muted text, bullets */
+  --col-n400: #a8a8a8;  /* L .392  secondary text */
+  --col-n300: #c0c0c0;  /* L .527  search-card hover row */
+  --col-n150: #d4d4d4;  /* L .658  body text. VS Code Dark+'s editor foreground */
+  --col-n100: #e8e8e8;  /* L .807  primary / bold — the ramp's emphatic end */
+  --col-n50:  #f5f5f5;  /* L .913  the light search card */
+
+  /* The six signals. This is the entire chromatic budget, and it
+     is small on purpose: on this page, colour means the app
+     resolved something. */
+  --col-teal:   #4ec9b0;  /* resolved   — VS Code Dark+'s type colour */
+  --col-azure:  #6fb3e0;  /* referenced */
+  --col-violet: #c586c0;  /* declared   — the keyword hue every editor trains you on */
+  --col-amber:  #d7ba7d;  /* literal */
+  --col-green:  #7ec699;  /* passing */
+  --col-coral:  #f2776f;  /* failing */
+
+  /* Violet is 2.55:1 on the bare search card — the same class of
+     bug as base-v1's invisible search selection. Deepened for that
+     one surface; see --keyword-on-light below. */
+  --col-violet-deep: #8a3a83;  /* 6.39:1 on the card */
+
+  /* Ring for a checked box: the same green pressed down. */
+  --col-green-deep: #5aa377;
+
+  /* Fills. Dark enough that they can only ever be backgrounds.
+     The two highlight marks are a deliberately matched pair —
+     2.15 and 2.14:1 against the page, 5.24 and 5.25:1 under body
+     text — so a cool mark and a warm mark are equally loud and
+     differ only in hue, which is the only thing they are meant to
+     encode. */
+  --col-hl-cool: #1c5c53;  /* block-highlight blue AND grey */
+  --col-hl-warm: #714a1b;  /* roam-highlight, block-highlight-yellow */
+  --col-select:  #264f78;  /* text selection. VS Code Dark+'s exact selection fill,
+                              and the only blue in the file that is not azure */
+
+  /* Matching-bracket fill: the accent at 25% alpha. */
+  --col-teal-veil: #4ec9b040;
+
+  /* ── APPLICATIONS (semantic; map palette -> UI roles) ─────
+     Each comment lists where the colour is used, so this block
+     doubles as a map of which components share each colour. The
+     var NAMES and the set of them are identical to base-v2.css —
+     that is the contract components-v2.css depends on. Only the
+     values differ. */
+
+  /* Surfaces. Separations are 1.10 / 1.26:1 against the page —
+     quiet on purpose. A working screen does not draw boxes around
+     its regions; these steps exist to sit a popover in front of
+     the page, not to panel it. */
+  --bg-base:   var(--col-n800); /* page/editor/topbar bg, kanban-card, empty mention-pill bg, CM5 gutters */
+  --bg-panel:  var(--col-n750); /* sidebars, kanban-column, embed-outer, buttons, borders, table header row */
+  --bg-raised: var(--col-n700); /* popovers/tooltips/datepicker + arrow, inline-code bg, buffer, hover, reference-item, embed-inner, 2ndary cursor, ruler, unchecked checkbox */
+
+  /* Text on dark surfaces. Four steps of grey and no hue anywhere
+     in this group — the whole hierarchy of things you wrote is
+     carried by tone, which is the Hacker News move: a headline
+     and its metadata line are the same typeface, separated only
+     by size and grey level. */
+  --text-primary:   var(--col-n100); /* editor chrome text, popovers, buffer, right sidebar, kanban-title border, cm-error, matching bracket, All-Pages title (13.6:1) */
+  --text-secondary: var(--col-n400); /* sidebar items, datepicker weekdays + day numbers, level3 heading, icons, parent-path, sorted headers (7.0:1) */
+  --text-muted:     var(--col-n500); /* CM5 line numbers, page-ref, ref brackets, small buttons, indent guide, title-children (4.8:1) */
+  --text-body:      var(--col-n150); /* body/block text; set with !important in Typography, so it — not --text-primary — is what you read on the page (11.2:1) */
+  --title-fg:       var(--col-teal);  /* page title: .roam-app h1 (display) + .rm-title-display/-textarea (edit). Teal and monospaced, because a page title in Roam IS an identifier — it is the key other pages resolve against, so it is drawn the way a resolved symbol is drawn (8.2:1) */
+
+  /* Text drawn ON a light or filled surface. */
+  --text-on-accent:       var(--col-n900);       /* text inside filled mention pills (9.5:1 on teal) */
+  --text-on-accent-faded: var(--text-on-accent); /* text in the FADED mention pill (the base .rm-clickable-pill, drawn at 0.7 opacity, so the accent composites toward the page) (5.5:1) */
+  --text-on-light:        var(--col-n900);       /* search input text, slider label text (17.8:1) */
+
+  /* Accent / state colours — the six signals, doing the one job each was picked for. */
+  --accent:   var(--col-teal);   /* external links, mention pills, cm5 header/def/link. RESOLVED: a url is something the app can follow (8.2:1) */
+  --success:  var(--col-green);  /* success toast, sync-synced icon, green cm5 tokens (8.3:1) */
+  --emphasis: var(--col-amber);  /* inline-code fg, warning toast, saving icon, cm5 variable-2, matching tag. LITERAL: a backtick means "this is the thing itself, not a description of it" (8.9:1 on the page, 7.0:1 on the raised chip inline code actually sits on) */
+  --keyword:  var(--col-violet); /* cm5 keyword/tag, find-or-create new-page label, linked-ref page title. DECLARED — but see the light-surface override below */
+  --keyword-on-light: var(--col-violet-deep); /* the "Create page" label, which lands on the LIGHT search card rather than the page (6.4:1; the signal violet is 2.55:1 there) */
+  --error:    var(--col-coral);  /* cm5 negative/invalidchar/non-matching bracket (6.1:1 on the page, 4.8:1 on the raised surface) */
+  --special:  var(--col-azure);  /* cm5 atom/number, page-ref link colour. REFERENCED: a [[page ref]] is the single most common coloured thing on a Roam page, so it gets its own hue rather than sharing the accent (7.3:1) */
+  --bold-fg:  var(--col-n100);   /* bold text. The shared default paints this --special, which here would be 7.3:1 inside a sentence running at 11.2:1 — emphasis measurably quieter than what it emphasises. See KNOWLEDGE.md; three themes hit this independently. Bold is the top of the grey ramp instead (13.6:1) */
+  --string:   var(--col-green);  /* cm5 string/string-2, slider progress. Shares "passing" with --success: a slider filling up and a box getting ticked are the same idea (8.3:1) */
+
+  /* Bullets, table, highlights */
+  --bullet-outer:   var(--col-n500);    /* closed/collapsed bullet, slider handle, cm5-meta, fat-cursor colour, checkbox :active. A collapsed bullet is hiding content from you, so it is as visible as muted text rather than dimmer (4.8:1) */
+  --kanban-bg:      var(--col-n650);    /* kanban board backdrop */
+  --bullet-inner:   var(--col-n100);    /* open bullet, slider-label bg, cm5 bracket/hr, fat-cursor bg */
+  --table-text:     var(--col-n400);    /* All-Pages cell text (7.0:1) */
+  --highlight-cool: var(--col-hl-cool); /* block-highlight blue AND grey (both intentionally share one var). Body text on it 5.2:1; 2.15:1 vs the page */
+  --highlight-warm: var(--col-hl-warm); /* roam-highlight, block-highlight-yellow, cm5-searching. Body text on it 5.2:1; 2.14:1 vs the page */
+
+  /* Find-or-create search (a LIGHT surface inside a dark theme).
+     Roam builds this card light and there is no theming it away.
+     The keyboard selection fills a row back to the page colour,
+     which reads as the row being lifted out of the card. */
+  --search-bg:            var(--col-n50);  /* search input + menu background */
+  --search-fg:            var(--col-n800); /* menu text on that light surface (15.3:1) */
+  --search-fg-muted:      var(--col-n550); /* secondary result line (6.1:1) */
+  --search-hover-bg:      var(--col-n300); /* mouse hover (1.67:1 vs the card — base-v2 ships 1.37:1 here) */
+  --search-selected-bg:   var(--col-n800); /* KEYBOARD-selected row (up/down arrows). 15.3:1 against the card and 9.2:1 against plain hover, so the two states cannot be confused — the bug that made base-v1 unusable */
+  --search-selected-text: var(--col-n50);  /* text on the selected row (15.3:1) */
+
+  /* No --datepicker-* day-state vars: day cells are left to Blueprint.
+     See KNOWLEDGE.md "Blueprint date picker: don't bother". */
+
+  /* Popover */
+  --popover-arrow: var(--bg-raised); /* the little triangle; needs `fill`, not `color` — see components-v2.css */
+
+  /* Selection */
+  --selection-bg:        var(--col-select);         /* normal text selection bg */
+  --selection-text:      var(--col-n100);           /* normal text selection fg (6.9:1) */
+  --code-selection-bg:   var(--col-amber);          /* LEGACY CM5 only — see note below */
+  --code-selection-text: var(--col-n900);           /* LEGACY CM5 only */
+  --code-activeline-bg:  rgba(232, 232, 232, 0.05); /* LEGACY CM5 only. Lightens rather than darkens — base-v2 uses rgba(0,0,0,.04), which is invisible on a dark ground */
+
+  /* Code blocks — CodeMirror 6 / .rm-code-block.
+     Modern Roam renders ``` blocks with CodeMirror 6. The three
+     --code-* vars above bind only to CM5 (.cm-s-default,
+     .CodeMirror-*), which ``` blocks no longer use, so the amber
+     code selection almost certainly never renders. Selection you
+     actually see inside a code block is --cm6-selection.
+
+     base-v2 ships OneDark here, which has its own opinions about
+     blue and would read as a window into a different application.
+     These are the same six signals instead, on a ground one step
+     BELOW the page (1.17:1) so a code block reads as inset. Every
+     token verified >= 4.5:1 on it.
+
+     COMMENTS ARE GREY, not green, which is the one place this
+     theme openly disagrees with the editors it comes from. A
+     comment is prose — it is the part of a source file you wrote
+     rather than the part the machine resolved — so under this
+     theme's own rule it cannot have a hue. */
+  --cm6-bg:                 var(--col-n900);      /* code block + gutter background */
+  --cm6-fg:                 var(--col-n150);      /* default code text, gutter text + border (13.1:1) */
+  --cm6-active-line:        var(--col-n850);      /* active line + active-line gutter */
+  --cm6-selection:          var(--col-select);    /* selected text background */
+  --cm6-cursor:             var(--col-teal);      /* caret + cursor */
+  --cm6-muted:              var(--col-n500);      /* comment, placeholder, fold placeholder (5.6:1) */
+  --cm6-keyword:            var(--col-violet);    /* keywords (7.0:1) */
+  --cm6-operator:           var(--col-azure);     /* operators, regexp, special chars (8.5:1) */
+  --cm6-string:             var(--col-green);     /* strings (9.6:1) */
+  --cm6-variable:           var(--col-n150);      /* variables — the most common token, so it stays foreground-coloured and the file does not turn into a fruit salad (13.1:1) */
+  --cm6-number:             var(--col-amber);     /* numbers, colours, constants (10.4:1) */
+  --cm6-name:               var(--col-coral);     /* property names, names (7.1:1) */
+  --cm6-type:               var(--col-teal);      /* type / class names (9.5:1). This is #4ec9b0 doing its original job — the theme's accent was taken from VS Code Dark+'s type colour, so the page and the code block agree about what teal means without being told */
+  --cm6-bracket-match-bg:   var(--col-teal-veil); /* matching-bracket fill */
+  --cm6-bracket-match-line: var(--col-n650);      /* matching-bracket outline */
+  --cm6-bracket-nomatch-bg: var(--col-coral);     /* non-matching bracket */
+  --cm6-field-border:       var(--col-n500);      /* CM search textfield border */
+
+  /* DONE / checked checkbox — "passing", doing its literal job. */
+  --done-checkbox-bg:     var(--col-green);      /* checked checkbox fill (8.3:1 vs the page) */
+  --done-checkbox-border: var(--col-green-deep); /* checked checkbox border + hover fill */
+  --done-checkbox-check:  var(--col-n900);       /* the tick mark (9.6:1 on fill, 6.4:1 on hover) */
+
+  /* Typography */
+  --font-ui:    "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI",
+                "Helvetica Neue", sans-serif;                               /* body/textarea */
+  --font-title: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo,
+                Consolas, "Liberation Mono", monospace;                     /* page titles (consumed by components-v2.css) */
+  --font-mono:  var(--font-title);                                          /* code surfaces — the same face, since a title and an identifier are the same kind of thing here */
+
+  /* Page title size, applied to BOTH the display <h1> and the edit
+     <textarea> so clicking the title doesn't resize it. Like every
+     theme here, this is the one value in the file that was chosen
+     rather than measured — Roam's own title size cannot be read
+     without a live DOM. It is isolated here so it is the only
+     thing to tune if titles come out wrong. */
+  --title-size: 2.75rem;
+}
+
+/* ============================================================
+   HEADS-DOWN-ONLY RULES
+   ------------------------------------------------------------
+   Everything above is a variable, which is all a theme normally
+   needs. These five exist because part of this idea is about
+   density and letterform, and none of that can be expressed as a
+   colour token.
+
+   They live here, in the entry file, so the other seven themes
+   are completely unaffected.
+   ============================================================ */
+
+/* Code surfaces get the mono stack back.
+   components-v2.css sets --font-ui on body/.roam-app/.rm-block-text
+   with !important, which would otherwise drag Geist into every code
+   surface in the app. Required, not cosmetic — see KNOWLEDGE.md
+   "Designing more themes on the same components". */
+code,
+.rm-code-block,
+.CodeMirror,
+.cm-editor {
+  font-family: var(--font-mono);
+  letter-spacing: 0;
+}
+
+/* Inline code as a chip.
+   components-v2.css gives `code` a foreground and a background but
+   no box, so on a dark ground the raised fill runs flush against the
+   surrounding sentence and reads as a smudge rather than a token.
+   The padding and radius are what make it a discrete object; the
+   size step down keeps a monospace run from out-measuring the
+   proportional text it sits inside. */
+code {
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  font-size: 0.92em;
+}
+
+/* Indent guides, quieter.
+   components-v2.css draws these in --text-muted, which is a *text*
+   value (4.8:1) and far too loud for a hairline repeated down the
+   whole page — in a deeply nested outline it becomes the most
+   prominent thing on screen. 1.82:1 is still plainly visible and
+   stops the guides competing with the text they are organising.
+   Editors draw theirs at about 1.5:1; this is deliberately above
+   that, because the indent guide is the only thing distinguishing
+   two sibling subtrees when a page is scrolled mid-way. */
+.block-border-left {
+  border-left: 1px solid var(--col-n600);
+}
+
+/* Dividers.
+   Roam styles its divider through the CLASS .rm-hr, which outranks a
+   bare `hr` element selector — so setting border-color on `hr` alone
+   leaves the divider at Roam's pale grey default, which on this ground
+   reads as a bright scar. Both forms are set, with the same border
+   shorthand Roam uses. */
+hr {
+  border-top: 1px solid var(--col-n650);
+}
+
+.rm-hr {
+  border: 1px solid var(--col-n650);
+}
+
+/* Lining figures in the All-Pages table.
+   The only rule here that is about information rather than colour or
+   type: this table's right-hand columns are counts and dates, and
+   proportional digits make a column of them ragged. Geist ships
+   tabular figures, so the columns line up; the fallback stacks
+   mostly do too, and where they do not this degrades to what you
+   already had. */
+.rm-all-pages .table .rm-pages-row,
+.rm-pages-col span {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Page title.
+   Family, colour and size come from components-v2.css (--font-title,
+   --title-fg, --title-size); only the letterform treatment is added
+   here. A monospace face set at 2.75rem tracks much too wide, because
+   it was spaced for 13px in a column of code — the negative tracking
+   pulls it back to something a headline can do. */
+.rm-title-display,
+.rm-title-textarea,
+.roam-body .roam-app h1 {
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+/* In-block headings: weight and tracking, and deliberately NO colour.
+   Colour on this page means the app resolved something, and a heading
+   is just something you typed larger — giving it a hue would be the
+   one lie in the scheme. Roam already handles the size step, so what
+   is left is the tightening a large grade wants.
+
+   THE `> .rm-block__self` IS LOAD-BEARING — do not simplify it away.
+   `.rm-heading-level-N` sits on the block CONTAINER, which holds this
+   block's own content *and* all of its nested children, so a plain
+   descendant selector would drag the entire subtree to weight 600.
+   `.rm-block__self` is the direct child holding only this block's own
+   text. See KNOWLEDGE.md "Block styles leak into children".
+
+   Both text-class spellings are listed because `.rm-block__input` is
+   current and `.rm-block-text` is what components-v2.css still uses;
+   inside `.rm-block__self` both are safe. !important is required to
+   beat the Typography rule that sets font-family on `.rm-block-text`. */
+.rm-heading-level-1 > .rm-block__self .rm-block__input,
+.rm-heading-level-2 > .rm-block__self .rm-block__input,
+.rm-heading-level-1 > .rm-block__self .rm-block-text,
+.rm-heading-level-2 > .rm-block__self .rm-block-text {
+  font-family: var(--font-ui) !important;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.rm-heading-level-3 > .rm-block__self .rm-block__input,
+.rm-heading-level-3 > .rm-block__self .rm-block-text {
+  font-family: var(--font-ui) !important;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+/* ============================================================
+   Notes, and what was deliberately not done
+   ------------------------------------------------------------
+   MEASURED, NOT ESTIMATED: every contrast figure above was
+   computed from WCAG relative luminance against the surface the
+   colour actually lands on. The values below 4.5:1 are all
+   surface-vs-surface pairs, where a text threshold is the wrong
+   measure: the two highlight marks against the page (2.15 and
+   2.14:1 — that is a mark's visibility, and text ON them is 5.2:1
+   each), the surface steps, the search-card hover row, and the
+   indent guide.
+
+   THE ONE ESTIMATED VALUE is --title-size, for the same reason it
+   is estimated in every theme here: Roam's own title font-size
+   cannot be read without inspecting a live DOM. It is 2.75rem
+   rather than the 3rem the other themes use because this title is
+   monospace, and a mono face sets wider at the same nominal size.
+   If titles come out wrong on install, tune that variable and
+   nothing else.
+
+   BOLD IS NOT A HUE. Bold is the top of the grey ramp, one step
+   above body text, rather than the shared default's --special.
+   The reason is measured and given inline: azure inside a sentence
+   of #d4d4d4 would be emphasis with *less* contrast than the words
+   around it. cyanotype.css reaches the same conclusion from a
+   completely different premise. If you disagree, set --bold-fg to
+   var(--special) and it reverts.
+
+   THE PAGE TITLE IS THE THEME'S ONE LOUD MOVE — teal, monospace,
+   negative tracking — and it is the thing most likely to be wrong
+   for you. It follows from the rule (a title is the key other
+   pages resolve against, so it is drawn like a resolved symbol),
+   but it is a strong claim to make at the top of every page. To
+   soften it, set --title-fg to var(--col-n100) for a grey title
+   that keeps the mono, or --font-title to var(--font-ui) for a
+   teal one that drops it. Either half works alone.
+
+   NOT ATTEMPTED: the date picker's day cells, for the reasons in
+   KNOWLEDGE.md "Blueprint date picker: don't bother".
+
+   The font import is the only external dependency. If
+   fonts.googleapis.com is blocked the theme falls back to the
+   system UI sans and the system mono — still coherent, and
+   noticeably less like a screen someone works on.
+   ============================================================ */
